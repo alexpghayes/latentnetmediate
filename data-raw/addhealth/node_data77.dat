@@ -1,0 +1,35 @@
+DL
+NR=25, NC=3
+FORMAT = FULLMATRIX DIAGONAL PRESENT
+COLUMN LABELS:
+"sex"
+"race"
+"grade"
+LEVEL LABELS:
+"Page 1"
+DATA:
+ 1 1 8
+ 1 1 8
+ 1 5 8
+ 2 1 7
+ 2 1 7
+ 2 1 8
+ 1 1 7
+ 1 1 8
+ 2 1 7
+ 1 1 7
+ 1 5 8
+ 1 1 7
+ 2 1 7
+ 1 5 8
+ 2 1 7
+ 2 1 7
+ 1 1 7
+ 2 1 7
+ 2 1 7
+ 2 1 8
+ 2 1 7
+ 1 1 8
+ 1 1 7
+ 1 5 8
+ 2 5 7
