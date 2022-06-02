@@ -1,5 +1,6 @@
 library(tidyverse)
 library(here)
+library(tidygraph)
 
 smoking_raw <- read_csv(here("data-raw", "smoking.csv"))
 
@@ -9,13 +10,9 @@ smoking <- smoking_raw |>
   igraph::graph_from_adjacency_matrix() |>
   as_tbl_graph() |>
   mutate(
-    smoking = if_else(smoking_raw$smoke == 1, "smokes", "doesn't smoke"),
+    smokes = if_else(smoking_raw$smoke == 1, "smokes", "doesn't smoke"),
     sex = if_else(smoking_raw$gender == 1, "female", "male")
   ) |>
-  mutate_at(vars(smoking, sex), as.factor)
+  mutate_at(vars(smokes, sex), as.factor)
 
 usethis::use_data(smoking, overwrite = TRUE)
-
-smoking_raw |>
-  select(smoke, gender) |>
-  skimr::skim()
