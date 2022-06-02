@@ -4,6 +4,12 @@
     <loc>https://alexpghayes.github.io/netmediate/404.html</loc>
   </url>
   <url>
+    <loc>https://alexpghayes.github.io/netmediate/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://alexpghayes.github.io/netmediate/LICENSE.html</loc>
+  </url>
+  <url>
     <loc>https://alexpghayes.github.io/netmediate/authors.html</loc>
   </url>
   <url>
@@ -13,10 +19,13 @@
     <loc>https://alexpghayes.github.io/netmediate/reference/addhealth.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/hello.html</loc>
+    <loc>https://alexpghayes.github.io/netmediate/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/index.html</loc>
+    <loc>https://alexpghayes.github.io/netmediate/reference/netmediate.html</loc>
+  </url>
+  <url>
+    <loc>https://alexpghayes.github.io/netmediate/reference/sensitivity_curve.html</loc>
   </url>
   <url>
     <loc>https://alexpghayes.github.io/netmediate/reference/smoking.html</loc>
