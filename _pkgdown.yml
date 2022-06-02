@@ -1,0 +1,13 @@
+url: https://alexpghayes.github.io/netmediate/
+
+template:
+  bootstrap: 5
+  params:
+    bootswatch: flatly
+
+authors:
+  Alex Hayes:
+    href: https://alexpghayes.com
+
+development:
+  mode: auto
