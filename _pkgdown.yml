@@ -13,7 +13,11 @@ development:
   mode: auto
 
 reference:
-- title: "Datasets"
-  contents:
-  - smoking
-  - addhealth
+  - title: Estimation
+    contents:
+    - netmediate
+    - sensitivity_curve
+  - title: "Datasets"
+    contents:
+    - smoking
+    - addhealth

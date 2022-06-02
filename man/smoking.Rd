@@ -27,7 +27,7 @@ Obtained from Haiyan Liu over email on April 28, 2022.
 smoking
 }
 \description{
-Section 6 of \link{1} describes the data as follows:
+Section 6 of Liu et al. describes the data as follows:
 }
 \details{
 We use the data collected by the Lab for Big Data Methodology at the
@@ -40,7 +40,7 @@ or not. We symmetrized the friendship network using the strongest relation
 we assumed they were mutual friends).
 }
 \references{
-\link{1} Liu, Haiyan, Ick Hoon Jin, Zhiyong Zhang, and Ying Yuan.
+Liu, Haiyan, Ick Hoon Jin, Zhiyong Zhang, and Ying Yuan.
 "Social Network Mediation Analysis: A Latent Space Approach."
 Psychometrika 86, no. 1 (March 2021): 272–98.
 https://doi.org/10.1007/s11336-020-09736-z.

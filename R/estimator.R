@@ -9,9 +9,12 @@
 #' @param rank Integer describing desired rank of embedding dimension.
 #'
 #' @return A `network_mediation` object.
+#' @importFrom tidygraph mutate as_tibble
 #' @export
 #'
 #' @examples
+#'
+#' library(tidygraph)
 #'
 #' smoking |>
 #'   mutate(
@@ -21,27 +24,27 @@
 #'
 netmediate <- function(graph, formula, rank) {
 
-  node_data <- as_tibble(graph)
-  A <- as_adjacency_matrix(graph, sparse = TRUE)
+  node_data <- tidygraph::as_tibble(graph)
+  A <- igraph::as_adjacency_matrix(graph, sparse = TRUE)
 
   s <- irlba::irlba(A, nv = rank)
   U <- s$u %*% diag(sqrt(s$d))
 
-  mf <- model.frame(formula, data = node_data)
-  y <- model.response(mf)
-  Z <- model.matrix(mf, node_data)
+  mf <- stats::model.frame(formula, data = node_data)
+  y <- stats::model.response(mf)
+  Z <- stats::model.matrix(mf, node_data)
 
-  outcome_model <- lm(y ~ Z + U + 0)
-  mediator_model <- lm(U ~ Z + 0)
+  outcome_model <- stats::lm(y ~ Z + U + 0)
+  mediator_model <- stats::lm(U ~ Z + 0)
 
   num_coefs <- ncol(Z)
 
-  Z_coefs <- coef(outcome_model)[1:num_coefs]
+  Z_coefs <- stats::coef(outcome_model)[1:num_coefs]
 
-  effects <- tibble(
+  effects <- tibble::tibble(
     term = names(Z_coefs),
     nde = Z_coefs,
-    nie = drop(coef(mediator_model) %*% coef(outcome_model)[-c(1:num_coefs)]),
+    nie = drop(stats::coef(mediator_model) %*% stats::coef(outcome_model)[-c(1:num_coefs)]),
     total = nde + nie
   )
 
@@ -72,7 +75,7 @@ print.network_mediation <- function(x, ...) {
   cat("Mediator model:\n")
   cat("---------------\n\n")
 
-  print(anova(x$mediator_model))
+  print(stats::anova(x$mediator_model))
 
   cat("\nEstimated direct and indirect effects:\n")
   cat("---------------------------------------\n\n")
@@ -88,10 +91,13 @@ print.network_mediation <- function(x, ...) {
 #' @param ranks_to_consider How many distinct ranks to consider (integer).
 #'   Optional, defaults to 10.
 #'
-#' @return
+#' @return A `rank_sensitivity_curve` object, which is a subclass of a
+#'   [tibble::tibble()].
 #' @export
 #'
 #' @examples
+#'
+#' library(tidygraph)
 #'
 #' rank_curve <- smoking |>
 #'   mutate(
@@ -104,31 +110,31 @@ print.network_mediation <- function(x, ...) {
 #'
 sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10) {
 
-  node_data <- as_tibble(graph)
-  A <- as_adjacency_matrix(graph, sparse = TRUE)
+  node_data <- tidygraph::as_tibble(graph)
+  A <- igraph::as_adjacency_matrix(graph, sparse = TRUE)
 
   s <- irlba::irlba(A, nv = max_rank)
   U_max <- s$u %*% diag(sqrt(s$d))
 
-  mf <- model.frame(formula, data = node_data)
-  y <- model.response(mf)
-  Z <- model.matrix(mf, node_data)
+  mf <- stats::model.frame(formula, data = node_data)
+  y <- stats::model.response(mf)
+  Z <- stats::model.matrix(mf, node_data)
   num_coefs <- ncol(Z)
 
   effects_at_rank <- function(rank) {
 
     U <- U_max[, 1:rank]
 
-    outcome_model <- lm(y ~ Z + U + 0)
-    mediator_model <- lm(U ~ Z + 0)
+    outcome_model <- stats::lm(y ~ Z + U + 0)
+    mediator_model <- stats::lm(U ~ Z + 0)
 
-    Z_coefs <- coef(outcome_model)[1:num_coefs]
+    Z_coefs <- stats::coef(outcome_model)[1:num_coefs]
 
-    effects <- tibble(
+    effects <- tibble::tibble(
       rank = rank,
       term = names(Z_coefs),
       nde = Z_coefs,
-      nie = drop(coef(mediator_model) %*% coef(outcome_model)[-c(1:num_coefs)]),
+      nie = drop(stats::coef(mediator_model) %*% stats::coef(outcome_model)[-c(1:num_coefs)]),
       total = nde + nie
     )
   }
@@ -142,14 +148,20 @@ sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10) 
 
 #' @method plot rank_sensitivity_curve
 #' @export
-plot.rank_sensitivity_curve <- function(curve) {
-  curve |>
-    pivot_longer(
+#' @import ggplot2
+plot.rank_sensitivity_curve <- function(x, ...) {
+
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Must install `ggplot2` package for this functionality.", call. = FALSE)
+  }
+
+  x |>
+    tidyr::pivot_longer(
       c("nie", "nde", "total"),
       names_to = "effect"
     ) |>
-    mutate(
-      effect = recode(
+    dplyr::mutate(
+      effect = dplyr::recode(
         effect,
         nde = "Natural Direct Effect",
         nie = "Natural Indirect Effect",

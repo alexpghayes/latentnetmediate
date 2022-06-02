@@ -23,6 +23,8 @@ A \code{network_mediation} object.
 }
 \examples{
 
+library(tidygraph)
+
 smoking |>
   mutate(
     smokes_int = as.integer(smokes) - 1

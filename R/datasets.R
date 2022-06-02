@@ -62,7 +62,7 @@
 
 #' Smoking in a network of chinese college students
 #'
-#' Section 6 of [1] describes the data as follows:
+#' Section 6 of Liu et al. describes the data as follows:
 #'
 #' We use the data collected by the Lab for Big Data Methodology at the
 #' University of Notre Dame in 2017. The participants were 162 students in a
@@ -73,9 +73,7 @@
 #' (i.e., if one of two students indicated the other as a friend,
 #' we assumed they were mutual friends).
 #'
-#' @references
-#'
-#'  [1] Liu, Haiyan, Ick Hoon Jin, Zhiyong Zhang, and Ying Yuan.
+#' @references Liu, Haiyan, Ick Hoon Jin, Zhiyong Zhang, and Ying Yuan.
 #'    "Social Network Mediation Analysis: A Latent Space Approach."
 #'    Psychometrika 86, no. 1 (March 2021): 272–98.
 #'    https://doi.org/10.1007/s11336-020-09736-z.

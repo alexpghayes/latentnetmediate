@@ -19,19 +19,21 @@ are allowed in the formula.}
 Optional, defaults to 10.}
 }
 \value{
-
+A \code{rank_sensitivity_curve} object, which is a subclass of a
+\code{\link[tibble:tibble]{tibble::tibble()}}.
 }
 \description{
 Estimate mediated effects for a variety of embedding dimensions
 }
 \examples{
 
+library(tidygraph)
 
 rank_curve <- smoking |>
   mutate(
     smokes_int = as.integer(smokes) - 1
   ) |>
- sensitivity_curve(smokes_int ~ sex + 0, max_rank = 7)
+ sensitivity_curve(smokes_int ~ sex, max_rank = 25, 25)
 
 rank_curve
 plot(rank_curve)
