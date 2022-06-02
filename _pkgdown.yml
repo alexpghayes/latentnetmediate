@@ -11,3 +11,9 @@ authors:
 
 development:
   mode: auto
+
+reference:
+- title: "Datasets"
+  contents:
+  - smoking
+  - addhealth
