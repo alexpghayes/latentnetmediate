@@ -17,6 +17,23 @@
 #  - causal effect recovery
 #
 
+#' Title
+#'
+#' @param n TODO
+#' @param k TODO
+#' @param prob_trt TODO
+#' @param theta_0 TODO
+#' @param theta_t TODO
+#' @param theta_c TODO
+#' @param theta_tc TODO
+#' @param beta_0 TODO
+#' @param beta_t TODO
+#' @param beta_c TODO
+#' @param beta_x TODO
+#'
+#' @return
+#' @export
+#'
 model_informative_controls <- function(n, k = 5, prob_trt = 0.5, theta_0 = NULL, theta_t = NULL,
                                        theta_c = NULL, theta_tc = NULL, beta_0 = NULL,
                                        beta_t = NULL, beta_c = NULL, beta_x = NULL) {

@@ -2,6 +2,7 @@
 
 S3method(plot,rank_sensitivity_curve)
 S3method(sample_tidygraph,model1)
+export(model_informative_controls)
 export(netmediate)
 export(sample_tidygraph)
 export(sensitivity_curve)

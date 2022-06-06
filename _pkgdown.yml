@@ -17,7 +17,11 @@ reference:
     contents:
     - netmediate
     - sensitivity_curve
-  - title: "Datasets"
+  - Simulating data
+    contents:
+    - sample_tidygraph
+    - model_informative_controls
+  - title: Datasets
     contents:
     - smoking
     - addhealth
