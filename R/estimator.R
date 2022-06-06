@@ -35,7 +35,7 @@ netmediate <- function(graph, formula, rank) {
   Z <- stats::model.matrix(mf, node_data)
 
   outcome_model <- stats::lm(y ~ Z + U + 0)
-  mediator_model <- estimatr::lm_robust(U ~ Z + 0, se_type = "HC2")
+  mediator_model <- stats::lm(U ~ Z + 0)
 
   num_coefs <- ncol(Z)
 
