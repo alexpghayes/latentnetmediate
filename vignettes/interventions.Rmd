@@ -20,7 +20,8 @@ knitr::opts_chunk$set(
 )
 
 library(netmediate)
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
 library(fastRG)
 library(GGally)
 
@@ -108,9 +109,9 @@ plot_intervention_latent <- function(model) {
 
   # plot treatment assignments
 
-  X_df <- model$X %>%
-    as.matrix() %>%
-    as_tibble() %>%
+  X_df <- model$X |>
+    as.matrix() |>
+    as_tibble() |>
     mutate(
       type = "post",
       id = row_number(),
@@ -118,9 +119,9 @@ plot_intervention_latent <- function(model) {
       moved = rowSums(abs(model$X - model$C)) > 1e-10
     )
 
-  C_df <- model$C %>%
-    as.matrix() %>%
-    as_tibble() %>%
+  C_df <- model$C |>
+    as.matrix() |>
+    as_tibble() |>
     mutate(
       type = "pre",
       id = row_number(),
@@ -130,7 +131,7 @@ plot_intervention_latent <- function(model) {
 
   colnames(X_df) <- colnames(C_df)
 
-  bound <- bind_rows(X_df, C_df) %>%
+  bound <- bind_rows(X_df, C_df) |>
     mutate(
       color = case_when(
         trt == "treatment" & !moved ~ "treated-stayed",
@@ -173,7 +174,7 @@ Here `mu` (row vector) represents a global shift that is applied universally, `t
 Suppose we proceed with the default null treatment of above. We can visualize this as
 
 ```{r}
-model1(n = 50) %>%
+model1(n = 50) |>
   plot_intervention_latent()
 ```
 
@@ -230,7 +231,7 @@ plot_expected_adjacency_before <- function(mrdpg) {
   
   EA <- as(ufm$X %*% ufm$S %*% t(ufm$X), "sparseMatrix")
 
-  summary(EA) %>%
+  summary(EA) |>
     ggplot2::ggplot(ggplot2::aes(x = j, y = -i, fill = x)) +
     ggplot2::geom_tile() +
     scale_fill_gradient(low = "white", high = "black", limits = c(0, 1)) +
@@ -244,7 +245,7 @@ plot_expected_adjacency_after <- function(mrdpg) {
   
   EA <- as(mrdpg$X %*% mrdpg$C_model$S %*% t(mrdpg$X), "sparseMatrix")
 
-  summary(EA) %>%
+  summary(EA) |>
     ggplot2::ggplot(ggplot2::aes(x = j, y = -i, fill = x)) +
     ggplot2::geom_tile() +
     scale_fill_gradient(low = "white", high = "black", limits = c(0, 1)) +
@@ -263,7 +264,7 @@ plot_change_in_ea <- function(mrdpg) {
   
   EA_diff <- EA_before - EA_after
 
-  summary(EA_diff) %>%
+  summary(EA_diff) |>
     ggplot2::ggplot(ggplot2::aes(x = j, y = -i, fill = x)) +
     ggplot2::geom_tile() +
     scale_fill_gradient(low = "white", high = "black", limits = c(0, 1)) +

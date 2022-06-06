@@ -31,13 +31,17 @@ Depends:
     R (>= 4.2.0)
 Imports: 
     dplyr,
-    estimatr,
+    fastRG (>= 0.3.0.9004),
+    GGally,
     ggplot2,
     igraph,
     irlba,
+    Matrix,
     purrr,
     tibble,
     tidygraph,
     tidyr
 License: MIT + file LICENSE
 VignetteBuilder: knitr
+Remotes: 
+    RoheLab/fastRG
