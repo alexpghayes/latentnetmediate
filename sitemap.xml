@@ -10,6 +10,12 @@
     <loc>https://alexpghayes.github.io/netmediate/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://alexpghayes.github.io/netmediate/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://alexpghayes.github.io/netmediate/articles/interventions.html</loc>
+  </url>
+  <url>
     <loc>https://alexpghayes.github.io/netmediate/authors.html</loc>
   </url>
   <url>
@@ -22,7 +28,13 @@
     <loc>https://alexpghayes.github.io/netmediate/reference/index.html</loc>
   </url>
   <url>
+    <loc>https://alexpghayes.github.io/netmediate/reference/model_informative_controls.html</loc>
+  </url>
+  <url>
     <loc>https://alexpghayes.github.io/netmediate/reference/netmediate.html</loc>
+  </url>
+  <url>
+    <loc>https://alexpghayes.github.io/netmediate/reference/sample_tidygraph.html</loc>
   </url>
   <url>
     <loc>https://alexpghayes.github.io/netmediate/reference/sensitivity_curve.html</loc>
