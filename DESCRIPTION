@@ -24,11 +24,14 @@ BugReports: https://github.com/alexpghayes/netmediate/issues
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Suggests: 
-    covr
+    covr,
+    knitr,
+    rmarkdown
 Depends: 
     R (>= 4.2.0)
 Imports: 
     dplyr,
+    estimatr,
     ggplot2,
     igraph,
     irlba,
@@ -37,3 +40,4 @@ Imports:
     tidygraph,
     tidyr
 License: MIT + file LICENSE
+VignetteBuilder: knitr
