@@ -1,0 +1,9 @@
+utils::globalVariables(
+  c(
+    "nde",
+    "nie",
+    "effect",
+    "term",
+    "value"
+  )
+)
