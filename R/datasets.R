@@ -1,9 +1,9 @@
 #' A portion of the AddHealth dataset pulled from an archived UCI site
 #'
-#' Per the original documentation:
-#'
 #' The ADD HEALTH data are constructed from the in-school questionnaire;
 #' 90,118 students representing 84 communities took this survey in 1994-95.
+#'
+#' @details
 #' Some communities had only one school; others had two. Where there are two
 #' schools in a community students from one school were allowed to name
 #' friends in the other, the "sister school."
@@ -62,9 +62,7 @@
 
 #' Smoking in a network of chinese college students
 #'
-#' Section 6 of Liu et al. describes the data as follows:
-#'
-#' We use the data collected by the Lab for Big Data Methodology at the
+#' Data collected by the Lab for Big Data Methodology at the
 #' University of Notre Dame in 2017. The participants were 162 students in a
 #' 4-year college in China. There were 90 female and 72 male students.
 #' Their average age was 21.64 years (SD = 0.86). During the data collection,
@@ -78,7 +76,7 @@
 #'    Psychometrika 86, no. 1 (March 2021): 272–98.
 #'    https://doi.org/10.1007/s11336-020-09736-z.
 
-#' @format A [tidygraph::tbl_graph()] graph objects, made up of a node table
+#' @format A [tidygraph::tbl_graph()] graph object, made up of a node table
 #'   and an edge table.
 #'
 #'   The node table has columns:
@@ -94,3 +92,56 @@
 #' @source Obtained from Haiyan Liu over email on April 28, 2022.
 #'
 "smoking"
+
+#' Top level gender-flaired Reddit comments
+#'
+#' Reddit is an online forum divided into topic-specific subforums called
+#' 'subreddits. We consider three subreddits: `keto`, `okcupid`, and
+#' `childfree`. In these subreddits, we identify users whose username
+#' flair includes a gender label (usually 'M' or 'F'). We collect all top-level
+#' comments from these users in 2018. We use each comment's text and score,
+#' the number of likes minus dislikes from other users.
+#' The dataset includes 90k comments in the selected subreddits.
+#'
+#' See <https://github.com/blei-lab/causal-text-embeddings> for a replication
+#' package for Veitch et al (2020). See <https://github.com/blei-lab/causal-text-embeddings/blob/master/src/reddit/data_cleaning/BigQuery_get_data>
+#' in particular for additional data details.
+#'
+#' @references Veitch, Victor, Dhanya Sridhar, and David M Blei.
+#'  "Adapting Text Embeddings for Causal Inference." In Proceedings of the
+#'  36 Th Conference on Uncertainty in Artificial Intelligence (UAI),
+#'  124:10, 2020.
+#'
+#' @format A [tidygraph::tbl_graph()] bipartite graph object, made up
+#'   of a node table and an edge table.
+#'
+#'   The node table has columns:
+#'
+#'   - `type` (logical): A logical indicator of whether a node corresponds to
+#'     a word or a reddit post. Used internally by `igraph` -- see `node_type`
+#'     for an easier to use alternative.
+#'   - `name` (character): Unique node identifier. There is one node in the
+#'     graph for each reddit post, and for each word used in a reddit post.
+#'     Posts are identified by a number. Words are identified by tokenized
+#'     words. Tokenized of raw top-level comment text was performed with
+#'     `tidytext::unnest_tokens(..., token = "tweets")`.
+#'   - `node_type` (character): Either `"post"` or `"word"`.
+#'   - `author_gender`: Either `"female"` or `"male"`, based on user
+#'     flairs. Only available for post nodes.
+#'   - `score` (integer): The number of upvotes minus the number of downvotes
+#'     received by a given post. Only available for post nodes.
+#'   - `subreddit` (character): One of `"keto"`, `"okcupid"` or `"childfree"`.
+#'     Only available for post nodes.
+#'   - `author_pseudonym` (character): An author identifier that is consistent
+#'     across posts. Only available for post nodes.
+#'
+#'   and the edge table has columns:
+#'
+#'   - `from` (int): Id of post
+#'   - `to` (int): Id of word
+#'   - `weight` (double): Number of times a word was used in a post.
+#'
+#' @source Downloaded from <https://archive.org/details/reddit_posts_2018> on
+#'   June 6, 2022.
+#'
+"reddit"

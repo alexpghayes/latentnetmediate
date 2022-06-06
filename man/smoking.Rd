@@ -5,7 +5,7 @@
 \alias{smoking}
 \title{Smoking in a network of chinese college students}
 \format{
-A \code{\link[tidygraph:tbl_graph]{tidygraph::tbl_graph()}} graph objects, made up of a node table
+A \code{\link[tidygraph:tbl_graph]{tidygraph::tbl_graph()}} graph object, made up of a node table
 and an edge table.
 
 The node table has columns:
@@ -27,10 +27,7 @@ Obtained from Haiyan Liu over email on April 28, 2022.
 smoking
 }
 \description{
-Section 6 of Liu et al. describes the data as follows:
-}
-\details{
-We use the data collected by the Lab for Big Data Methodology at the
+Data collected by the Lab for Big Data Methodology at the
 University of Notre Dame in 2017. The participants were 162 students in a
 4-year college in China. There were 90 female and 72 male students.
 Their average age was 21.64 years (SD = 0.86). During the data collection,

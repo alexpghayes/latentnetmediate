@@ -31,11 +31,10 @@ ultimately accessed via \url{https://web.archive.org/web/20210115130726/http://m
 addhealth
 }
 \description{
-Per the original documentation:
-}
-\details{
 The ADD HEALTH data are constructed from the in-school questionnaire;
 90,118 students representing 84 communities took this survey in 1994-95.
+}
+\details{
 Some communities had only one school; others had two. Where there are two
 schools in a community students from one school were allowed to name
 friends in the other, the "sister school."
