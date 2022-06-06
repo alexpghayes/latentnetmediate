@@ -1,5 +1,8 @@
 utils::globalVariables(
   c(
+    "color",
+    "id",
+    "name",
     "nde",
     "nie",
     "effect",
