@@ -80,14 +80,18 @@ NULL
 #' @export
 Z <- function(A, rank, ..., degree_normalize = FALSE) {
   fa <- vsp::vsp(A, rank, ..., degree_normalize = degree_normalize)
-  as.matrix(fa$Z)
+  z <- as.matrix(fa$Z)
+  colnames(z) <- as.character(1:rank)
+  z
 }
 
 #' @rdname vsp_specials
 #' @export
 Y <- function(A, rank, ..., degree_normalize = FALSE) {
   fa <- vsp::vsp(A, rank, ..., degree_normalize = degree_normalize)
-  as.matrix(fa$Y)
+  y <- as.matrix(fa$Y)
+  colnames(y) <- as.character(1:rank)
+  y
 }
 
 #' Use spectral node embeddings in ordinary least squares regression
