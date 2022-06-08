@@ -35,12 +35,14 @@ Imports:
     GGally,
     ggplot2,
     igraph,
+    invertiforms,
     irlba,
     Matrix,
     purrr,
     tibble,
     tidygraph,
-    tidyr
+    tidyr,
+    vsp
 License: MIT + file LICENSE
 VignetteBuilder: knitr
 Remotes: 

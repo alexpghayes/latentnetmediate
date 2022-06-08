@@ -17,6 +17,9 @@ reference:
     contents:
     - netmediate
     - sensitivity_curve
+    - nodelm
+    - ase_specials
+    - vsp_specials
   - title: Simulating data
     contents:
     - sample_tidygraph
