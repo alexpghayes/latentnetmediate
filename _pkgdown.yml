@@ -27,7 +27,6 @@ reference:
     - model_mediator_block
     - model_mediator_informative
     - plot_expected_a_pre_trt
-    - plot_intervention_on_x
   - title: Datasets
     contents:
     - smoking

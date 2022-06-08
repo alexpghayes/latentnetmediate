@@ -127,92 +127,92 @@ plot_x_pre_post_diff <- function(model) {
     )
 }
 
-
-plot_shift <- function(data, mapping) {
-  color_map <- c(
-    "treated-stayed" = "blue1",
-    "start" = "darkgray",
-    "finish" = "firebrick2",
-    "stayed" = "darkgray"
-  )
-
-  ggplot(data = data, mapping = mapping) +
-    geom_point(aes(color = color)) +
-    geom_line(aes(group = id), color = "firebrick2") +
-    geom_vline(xintercept = 0) +
-    geom_hline(yintercept = 0) +
-    scale_color_manual(values = color_map) +
-    expand_limits(x = 0, y = 0)
-}
-
-#' TODO
 #'
-#' @param model TODO
+#' plot_shift <- function(data, mapping) {
+#'   color_map <- c(
+#'     "treated-stayed" = "blue1",
+#'     "start" = "darkgray",
+#'     "finish" = "firebrick2",
+#'     "stayed" = "darkgray"
+#'   )
 #'
-#' @param post_multiply TODO
+#'   ggplot(data = data, mapping = mapping) +
+#'     geom_point(aes(color = color)) +
+#'     geom_line(aes(group = id), color = "firebrick2") +
+#'     geom_vline(xintercept = 0) +
+#'     geom_hline(yintercept = 0) +
+#'     scale_color_manual(values = color_map) +
+#'     expand_limits(x = 0, y = 0)
+#' }
 #'
-#' @return TODO
+#' #' TODO
+#' #'
+#' #' @param model TODO
+#' #'
+#' #' @param post_multiply TODO
+#' #'
+#' #' @return TODO
+#' #'
+#' #' @import ggplot2 GGally
+#' plot_intervention_on_x <- function(model, post_multiply = FALSE) {
 #'
-#' @import ggplot2 GGally
-plot_intervention_on_x <- function(model, post_multiply = FALSE) {
-
-  # plot treatment assignments
-
-  if (post_multiply) {
-    X <- model$X
-    C <- model$C
-  } else {
-    X <- model$UX
-    C <- model$UC
-  }
-
-  X_df <- as.matrix(X) |>
-    as_tibble() |>
-    mutate(
-      type = "post",
-      id = 1:nrow(X),
-      trt = ifelse(model$trt == 1, "treatment", "control"),
-      moved = Matrix::rowSums(abs(X - C)) > 1e-10
-    )
-
-  C_df <- as.matrix(C) |>
-    as_tibble() |>
-    mutate(
-      type = "pre",
-      id = 1:nrow(C),
-      trt = ifelse(model$trt == 1, "treatment", "control"),
-      moved = Matrix::rowSums(abs(X - C)) > 1e-10
-    )
-
-  colnames(X_df) <- colnames(C_df)
-
-  bound <- dplyr::bind_rows(X_df, C_df) |>
-    mutate(
-      color = dplyr::case_when(
-        trt == "treatment" & !moved ~ "treated-stayed",
-        trt == "treatment" & type == "pre" & moved ~ "start",
-        trt == "treatment" & type == "post" & moved ~ "finish",
-        trt == "control" ~ "control-stayed"
-      )
-    )
-
-  columns <- setdiff(colnames(bound), c("trt", "id", "type", "color", "moved"))
-
-  p <- ggpairs(
-    bound,
-    mapping = aes(alpha = 0.1),
-    columns = columns,
-    lower = list(
-      continuous = plot_shift
-    ),
-    upper = list(
-      continuous = plot_shift
-    ),
-    diag = list(
-      mapping = aes(color = NULL)
-    )
-  ) +
-    theme_classic()
-
-  p
-}
+#'   # plot treatment assignments
+#'
+#'   if (post_multiply) {
+#'     X <- model$X
+#'     C <- model$C
+#'   } else {
+#'     X <- model$UX
+#'     C <- model$UC
+#'   }
+#'
+#'   X_df <- as.matrix(X) |>
+#'     as_tibble() |>
+#'     mutate(
+#'       type = "post",
+#'       id = 1:nrow(X),
+#'       trt = ifelse(model$trt == 1, "treatment", "control"),
+#'       moved = Matrix::rowSums(abs(X - C)) > 1e-10
+#'     )
+#'
+#'   C_df <- as.matrix(C) |>
+#'     as_tibble() |>
+#'     mutate(
+#'       type = "pre",
+#'       id = 1:nrow(C),
+#'       trt = ifelse(model$trt == 1, "treatment", "control"),
+#'       moved = Matrix::rowSums(abs(X - C)) > 1e-10
+#'     )
+#'
+#'   colnames(X_df) <- colnames(C_df)
+#'
+#'   bound <- dplyr::bind_rows(X_df, C_df) |>
+#'     mutate(
+#'       color = dplyr::case_when(
+#'         trt == "treatment" & !moved ~ "treated-stayed",
+#'         trt == "treatment" & type == "pre" & moved ~ "start",
+#'         trt == "treatment" & type == "post" & moved ~ "finish",
+#'         trt == "control" ~ "control-stayed"
+#'       )
+#'     )
+#'
+#'   columns <- setdiff(colnames(bound), c("trt", "id", "type", "color", "moved"))
+#'
+#'   p <- ggpairs(
+#'     bound,
+#'     mapping = aes(alpha = 0.1),
+#'     columns = columns,
+#'     lower = list(
+#'       continuous = plot_shift
+#'     ),
+#'     upper = list(
+#'       continuous = plot_shift
+#'     ),
+#'     diag = list(
+#'       mapping = aes(color = NULL)
+#'     )
+#'   ) +
+#'     theme_classic()
+#'
+#'   p
+#' }
