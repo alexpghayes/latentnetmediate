@@ -39,6 +39,7 @@ Imports:
     invertiforms,
     irlba,
     Matrix,
+    methods,
     purrr,
     rlang,
     tibble,
