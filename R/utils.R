@@ -2,6 +2,11 @@ utils::globalVariables(
   c(
     "color",
     "id",
+    "i",
+    "j",
+    "n",
+    "trt",
+    "x",
     "name",
     "nde",
     "nie",
