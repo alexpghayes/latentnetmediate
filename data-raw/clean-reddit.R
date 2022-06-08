@@ -20,7 +20,8 @@ reddit_table <- reddit_raw |>
   mutate(
     post_id = row_number()
   ) |>
-  mutate_at(vars(score), as.integer)
+  mutate_at(vars(score), as.integer) |>
+  slice_sample(n = 100) # TODO: remove this once a large lazyload DB is no longer a nuisance
 
 # limited anonymization of author handles
 
