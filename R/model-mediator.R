@@ -130,13 +130,6 @@ model_mediator_uninformative <- function(n, k = 5, dim_c = 3) {
   theta_c <- matrix(0, nrow = dim_c, ncol = k)
   theta_tc <- matrix(0, nrow = dim_c, ncol = k)
 
-  # check that the residuals X - E[X|T, C] have zero mean
-
-  EX <- matrix(1, nrow = n) %*% theta_0 + trt %*% theta_t + C %*% theta_c + trt * C %*% theta_tc
-  avg_residuals <- Matrix::colMeans(X - EX)
-
-  stopifnot(isTRUE(all.equal(avg_residuals, rep(0, k))))
-
   model <- list(
     n = n,
     k = k,
@@ -269,13 +262,6 @@ model_mediator_block <- function(n, k = 5, dim_c = 3) {
   theta_c <- matrix(0, nrow = dim_c, ncol = k)
   theta_tc <- matrix(0, nrow = dim_c, ncol = k)
 
-  # check that the residuals X - E[X|T, C] have zero mean
-
-  EX <- matrix(1, nrow = n) %*% theta_0 + trt %*% theta_t + C %*% theta_c + trt * C %*% theta_tc
-  avg_residuals <- Matrix::colMeans(X - EX)
-
-  stopifnot(isTRUE(all.equal(avg_residuals, rep(0, k))))
-
   model <- list(
     n = n,
     k = k,
@@ -297,17 +283,18 @@ model_mediator_block <- function(n, k = 5, dim_c = 3) {
 
 #' Title
 #'
-#' @param beta_0 TODO
-#' @param beta_t TODO
-#' @param beta_c TODO
-#' @param beta_x TODO
+#' @inheritParams model_mediator_uninformative
+#'
+#' @param theta_0 TODO
+#' @param theta_t TODO
+#' @param theta_c TODO
+#' @param theta_tc TODO
 #'
 #' @return TODO
 #' @export
 #'
-model_mediator_informative <- function(n, k = 5, prob_trt = 0.5, theta_0 = NULL, theta_t = NULL,
-                                       theta_c = NULL, theta_tc = NULL, beta_0 = NULL,
-                                       beta_t = NULL, beta_c = NULL, beta_x = NULL) {
+model_mediator_informative <- function(n, k = 5,theta_0 = NULL, theta_t = NULL,
+                                       theta_c = NULL, theta_tc = NULL) {
 
   # 1. sample C
 
@@ -359,24 +346,6 @@ model_mediator_informative <- function(n, k = 5, prob_trt = 0.5, theta_0 = NULL,
 
   X <- theta_0 + trt %*% theta_t + C %*% theta_c + trt * C %*% theta_tc
 
-  if (is.null(beta_0)) {
-    beta_0 <- 0
-  }
-
-  if (is.null(beta_t)) {
-    beta_t <- 0
-  }
-
-  if (is.null(beta_c)) {
-    beta_c <- rep(0, ncol(C))
-  }
-
-  if (is.null(beta_x)) {
-    beta_x <- rep(0, ncol(X))
-  }
-
-  y <- beta_0 + trt * beta_t + C %*% beta_c + X %*% beta_x + stats::rnorm(n)
-
   model <- list(
     n = n,
     UX = X,
@@ -386,18 +355,13 @@ model_mediator_informative <- function(n, k = 5, prob_trt = 0.5, theta_0 = NULL,
     C = C %*% post_mult,
     UC_model = C_model,
     trt = trt,
-    y = as.numeric(y),
     theta_0 = theta_0,
     theta_t = theta_t,
     theta_c = theta_c,
-    theta_tc = theta_tc,
-    beta_0 = beta_0,
-    beta_t = beta_t,
-    beta_c = beta_c,
-    beta_x = beta_x
+    theta_tc = theta_tc
   )
 
-  class(model) <- c("model1", "mediated_rdpg")
+  class(model) <- c("informative", "mediator", "mrdpg")
 
   model
 }
