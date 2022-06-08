@@ -69,6 +69,7 @@ VS <- function(A, rank, ...) {
 #' @param A A [matrix()] or [Matrix::Matrix()] object.
 #' @param rank Rank of desired decomposition.
 #' @inheritDotParams vsp::vsp
+#' @inheritParams vsp::vsp
 #'
 #' @name vsp_specials
 #' @seealso nodelm, ase_specials
@@ -139,6 +140,7 @@ Y <- function(A, rank, ..., degree_normalize = FALSE) {
 #' nodelm(as.integer(smokes) ~ sex + U(A, 5) , graph = smoking)
 #'
 #' library(Matrix)
+#' library(tidygraph)
 #'
 #' B <- igraph::as_adjacency_matrix(addhealth[[36]], attr = "weight")
 #'

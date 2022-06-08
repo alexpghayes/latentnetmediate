@@ -42,7 +42,7 @@ model_informative_controls(
 \item{beta_x}{TODO}
 }
 \value{
-
+TODO
 }
 \description{
 Title

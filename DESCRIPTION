@@ -31,6 +31,7 @@ Depends:
     R (>= 4.2.0)
 Imports: 
     dplyr,
+    estimatr,
     fastRG (>= 0.3.0.9004),
     GGally,
     ggplot2,
@@ -39,6 +40,7 @@ Imports:
     irlba,
     Matrix,
     purrr,
+    rlang,
     tibble,
     tidygraph,
     tidyr,
