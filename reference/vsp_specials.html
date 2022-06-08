@@ -50,7 +50,7 @@ vsp::vsp() for details."><!-- mathjax --><script src="https://cdnjs.cloudflare.c
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Helper functions for including rotated node embeddings in formulas</h1>
-      <small class="dont-index">Source: <a href="https://github.com/alexpghayes/netmediate/blob/HEAD/R/formulae.R" class="external-link"><code>R/formulae.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alexpghayes/netmediate/blob/HEAD/R/nodelm.R" class="external-link"><code>R/nodelm.R</code></a></small>
       <div class="d-none name"><code>vsp_specials.Rd</code></div>
     </div>
 
@@ -83,6 +83,10 @@ to node <code>j</code>.</p></dd>
 
   
 </dl></dd>
+<dt>degree_normalize</dt>
+<dd><p>Should the regularized graph laplacian be used instead of the
+raw adjacency matrix? Defaults to <code>TRUE</code>. If <code>center = TRUE</code>, <code>A</code> will
+first be centered and then normalized.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
