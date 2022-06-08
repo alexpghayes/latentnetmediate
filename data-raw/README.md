@@ -29,6 +29,11 @@ regression [1]. I do not know what pre-processing they used to generate the
 networks in `AddHealth84Communities.Rda`, but would eventually like to
 reproduce the results from their paper in this package for comparison purposes.
 
+## Data to update and import
+
+Glasgow data from Siena package, pulled from <https://www.stats.ox.ac.uk/~snijders/siena/Glasgow_data.htm> on 2022-06-08
+
+
 ## References
 
-[1] Le, Can M., and Tianxi Li. “Linear Regression and Its Inference on Noisy Network-Linked Data.” ArXiv:2007.00803 [Stat], 2021. http://arxiv.org/abs/2007.00803.
+[1] Le, Can M., and Tianxi Li. “Linear Regression and Its Inference on Noisy Network-Linked Data.” ArXiv:2007.00803 [Stat], 2021. <http://arxiv.org/abs/2007.00803>.
