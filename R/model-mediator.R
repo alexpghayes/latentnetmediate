@@ -305,7 +305,7 @@ model_mediator_block <- function(n, k = 5, dim_c = 3) {
 #' @return TODO
 #' @export
 #'
-model_informative_controls <- function(n, k = 5, prob_trt = 0.5, theta_0 = NULL, theta_t = NULL,
+model_mediator_informative <- function(n, k = 5, prob_trt = 0.5, theta_0 = NULL, theta_t = NULL,
                                        theta_c = NULL, theta_tc = NULL, beta_0 = NULL,
                                        beta_t = NULL, beta_c = NULL, beta_x = NULL) {
 

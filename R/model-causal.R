@@ -32,7 +32,6 @@
 #' @param beta_x TODO
 #'
 #' @return TODO
-#' @export
 #'
 model_informative_controls <- function(n, k = 5, prob_trt = 0.5, theta_0 = NULL, theta_t = NULL,
                                        theta_c = NULL, theta_tc = NULL, beta_0 = NULL,
