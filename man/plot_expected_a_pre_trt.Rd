@@ -5,6 +5,7 @@
 \alias{plot_expected_a_post_trt}
 \alias{plot_expected_a_pre_post_diff}
 \alias{plot_x_pre_post_diff}
+\alias{plot_sparse_adjacency_matrix}
 \title{Title}
 \usage{
 plot_expected_a_pre_trt(model)
@@ -14,9 +15,13 @@ plot_expected_a_post_trt(model)
 plot_expected_a_pre_post_diff(model)
 
 plot_x_pre_post_diff(model)
+
+plot_sparse_adjacency_matrix(A)
 }
 \arguments{
 \item{model}{TODO}
+
+\item{A}{TODO}
 }
 \value{
 TODO
