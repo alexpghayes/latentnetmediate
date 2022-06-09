@@ -31,13 +31,22 @@
     <loc>https://alexpghayes.github.io/netmediate/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/model_informative_controls.html</loc>
+    <loc>https://alexpghayes.github.io/netmediate/reference/model_mediator_block.html</loc>
+  </url>
+  <url>
+    <loc>https://alexpghayes.github.io/netmediate/reference/model_mediator_informative.html</loc>
+  </url>
+  <url>
+    <loc>https://alexpghayes.github.io/netmediate/reference/model_mediator_uninformative.html</loc>
   </url>
   <url>
     <loc>https://alexpghayes.github.io/netmediate/reference/netmediate.html</loc>
   </url>
   <url>
     <loc>https://alexpghayes.github.io/netmediate/reference/nodelm.html</loc>
+  </url>
+  <url>
+    <loc>https://alexpghayes.github.io/netmediate/reference/plot_expected_a_pre_trt.html</loc>
   </url>
   <url>
     <loc>https://alexpghayes.github.io/netmediate/reference/reddit.html</loc>

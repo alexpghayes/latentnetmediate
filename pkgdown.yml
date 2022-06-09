@@ -3,7 +3,7 @@ pkgdown: 2.0.3
 pkgdown_sha: ~
 articles:
   interventions: interventions.html
-last_built: 2022-06-08T16:00Z
+last_built: 2022-06-09T00:02Z
 urls:
   reference: https://alexpghayes.github.io/netmediate/reference
   article: https://alexpghayes.github.io/netmediate/articles
