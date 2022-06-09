@@ -11,6 +11,10 @@ test_that("uninformative model residuals are zero", {
     avg_residuals,
     rep(0, mu$k)
   )
+
+  expect_silent(
+    graph <- sample_tidygraph(mu)
+  )
 })
 
 test_that("block model residuals are zero", {
@@ -26,6 +30,11 @@ test_that("block model residuals are zero", {
     avg_residuals,
     rep(0, mblock$k)
   )
+
+  expect_silent(
+    graph <- sample_tidygraph(mblock)
+  )
+
 })
 
 test_that("informative model residuals are zero", {
@@ -40,6 +49,10 @@ test_that("informative model residuals are zero", {
   expect_equal(
     avg_residuals,
     rep(0, informative$k)
+  )
+
+  expect_silent(
+    graph <- sample_tidygraph(informative)
   )
 })
 
@@ -63,5 +76,9 @@ test_that("perfect model residuals are zero", {
   expect_equal(
     avg_residuals,
     rep(0, perfect$k)
+  )
+
+  expect_silent(
+    graph <- sample_tidygraph(perfect)
   )
 })
