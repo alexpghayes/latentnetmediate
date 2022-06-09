@@ -15,10 +15,9 @@ sample_tidygraph <- function(model, ...) {
 #' @export
 sample_tidygraph.mediator <- function(model, ...) {
 
-  C_df <- as.matrix(model$C) |>
-    as_tibble()
-
-  colnames(C_df) <- paste0("C", 1:ncol(model$C))
+  C <- as.matrix(model$C)
+  colnames(C) <- paste0("C", 1:ncol(model$C))
+  C_df <- as_tibble(C)
 
   graph <- fastRG::sample_tidygraph(
     model$A_model,
