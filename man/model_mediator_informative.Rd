@@ -7,10 +7,10 @@
 model_mediator_informative(
   n,
   k = 5,
-  theta_0 = NULL,
-  theta_t = NULL,
-  theta_c = NULL,
-  theta_tc = NULL
+  ztheta_0 = NULL,
+  ztheta_t = NULL,
+  ztheta_c = NULL,
+  ztheta_tc = NULL
 )
 }
 \arguments{
@@ -18,13 +18,13 @@ model_mediator_informative(
 
 \item{k}{TODO}
 
-\item{theta_0}{TODO}
+\item{ztheta_0}{TODO}
 
-\item{theta_t}{TODO}
+\item{ztheta_t}{TODO}
 
-\item{theta_c}{TODO}
+\item{ztheta_c}{TODO}
 
-\item{theta_tc}{TODO}
+\item{ztheta_tc}{TODO}
 }
 \value{
 TODO

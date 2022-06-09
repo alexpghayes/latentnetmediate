@@ -46,6 +46,7 @@ Imports:
     tibble,
     tidygraph,
     tidyr,
+    vegan,
     vsp
 License: MIT + file LICENSE
 VignetteBuilder: knitr

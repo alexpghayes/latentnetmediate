@@ -1,5 +1,8 @@
 utils::globalVariables(
   c(
+    "aligned_true_coef",
+    "conf.low",
+    "conf.high",
     "color",
     "id",
     "i",
