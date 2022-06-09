@@ -104,16 +104,8 @@ model_mediator_uninformative <- function(n, k = 5, dim_c = 3) {
     expected_density = 0.1
   )
 
-  # derive the population ASE from A_model. E[A|stuff] = X S X^T
-  # compute population ASE as X %*% left_principle_components(S)
-  #
-  # note that X is orthogonal but not orthonormal in the fastRG
-  # parameterization
-
-  S_eigs <- eigen(A_model$S)
-  S_pcs <- S_eigs$vectors %*% diag(sqrt(S_eigs$values))
-
-  X <- A_model$X %*% S_pcs
+  A_eigs <- fastRG::eigs_sym(A_model, k = k)
+  X <- A_eigs$vectors %*% diag(sqrt(A_eigs$values))
 
   trt <- stats::rbinom(n, size = 1, prob = 0.5)
 
@@ -216,16 +208,6 @@ model_mediator_block <- function(n, k = 5, dim_c = 3) {
 
   pi <- rep(1 / k, k)
 
-  # this is a little delicate. we want to simulate A from a dcsbm, but if we
-  # compute the eigen decomposition of E[A|X] to get the population positions
-  # X, X may have negative elements. when X has negative elements we can't
-  # use the fastRG algorithm to sample A, but we very much want to sample
-  # using the fastRG algorithm so that we can simulate large sparse graphs
-  #
-  # so the trick here is to use the fastRG parameterization of the dcsbm
-  # for simulating A, and to derive X from this parameterization but to
-  # avoid using X for simulations
-
   A_model <- fastRG::dcsbm(
     theta = stats::runif(n, min = 1, max = 3),
     B = B,
@@ -233,16 +215,8 @@ model_mediator_block <- function(n, k = 5, dim_c = 3) {
     expected_density = 0.1
   )
 
-  # derive the population ASE from A_model. E[A|stuff] = X S X^T
-  # compute population ASE as X %*% left_principle_components(S)
-  #
-  # note that X is orthogonal but not orthonormal in the fastRG
-  # parameterization
-
-  S_eigs <- eigen(A_model$S)
-  S_pcs <- S_eigs$vectors %*% diag(sqrt(S_eigs$values))
-
-  X <- A_model$X %*% S_pcs
+  A_eigs <- fastRG::eigs_sym(A_model, k = k)
+  X <- A_eigs$vectors %*% diag(sqrt(A_eigs$values))
 
   trt <- as.integer(as.integer(A_model$z) <= round(k / 2))
 
@@ -254,7 +228,7 @@ model_mediator_block <- function(n, k = 5, dim_c = 3) {
 
   # coefficients to later compare estimates to
 
-  # back out coefficients
+  # back out coefficients by computing E[X|trt] on population data
   fit <- stats::lm(as.matrix(X) ~ trt)
 
   theta_0 <- stats::coef(fit)["(Intercept)", , drop = FALSE]
@@ -293,10 +267,8 @@ model_mediator_block <- function(n, k = 5, dim_c = 3) {
 #' @return TODO
 #' @export
 #'
-model_mediator_informative <- function(n, k = 5,theta_0 = NULL, theta_t = NULL,
+model_mediator_informative <- function(n, k = 5, theta_0 = NULL, theta_t = NULL,
                                        theta_c = NULL, theta_tc = NULL) {
-
-  # 1. sample C
 
   B <- matrix(0.01, nrow = k, ncol = k)
   diag(B) <- 0.8
@@ -310,51 +282,40 @@ model_mediator_informative <- function(n, k = 5,theta_0 = NULL, theta_t = NULL,
     expected_density = 0.1
   )
 
-  # NOTE: designing an intervention on the ASE is a pain in the ass, so instead
-  # we parameterize the intervention here on the left singular vectors and
-  # then post-multiply everything to move from "U-space" to "U sqrt(S)-space"
+  C_eigs <- fastRG::eigs_sym(C_model, k = k)
+  C <- C_eigs$vectors %*% diag(sqrt(C_eigs$values))
 
-  # C_eigs <- eigs_sym(C_model)
-  S_eigs <- eigen(C_model$S)
-  post_mult <- S_eigs$vectors %*% diag(sqrt(S_eigs$values))
+  A_model <- fastRG::dcsbm(
+    theta = stats::runif(n, min = 1, max = 3),
+    B = B,
+    pi = pi,
+    expected_density = 0.1
+  )
 
+  A_eigs <- fastRG::eigs_sym(A_model, k = k)
+  X <- A_eigs$vectors %*% diag(sqrt(A_eigs$values))
 
-  # C <- C_eigs$vectors %*% diag(sqrt(C_eigs$values))
-  C <- C_model$X
+  trt <- stats::rbinom(n = n, size = 1, prob = 0.5)
 
-  # 2. choose who to treat: everybody in blocks 1, 2, 3
-  # trt <- rbinom(n, size = 1, prob = as.integer(C_model$z) < 4)
-  trt <- stats::rbinom(n, size = 1, prob = 0.5)
+  # back out implied coefficients
 
-  # 3. intervention to form X
+  fit <- stats::lm(as.matrix(X) ~ trt + as.matrix(C))
 
-  if (is.null(theta_0)) {
-    theta_0 <- matrix(0, nrow = n, ncol = k)
-  }
+  theta_c_terms <- paste0("as.matrix(C)", 1:k)
+  dim_c <- k
 
-  if (is.null(theta_t)) {
-    theta_t <- rbind(rep(0, k))
-  }
-
-  if (is.null(theta_c)) {
-    theta_c <- diag(x = 1, nrow = k, ncol = k)
-  }
-
-  if (is.null(theta_tc)) {
-    theta_tc <- matrix(0, nrow = k, ncol = k)
-  }
-
-  X <- theta_0 + trt %*% theta_t + C %*% theta_c + trt * C %*% theta_tc
+  theta_0 <- stats::coef(fit)["(Intercept)", , drop = FALSE]
+  theta_t <- stats::coef(fit)["trt", , drop = FALSE]
+  theta_c <- stats::coef(fit)[theta_c_terms, , drop = FALSE]
+  theta_tc <- matrix(0, nrow = dim_c, ncol = k)
 
   model <- list(
     n = n,
-    UX = X,
-    UC = C,
-    post_mult = post_mult,
-    X = X %*% post_mult,
-    C = C %*% post_mult,
-    UC_model = C_model,
+    k = k,
+    X = X,
     trt = trt,
+    C = C,
+    A_model = A_model,
     theta_0 = theta_0,
     theta_t = theta_t,
     theta_c = theta_c,
@@ -362,6 +323,116 @@ model_mediator_informative <- function(n, k = 5,theta_0 = NULL, theta_t = NULL,
   )
 
   class(model) <- c("informative", "mediator", "mrdpg")
+
+  model
+}
+
+
+
+#' Title
+#'
+#' @inheritParams model_mediator_uninformative
+#'
+#' @param ztheta_0 TODO
+#' @param ztheta_t TODO
+#' @param ztheta_c TODO
+#' @param ztheta_tc TODO
+#'
+#' @return TODO
+#' @export
+#'
+model_mediator_perfect <- function(n, k = 5, ztheta_0 = NULL, ztheta_t = NULL,
+                                   ztheta_c = NULL, ztheta_tc = NULL) {
+
+  B <- matrix(0.01, nrow = k, ncol = k)
+  diag(B) <- 0.8
+
+  pi <- rep(1 / k, k)
+
+  C_model <- fastRG::dcsbm(
+    theta = stats::runif(n, min = 1, max = 3),
+    B = B,
+    pi = pi,
+    expected_density = 0.1
+  )
+
+  # transformations are applied to this matrix because it is easiest to
+  # reason about
+  zC <- C_model$X
+
+  C_eigs <- fastRG::eigs_sym(C_model, k = k)
+  C <- C_eigs$vectors %*% diag(sqrt(C_eigs$values))
+
+  trt <- stats::rbinom(n, size = 1, prob = 0.5)
+
+  dim_c <- k
+
+  if (is.null(ztheta_0)) {
+    ztheta_0 <- matrix(0, nrow = 1, ncol = k)
+  }
+
+  if (is.null(ztheta_t)) {
+    ztheta_t <- matrix(0, nrow = 1, ncol = k)
+  }
+
+  if (is.null(ztheta_c)) {
+    ztheta_c <- diag(x = 1, nrow = dim_c, ncol = k)
+  }
+
+  if (is.null(ztheta_tc)) {
+    ztheta_tc <- matrix(0, nrow = dim_c, ncol = k)
+  }
+
+  # here we perform the intervention in Z space so we can take the post-trt
+  # Z and plug it into a new fastRG object to simulate from
+
+  ones <- matrix(1, nrow = n)
+  zX <- ones %*% ztheta_0 + trt %*% ztheta_t + zC %*% ztheta_c + trt * zC %*% ztheta_tc
+
+  A_model <- fastRG::undirected_factor_model(X = zX, S = C_model$S)
+  A_eigs <- fastRG::eigs_sym(A_model, k = k)
+  X <- A_eigs$vectors %*% diag(sqrt(A_eigs$values))
+
+  # EX = X since we are in the noiseless case
+  EX <- as.matrix(X)
+
+  # back out the ASE space regression coefficients
+  # this fit needs to be perfect or the parameterization is bad
+  # we need to prove that this is always the case but have not yet
+  fit <- stats::lm(EX ~ trt * as.matrix(C))
+
+  # can check for perfect fit by running `summary(fit)`, which should
+  # give a warning
+
+  theta_c_terms <- paste0("as.matrix(C)", 1:k)
+  theta_tc_terms <- paste0("trt:as.matrix(C)", 1:k)
+
+  theta_0 <- stats::coef(fit)["(Intercept)", , drop = FALSE]
+  theta_t <- stats::coef(fit)["trt", , drop = FALSE]
+  theta_c <- stats::coef(fit)[theta_c_terms, , drop = FALSE]
+  theta_tc <- stats::coef(fit)[theta_tc_terms, , drop = FALSE]
+
+  model <- list(
+    n = n,
+    k = k,
+    X = X,
+    trt = trt,
+    C = C,
+    A_model = A_model,
+    theta_0 = theta_0,
+    theta_t = theta_t,
+    theta_c = theta_c,
+    theta_tc = theta_tc,
+    C_model = C_model,
+    zC = zC,
+    zX = zX,
+    ztheta_0 = ztheta_0,
+    ztheta_t = ztheta_t,
+    ztheta_c = ztheta_c,
+    ztheta_tc = ztheta_tc
+  )
+
+  class(model) <- c("perfect", "mediator", "mrdpg")
 
   model
 }

@@ -44,7 +44,7 @@ expected_a_post_trt <- function(model) {
 }
 
 threshold <- function(X, threshold = 1e-10) {
-  X[X < threshold] <- 0
+  X[abs(X) < threshold] <- 0
   X
 }
 
