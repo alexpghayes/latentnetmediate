@@ -7,25 +7,24 @@
 model_mediator_informative(
   n,
   k = 5,
-  prob_trt = 0.5,
   theta_0 = NULL,
   theta_t = NULL,
   theta_c = NULL,
-  theta_tc = NULL,
-  beta_0 = NULL,
-  beta_t = NULL,
-  beta_c = NULL,
-  beta_x = NULL
+  theta_tc = NULL
 )
 }
 \arguments{
-\item{beta_0}{TODO}
+\item{n}{TODO}
 
-\item{beta_t}{TODO}
+\item{k}{TODO}
 
-\item{beta_c}{TODO}
+\item{theta_0}{TODO}
 
-\item{beta_x}{TODO}
+\item{theta_t}{TODO}
+
+\item{theta_c}{TODO}
+
+\item{theta_tc}{TODO}
 }
 \value{
 TODO

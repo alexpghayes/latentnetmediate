@@ -6,7 +6,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-4985-5160"))
   )
 Description: Uses spectral network regression to estimate natural direct
-    and indirect effects in network mediation settings. The estimator is 
+    and indirect effects in network mediation settings. The estimator
     proceeds in two stages: first, it estimates a spectral embeddings
     of (generalized) random dot product graphs by taking low rank
     decompositions of the graph adjacency matrix and degree-normalized
@@ -26,7 +26,8 @@ RoxygenNote: 7.1.2
 Suggests: 
     covr,
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat (>= 3.0.0)
 Depends: 
     R (>= 4.2.0)
 Imports: 
