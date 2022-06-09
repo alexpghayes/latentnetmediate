@@ -94,12 +94,45 @@ plot_expected_a_post_trt <- function(model) {
 #' @export
 plot_expected_a_pre_post_diff <- function(model) {
 
-  .NotYetImplemented()
-
   stopifnot(inherits(model, "mediator"))
 
   diff <- expected_a_post_trt(model) - expected_a_pre_trt(model)
   diff_nice <- methods::as(methods::as(threshold(diff), "TsparseMatrix"), "dgTMatrix")
+
+  Matrix::summary(diff_nice) |>
+    ggplot2::ggplot(ggplot2::aes(x = j, y = -i, fill = x)) +
+    ggplot2::geom_tile() +
+    scale_fill_viridis_c() +
+    scale_fill_gradient(low = "white", high = "black", limits = c(0, 1)) +
+    ggplot2::theme_void() +
+    theme(
+      legend.position = "none"
+    )
+}
+
+plot_shift <- function(data, mapping) {
+  color_map <- c(
+    "treated-stayed" = "blue1",
+    "start" = "darkgray",
+    "finish" = "firebrick2",
+    "stayed" = "darkgray"
+  )
+
+  ggplot(data = data, mapping = mapping) +
+    geom_point(aes(color = color)) +
+    geom_line(aes(group = id), color = "firebrick2") +
+    geom_vline(xintercept = 0) +
+    geom_hline(yintercept = 0) +
+    scale_color_manual(values = color_map) +
+    expand_limits(x = 0, y = 0)
+}
+
+#' @rdname plot_expected_a_pre_trt
+#' @export
+plot_x_pre_post_diff <- function(model) {
+  stopifnot(inherits(model, "mediator"))
+
+  .NotYetImplemented()
 
   plot_intervention_on_x <- function(model, post_multiply = FALSE) {
 
@@ -145,7 +178,7 @@ plot_expected_a_pre_post_diff <- function(model) {
 
     columns <- setdiff(colnames(bound), c("trt", "id", "type", "color", "moved"))
 
-    p <- ggpairs(
+    p <- GGally::ggpairs(
       bound,
       mapping = aes(alpha = 0.1),
       columns = columns,
@@ -164,39 +197,6 @@ plot_expected_a_pre_post_diff <- function(model) {
     p
   }
 
-  Matrix::summary(diff_nice) |>
-    ggplot2::ggplot(ggplot2::aes(x = j, y = -i, fill = x)) +
-    ggplot2::geom_tile() +
-    scale_fill_viridis_c() +
-    scale_fill_gradient(low = "white", high = "black", limits = c(0, 1)) +
-    ggplot2::theme_void() +
-    theme(
-      legend.position = "none"
-    )
-}
-
-plot_shift <- function(data, mapping) {
-  color_map <- c(
-    "treated-stayed" = "blue1",
-    "start" = "darkgray",
-    "finish" = "firebrick2",
-    "stayed" = "darkgray"
-  )
-
-  ggplot(data = data, mapping = mapping) +
-    geom_point(aes(color = color)) +
-    geom_line(aes(group = id), color = "firebrick2") +
-    geom_vline(xintercept = 0) +
-    geom_hline(yintercept = 0) +
-    scale_color_manual(values = color_map) +
-    expand_limits(x = 0, y = 0)
-}
-
-#' @rdname plot_expected_a_pre_trt
-#' @export
-plot_x_pre_post_diff <- function(model) {
-  stopifnot(inherits(model, "mediator"))
-
   diff <- x_post_trt(model) - x_pre_trt(model)
   diff_nice <- methods::as(methods::as(threshold(diff), "TsparseMatrix"), "dgTMatrix")
 
@@ -214,8 +214,8 @@ plot_x_pre_post_diff <- function(model) {
 #' @rdname plot_expected_a_pre_trt
 #' @export
 plot_sparse_adjacency_matrix <- function(A) {
-  sign(as(A, "dgCMatrix")) %>%
-    summary(A, uniqT = FALSE) %>%
+  sign(methods::as(A, "dgCMatrix")) |>
+    summary(A, uniqT = FALSE) |>
     ggplot(aes(j, -i, fill = x)) +
     geom_tile(fill = "black") +
     theme_void()
