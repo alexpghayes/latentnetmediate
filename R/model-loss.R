@@ -38,7 +38,7 @@ mediator_loss <- function(estimates, model) {
   coef_estimates <- stats::coef(estimates)
 
   coef_model <- stats::coef(model)
-  rownames(model) <- rownames(coef_estimates)
+  rownames(coef_model) <- rownames(coef_estimates)
 
   procrustes <- vegan::procrustes(coef_estimates, coef_model, scale = FALSE)
 
