@@ -36,12 +36,16 @@ plot_expected_a_pre_post_diff(mblock)
 graph <- sample_tidygraph(mblock)
 graph
 
-fit <- nodelm(US(A, 5) ~ trt + C1 + C2 + C3 , graph = graph)
+fit <- nodelm(US(A, 5) ~ trt1 + trt2 + trt3 + trt4 + trt5 + C1 + C2 + C3 , graph = graph)
 
 true_coefs <- tibble(
   outcome = 1:5,
   `(Intercept)` = drop(mblock$theta_0),
-  trt = drop(mblock$theta_t),
+  trt1 = mblock$theta_t[1, ],
+  trt2 = mblock$theta_t[2, ],
+  trt3 = mblock$theta_t[3, ],
+  trt4 = mblock$theta_t[4, ],
+  trt5 = mblock$theta_t[5, ],
   C1 = mblock$theta_c[1, ],
   C2 = mblock$theta_c[2, ],
   C3 = mblock$theta_c[3, ]

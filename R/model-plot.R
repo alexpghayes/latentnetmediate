@@ -1,7 +1,14 @@
 expected_x_pre_trt <- function(model) {
   stopifnot(inherits(model, "mediator"))
 
-  untrt <- rep(0, length(model$trt))
+  # maybe a vector, maybe a whole matrix
+  trt <- model$trt
+
+  if (is.matrix(trt)) {
+    untrt <- matrix(0, nrow = nrow(trt), ncol = ncol(trt))
+  } else{
+    untrt <- rep(0, length(trt))
+  }
 
   EX <- matrix(1, nrow = model$n) %*% model$theta_0 + untrt %*% model$theta_t + model$C %*% model$theta_c + untrt * model$C %*% model$theta_tc
   EX
@@ -102,7 +109,6 @@ plot_expected_a_pre_post_diff <- function(model) {
   Matrix::summary(diff_nice) |>
     ggplot2::ggplot(ggplot2::aes(x = j, y = -i, fill = x)) +
     ggplot2::geom_tile() +
-    scale_fill_viridis_c() +
     scale_fill_gradient(low = "white", high = "black", limits = c(0, 1)) +
     ggplot2::theme_void() +
     theme(

@@ -72,7 +72,7 @@ model_mediator_uninformative <- function(n, k = 5, dim_c = 3) {
   B <- matrix(0.01, nrow = k, ncol = k)
   diag(B) <- 0.8
 
-  pi <- rep(1 / k, k)
+  pi <- rep(0.5, k)
 
   # this is a little delicate. we want to simulate A from a dcsbm, but if we
   # compute the eigen decomposition of E[A|X] to get the population positions
@@ -84,7 +84,7 @@ model_mediator_uninformative <- function(n, k = 5, dim_c = 3) {
   # for simulating A, and to derive X from this parameterization but to
   # avoid using X for simulations
 
-  A_model <- fastRG::dcsbm(
+  A_model <- fastRG::overlapping_sbm(
     theta = stats::runif(n, min = 1, max = 3),
     B = B,
     pi = pi,
@@ -122,7 +122,7 @@ model_mediator_uninformative <- function(n, k = 5, dim_c = 3) {
     theta_tc = theta_tc
   )
 
-  class(model) <- c("uniformative", "mediator", "mrdpg")
+  class(model) <- c("uninformative", "mediator", "mrdpg")
 
   model
 }
@@ -153,12 +153,16 @@ model_mediator_uninformative <- function(n, k = 5, dim_c = 3) {
 #' graph <- sample_tidygraph(mblock)
 #' graph
 #'
-#' fit <- nodelm(US(A, 5) ~ trt + C1 + C2 + C3 , graph = graph)
+#' fit <- nodelm(US(A, 5) ~ trt1 + trt2 + trt3 + trt4 + trt5 + C1 + C2 + C3 , graph = graph)
 #'
 #' true_coefs <- tibble(
 #'   outcome = 1:5,
 #'   `(Intercept)` = drop(mblock$theta_0),
-#'   trt = drop(mblock$theta_t),
+#'   trt1 = mblock$theta_t[1, ],
+#'   trt2 = mblock$theta_t[2, ],
+#'   trt3 = mblock$theta_t[3, ],
+#'   trt4 = mblock$theta_t[4, ],
+#'   trt5 = mblock$theta_t[5, ],
 #'   C1 = mblock$theta_c[1, ],
 #'   C2 = mblock$theta_c[2, ],
 #'   C3 = mblock$theta_c[3, ]
@@ -193,9 +197,9 @@ model_mediator_block <- function(n, k = 5, dim_c = 3) {
   B <- matrix(0.01, nrow = k, ncol = k)
   diag(B) <- 0.8
 
-  pi <- rep(1 / k, k)
+  pi <- rep(0.5, k)
 
-  A_model <- fastRG::dcsbm(
+  A_model <- fastRG::overlapping_sbm(
     theta = stats::runif(n, min = 1, max = 3),
     B = B,
     pi = pi,
@@ -205,7 +209,7 @@ model_mediator_block <- function(n, k = 5, dim_c = 3) {
   A_eigs <- fastRG::eigs_sym(A_model, k = k)
   X <- A_eigs$vectors %*% diag(sqrt(A_eigs$values))
 
-  trt <- as.integer(as.integer(A_model$z) <= round(k / 2))
+  trt <- as.matrix(A_model$Z)
 
   C <- matrix(
     stats::rnorm(n * dim_c),
@@ -219,7 +223,7 @@ model_mediator_block <- function(n, k = 5, dim_c = 3) {
   fit <- stats::lm(as.matrix(X) ~ trt)
 
   theta_0 <- stats::coef(fit)["(Intercept)", , drop = FALSE]
-  theta_t <- stats::coef(fit)["trt", , drop = FALSE]
+  theta_t <- stats::coef(fit)[-1, , drop = FALSE]
   theta_c <- matrix(0, nrow = dim_c, ncol = k)
   theta_tc <- matrix(0, nrow = dim_c, ncol = k)
 
