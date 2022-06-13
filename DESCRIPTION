@@ -31,6 +31,7 @@ Suggests:
 Depends: 
     R (>= 4.2.0)
 Imports: 
+    broom,
     dplyr,
     estimatr,
     fastRG (>= 0.3.0.9004),

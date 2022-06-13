@@ -17,6 +17,7 @@
 #'
 #' @examples
 #'
+#' library(broom)
 #' library(estimatr)
 #' library(ggplot2)
 #' library(dplyr)
@@ -35,7 +36,7 @@
 #' fit <- nodelm(US(A, 5) ~ trt + C1 + C2 + C3 , graph = graph)
 #'
 #' true_coefs <- tibble(
-#'   outcome = 1:5,
+#'   response = 1:5,
 #'   `(Intercept)` = drop(mu$theta_0),
 #'   trt = drop(mu$theta_t),
 #'   C1 = mu$theta_c[1, ],
@@ -43,12 +44,12 @@
 #'   C3 = mu$theta_c[3, ]
 #' ) |>
 #'   tidyr::pivot_longer(
-#'     cols = -outcome,
+#'     cols = -response,
 #'     names_to = "term",
 #'     values_to = "estimate"
 #'   )
 #'
-#' tidy(fit) |>
+#' tidy(fit, conf.int = TRUE) |>
 #'   ggplot(aes(x = term, ymin = conf.low, y = estimate, ymax = conf.high)) +
 #'   geom_pointrange() +
 #'   geom_point(
@@ -62,7 +63,7 @@
 #'   geom_hline(yintercept = 0, linetype = "dashed") +
 #'   coord_flip() +
 #'   facet_wrap(
-#'     vars(outcome),
+#'     vars(response),
 #'     labeller = "label_both"
 #'   ) +
 #'   theme_classic()
@@ -138,6 +139,7 @@ model_mediator_uninformative <- function(n, k = 5, dim_c = 3) {
 #'
 #' @examples
 #'
+#' library(broom)
 #' library(estimatr)
 #' library(ggplot2)
 #' library(tidyr)
@@ -220,10 +222,10 @@ model_mediator_block <- function(n, k = 5, dim_c = 3) {
   # coefficients to later compare estimates to
 
   # back out coefficients by computing E[X|trt] on population data
-  fit <- stats::lm(as.matrix(X) ~ trt)
+  fit <- stats::lm(as.matrix(X) ~ trt + 0)
 
-  theta_0 <- stats::coef(fit)["(Intercept)", , drop = FALSE]
-  theta_t <- stats::coef(fit)[-1, , drop = FALSE]
+  theta_0 <- matrix(0, nrow = 1, ncol = k)
+  theta_t <- stats::coef(fit)
   theta_c <- matrix(0, nrow = dim_c, ncol = k)
   theta_tc <- matrix(0, nrow = dim_c, ncol = k)
 
