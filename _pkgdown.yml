@@ -18,6 +18,7 @@ reference:
     - netmediate
     - sensitivity_curve
     - nodelm
+    - nodelm_robust
     - ase_specials
     - vsp_specials
   - title: Simulating data

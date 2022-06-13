@@ -122,9 +122,9 @@ Y <- function(A, rank, ..., degree_normalize = FALSE) {
 #'   on arbitrary matrix representations of a graph--see the examples.
 #' @param data A [data.frame()] with one row for each node in the graph.
 #' @inheritParams igraph::as_adjacency_matrix
-#' @inheritDotParams estimatr::lm_robust
+#' @inheritDotParams stats::lm
 #'
-#' @return An object of class `lm_robust`. See [estimatr::lm_robust()] for
+#' @return An object of class `lm`. See [stats::lm()] for
 #'   details.
 #'
 #' @import invertiforms
@@ -159,6 +159,94 @@ Y <- function(A, rank, ..., degree_normalize = FALSE) {
 #' summary(fit)
 #'
 nodelm <- function(formula, graph = NULL, data = NULL, attr = NULL, ...) {
+
+  if (!is.null(graph)) {
+    if (!inherits(graph, "igraph")) {
+      stop("`graph` must be an `igraph` or `tbl_graph` object.")
+    }
+
+    # inject A, L and L_tau into formula environment
+    A <- igraph::as_adjacency_matrix(graph, attr = attr)
+    L <- transform(NormalizedLaplacian(A), A)
+    L_tau <- transform(RegularizedLaplacian(A), A)
+
+    if (!is.null(data)) {
+      warning("Ignoring `data` since `graph` was specified.")
+    }
+
+    data <- tidygraph::as_tibble(tidygraph::as_tbl_graph(graph))
+
+    environment(formula) <- rlang::env(A = A, L = L, L_tau = L_tau, parent = parent.frame())
+  }
+
+  stats::lm(formula, data = data, ...)
+}
+
+#' Use spectral node embeddings in OLS with robust standard errors
+#'
+#' A helper function that exposes the adjacency matrix `A`, normalized
+#' graph Laplacian `L`, and regularized graph Laplacian `L_tau` to
+#' model formulas for convenient network regression. Primarily designed
+#' to work with [tidygraph::tbl_graph()] objects, but can also be used
+#' with a matrix representation of a graph together with a [data.frame()]
+#' of nodal covariates.
+#'
+#' @param formula A regression formula that can include [ase_specials]
+#'   and [vsp_specials], which encode node embeddings. Data for non-
+#'   embedding terms can come from the global environment, `data`, or
+#'   can be named attributes of an `igraph` object. It is likely most
+#'   convenient and intuitive to but nodal covariates in the `nodes` table
+#'   of a [tidygraph::tbl_graph()] object to expose nodal data. See [reddit],
+#'   [addhealth] and [smoking] for examples.
+#' @param graph An optional [igraph::graph()] or [tidygraph::tbl_graph()]
+#'   object. If specified, the graph adjacency matrix `A`, normalized
+#'   graph Laplacian `L`, and regularized graph Laplacian `L_tau` are
+#'   injected into the environment of formula, so these matrices may be used
+#'   freely in `formula`. See [igraph::as_adjacency_matrix()] for
+#'   details about the construction of `A`, and
+#'   [invertiforms::NormalizedLaplacian()] and
+#'   [invertiforms::RegularizedLaplacian()] for details about the construction
+#'   of `L` and `L_tau`. Note that you can also use node embeddings based
+#'   on arbitrary matrix representations of a graph--see the examples.
+#' @param data A [data.frame()] with one row for each node in the graph.
+#' @inheritParams igraph::as_adjacency_matrix
+#' @inheritDotParams estimatr::lm_robust
+#'
+#' @return An object of class `lm_robust`. See [estimatr::lm_robust()] for
+#'   details.
+#'
+#' @import invertiforms
+#' @export
+#'
+#' @examples
+#'
+#' ### some examples where data is specified as a tidygraph
+#'
+#' # a regression that does not use any node embeddings
+#' nodelm_robust(grade ~ sex, graph = addhealth[[36]])
+#'
+#' # a regression including left and right singular embeddings of
+#' # the adjacency matrix and the normalized graph Laplacian
+#' nodelm_robust(grade ~ sex + U(A, 5) + V(L, 3), graph = addhealth[[36]])
+#'
+#' nodelm_robust(as.integer(smokes) ~ sex + U(A, 5) , graph = smoking)
+#'
+#' library(Matrix)
+#' library(tidygraph)
+#'
+#' B <- igraph::as_adjacency_matrix(addhealth[[36]], attr = "weight")
+#'
+#' node <- addhealth[[36]] |>
+#'   as_tibble() |>
+#'   mutate(level = rowSums(B))
+#'
+#' node[5, "sex"] <- NA
+#' node
+#'
+#' fit <- nodelm_robust(level ~ sex + grade + race + U(sign(B), 10), data = node)
+#' summary(fit)
+#'
+nodelm_robust <- function(formula, graph = NULL, data = NULL, attr = NULL, ...) {
 
   if (!is.null(graph)) {
     if (!inherits(graph, "igraph")) {
