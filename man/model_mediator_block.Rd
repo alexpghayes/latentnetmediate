@@ -21,6 +21,7 @@ Title
 }
 \examples{
 
+library(broom)
 library(estimatr)
 library(ggplot2)
 library(tidyr)

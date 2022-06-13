@@ -24,7 +24,7 @@ test_that("block model residuals are zero", {
   EX <- expected_x_post_trt(mblock)
   X <- x_post_trt(mblock)
 
-  avg_residuals <- Matrix::colMeans(X - EX)
+  avg_residuals <- unname(Matrix::colMeans(X - EX))
 
   expect_equal(
     avg_residuals,

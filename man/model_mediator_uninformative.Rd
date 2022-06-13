@@ -21,6 +21,7 @@ Title
 }
 \examples{
 
+library(broom)
 library(estimatr)
 library(ggplot2)
 library(dplyr)
@@ -39,7 +40,7 @@ graph
 fit <- nodelm(US(A, 5) ~ trt + C1 + C2 + C3 , graph = graph)
 
 true_coefs <- tibble(
-  outcome = 1:5,
+  response = 1:5,
   `(Intercept)` = drop(mu$theta_0),
   trt = drop(mu$theta_t),
   C1 = mu$theta_c[1, ],
@@ -47,12 +48,12 @@ true_coefs <- tibble(
   C3 = mu$theta_c[3, ]
 ) |>
   tidyr::pivot_longer(
-    cols = -outcome,
+    cols = -response,
     names_to = "term",
     values_to = "estimate"
   )
 
-tidy(fit) |>
+tidy(fit, conf.int = TRUE) |>
   ggplot(aes(x = term, ymin = conf.low, y = estimate, ymax = conf.high)) +
   geom_pointrange() +
   geom_point(
@@ -66,7 +67,7 @@ tidy(fit) |>
   geom_hline(yintercept = 0, linetype = "dashed") +
   coord_flip() +
   facet_wrap(
-    vars(outcome),
+    vars(response),
     labeller = "label_both"
   ) +
   theme_classic()
