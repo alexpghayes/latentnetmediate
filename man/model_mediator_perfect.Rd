@@ -10,7 +10,8 @@ model_mediator_perfect(
   ztheta_0 = NULL,
   ztheta_t = NULL,
   ztheta_c = NULL,
-  ztheta_tc = NULL
+  ztheta_tc = NULL,
+  expected_degree = 10
 )
 }
 \arguments{
@@ -31,4 +32,19 @@ TODO
 }
 \description{
 Title
+}
+\examples{
+
+perf <- model_mediator_perfect(n = 100)
+
+graph <- sample_tidygraph(perf)
+graph
+
+igraph::as_adj(graph)
+
+
+coef(perf)
+
+perf$X - perf$C
+
 }

@@ -51,11 +51,14 @@ coef.informative <- function(object, ...) {
 #' @export
 #' @method coef perfect
 coef.perfect <- function(object, ...) {
+  # rbind(
+  #   object$theta_0,
+  #   object$theta_t,
+  #   object$theta_c,
+  #   object$theta_tc
+  # )
   rbind(
-    object$theta_0,
-    object$theta_t,
-    object$theta_c,
-    object$theta_tc
+   object$theta_c
   )
 }
 

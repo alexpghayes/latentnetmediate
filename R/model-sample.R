@@ -20,9 +20,7 @@ sample_tidygraph.mediator <- function(model, ...) {
   C_df <- as_tibble(C)
 
   graph <- fastRG::sample_tidygraph(
-    model$A_model,
-    allow_self_loops = FALSE,
-    poisson_edges = FALSE
+    model$A_model
   ) |>
     dplyr::arrange(as.numeric(name)) |>
     dplyr::mutate(trt = model$trt, !!!C_df)

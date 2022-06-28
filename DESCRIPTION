@@ -1,6 +1,6 @@
 Package: netmediate
 Title: Estimate Latent Network Mediation Effects via Spectral Embeddings
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: c(
     person("Alex", "Hayes", , "alexpghayes@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0002-4985-5160"))
