@@ -20,9 +20,11 @@ reddit_table <- reddit_raw |>
   mutate(
     post_id = row_number()
   ) |>
-  mutate_at(vars(score), as.integer) |>
-  slice_sample(n = 100) # TODO: remove this once a large lazyload DB is no longer a nuisance
+  mutate_at(vars(score), as.integer)
 
+reddit_table <- slice_sample(reddit_table, n = 100) # TODO: remove this once a large lazyload DB is no longer a nuisance
+
+readr::write_csv(reddit_table, here("data-raw", "reddit", "veitch_subset.csv"))
 # limited anonymization of author handles
 
 pseudonyms <- reddit_table |>
@@ -42,6 +44,8 @@ tokenized <- reddit_table |>
   select(post_id, body) |>
   unnest_tokens(word, body, token = "tweets") |>
   count(post_id, word)
+
+readr::write_csv(tokenized, here("data-raw", "reddit", "tokenized_post_text.csv"))
 
 A <- cast_sparse(tokenized, row = post_id, column = word, value = n)
 
