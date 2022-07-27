@@ -4,8 +4,9 @@
 \alias{plot_expected_a_pre_trt}
 \alias{plot_expected_a_post_trt}
 \alias{plot_expected_a_pre_post_diff}
-\alias{plot_x_pre_post_diff}
+\alias{plot_z_pre_post_diff}
 \alias{plot_sparse_adjacency_matrix}
+\alias{plot_tidygraph_matrix}
 \title{Title}
 \usage{
 plot_expected_a_pre_trt(model)
@@ -14,9 +15,11 @@ plot_expected_a_post_trt(model)
 
 plot_expected_a_pre_post_diff(model)
 
-plot_x_pre_post_diff(model)
+plot_z_pre_post_diff(model)
 
 plot_sparse_adjacency_matrix(A)
+
+plot_tidygraph_matrix(graph)
 }
 \arguments{
 \item{model}{TODO}
