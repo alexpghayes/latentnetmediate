@@ -1,10 +1,57 @@
-# investigate:
-#
-#  - coefficient recovery (up to rotation)
-#  - causal effect recovery
-#  - coverage correctness
-#  - hypothesis test of any network effect at all
-#
+new_mediator <- function(n, k, X, W, A_model, Theta, ..., subclass = character()) {
+
+  rlang::check_dots_unnamed()
+
+  model <- list(
+    n = n,
+    k = k,
+    X = X,
+    W = W,
+    A_model = A_model,
+    Theta = Theta,
+    model_name = subclass
+  )
+
+  class(model) <- c(subclass, "mediator")
+  model
+}
+
+validate_mediator <- function(x) {
+
+  # values <- unclass(x)
+
+  x
+}
+
+model_mediator <- function(A_model, W, ...) {
+
+  # infer X from the fastRG rdpg parameterization of the graph
+  X <- ASE(A_model)
+
+  # back out implied coefficients between X and W
+  fit <- stats::lm(as.matrix(X) ~ as.matrix(W) + 0)
+  Theta <- coef(fit)
+  rownames(Theta) <- colnames(W)
+
+  m <- new_mediator(
+    n = nrow(X),
+    k = ncol(X),
+    X = X,
+    W = W,
+    A_model = A_model,
+    Theta = Theta,
+    ...
+  )
+
+  validate_mediator(m)
+}
+
+#' @importFrom stats coef
+#' @export
+#' @method coef mediator
+coef.mediator <- function(object, ...) {
+  object$Theta
+}
 
 #' Title
 #'
@@ -17,668 +64,64 @@ ASE <- function(ufm) {
   k <- ufm$k
 
   if (k > 1) {
-    S <- diag(sqrt(s$d))
+    S <- diag(sqrt(s$d * 2))
   } else {
-    S <- matrix(sqrt(s$d))
+    S <- matrix(sqrt(s$d * 2))
   }
 
-  s$u %*% S
+  US <- s$u %*% S
+  colnames(US) <- paste0("US", 1:ncol(US))
+  US
 }
 
-#' Title
+
+#' Sample from a mediated RDPG object
 #'
-#' @param n TODO
-#' @param k TODO
-#' @param dim_c TODO
+#' @param model A `mediated_rdpg` object
+#' @param ... Ignored.
 #'
-#' @return TODO
+#' @return A [tidygraph::tbl_graph()] object.
+#'
 #' @export
-#'
-#' @examples
-#'
-#' library(broom)
-#' library(estimatr)
-#' library(ggplot2)
-#' library(dplyr)
-#'
-#' set.seed(26)
-#'
-#' mu <- model_mediator_uninformative(n = 100, k = 5, dim_c = 3)
-#'
-#' plot_expected_a_pre_trt(mu)
-#' plot_expected_a_post_trt(mu)
-#' plot_expected_a_pre_post_diff(mu)
-#'
-#' graph <- sample_tidygraph(mu)
-#' graph
-#'
-#' fit <- nodelm(US(A, 5) ~ trt + C1 + C2 + C3 , graph = graph)
-#'
-#' true_coefs <- tibble(
-#'   response = 1:5,
-#'   `(Intercept)` = drop(mu$theta_0),
-#'   trt = drop(mu$theta_t),
-#'   C1 = mu$theta_c[1, ],
-#'   C2 = mu$theta_c[2, ],
-#'   C3 = mu$theta_c[3, ]
-#' ) |>
-#'   tidyr::pivot_longer(
-#'     cols = -response,
-#'     names_to = "term",
-#'     values_to = "estimate"
-#'   )
-#'
-#' tidy(fit, conf.int = TRUE) |>
-#'   ggplot(aes(x = term, ymin = conf.low, y = estimate, ymax = conf.high)) +
-#'   geom_pointrange() +
-#'   geom_point(
-#'     data = true_coefs,
-#'     aes(x = term, y = estimate),
-#'     color = "red",
-#'     shape = 4,
-#'     size = 2,
-#'     inherit.aes = FALSE
-#'   ) +
-#'   geom_hline(yintercept = 0, linetype = "dashed") +
-#'   coord_flip() +
-#'   facet_wrap(
-#'     vars(response),
-#'     labeller = "label_both"
-#'   ) +
-#'   theme_classic()
-#'
-model_mediator_uninformative <- function(n, k = 5, dim_c = 3) {
-
-  B <- matrix(0.01, nrow = k, ncol = k)
-  diag(B) <- 0.8
-
-  pi <- rep(0.5, k)
-
-  # this is a little delicate. we want to simulate A from a dcsbm, but if we
-  # compute the eigen decomposition of E[A|X] to get the population positions
-  # X, X may have negative elements. when X has negative elements we can't
-  # use the fastRG algorithm to sample A, but we very much want to sample
-  # using the fastRG algorithm so that we can simulate large sparse graphs
-  #
-  # so the trick here is to use the fastRG parameterization of the dcsbm
-  # for simulating A, and to derive X from this parameterization but to
-  # avoid using X for simulations
-
-  A_model <- fastRG::overlapping_sbm(
-    theta = stats::runif(n, min = 1, max = 3),
-    B = B,
-    pi = pi,
-    expected_density = 0.1
-  )
-
-  X <- ASE(A_model)
-
-  trt <- stats::rbinom(n, size = 1, prob = 0.5)
-
-  C <- matrix(
-    stats::rnorm(n * dim_c),
-    nrow = n,
-    ncol = dim_c
-  )
-
-  # coefficients to later compare estimates to
-
-  theta_0 <- matrix(Matrix::colMeans(X), nrow = 1, ncol = k)
-  theta_t <- matrix(0, nrow = 1, ncol = k)
-  theta_c <- matrix(0, nrow = dim_c, ncol = k)
-  theta_tc <- matrix(0, nrow = dim_c, ncol = k)
-
-  model <- list(
-    n = n,
-    k = k,
-    X = X,
-    trt = trt,
-    C = C,
-    A_model = A_model,
-    theta_0 = theta_0,
-    theta_t = theta_t,
-    theta_c = theta_c,
-    theta_tc = theta_tc
-  )
-
-  class(model) <- c("uninformative", "mediator", "mrdpg")
-
-  model
+sample_tidygraph <- function(model, ...) {
+  UseMethod("sample_tidygraph")
 }
 
-#' Title
-#'
-#' @param n TODO
-#' @param k TODO
-#' @param dim_c TODO
-#'
-#' @return TODO
+
+#' @method sample_tidygraph perfect
 #' @export
-#'
-#' @examples
-#'
-#' library(broom)
-#' library(estimatr)
-#' library(ggplot2)
-#' library(tidyr)
-#'
-#' set.seed(26)
-#'
-#' mblock <- model_mediator_block(n = 100, k = 5, dim_c = 3)
-#'
-#' plot_expected_a_pre_trt(mblock)
-#' plot_expected_a_post_trt(mblock)
-#' plot_expected_a_pre_post_diff(mblock)
-#'
-#' graph <- sample_tidygraph(mblock)
-#' graph
-#'
-#' fit <- nodelm(US(A, 5) ~ trt1 + trt2 + trt3 + trt4 + trt5 + C1 + C2 + C3 , graph = graph)
-#'
-#' true_coefs <- tibble(
-#'   outcome = 1:5,
-#'   `(Intercept)` = drop(mblock$theta_0),
-#'   trt1 = mblock$theta_t[1, ],
-#'   trt2 = mblock$theta_t[2, ],
-#'   trt3 = mblock$theta_t[3, ],
-#'   trt4 = mblock$theta_t[4, ],
-#'   trt5 = mblock$theta_t[5, ],
-#'   C1 = mblock$theta_c[1, ],
-#'   C2 = mblock$theta_c[2, ],
-#'   C3 = mblock$theta_c[3, ]
-#' ) |>
-#'   tidyr::pivot_longer(
-#'     cols = -outcome,
-#'     names_to = "term",
-#'     values_to = "estimate"
-#'   )
-#'
-#' tidy(fit) |>
-#'   ggplot(aes(x = term, ymin = conf.low, y = estimate, ymax = conf.high)) +
-#'   geom_pointrange() +
-#'   geom_point(
-#'     data = true_coefs,
-#'     aes(x = term, y = estimate),
-#'     color = "red",
-#'     shape = 4,
-#'     size = 2,
-#'     inherit.aes = FALSE
-#'   ) +
-#'   geom_hline(yintercept = 0, linetype = "dashed") +
-#'   coord_flip() +
-#'   facet_wrap(
-#'     vars(outcome),
-#'     labeller = "label_both"
-#'   ) +
-#'   theme_classic()
-#'
-model_mediator_block <- function(n, k = 5, dim_c = 3, expected_degree = 10) {
+sample_tidygraph.perfect <- function(model, intervene = TRUE, ...) {
 
-  B <- matrix(0, nrow = k, ncol = k)
-  diag(B) <- 1
+  # model$W should already have appropriate column names
+  W_df <- as_tibble(as.matrix(model$W))
 
-  # theta_row <- rexp(n, k + 2)
-  #
-  # Z <- matrix(0, nrow = n, ncol = k)
-  #
-  # for (i in 1:n) {
-  #
-  #   row <- 0
-  #
-  #   # coin flip until each node is in at least one community
-  #   while (sum(row) < 1) {
-  #     row <- rpois(n = k, lambda = theta_row[i])
-  #   }
-  #
-  #   Z[i, ] <- row
-  # }
-  #
-  # A_model <- fastRG::undirected_factor_model(Z, B, expected_degree = expected_degree)
-  #
-  # rowSums(Z)
-  # colSums(Z)
-  #
-  # A_eigs <- fastRG::svds(A_model, k = k)
-  # X <- A_eigs$u %*% diag(sqrt(A_eigs$d))
-  #
-  # trt <- Z
-
-  pi <- rep(0.1, k)
-
-  A_model <- fastRG::overlapping_sbm(
-    theta = rep(1, n), # stats::runif(n, min = 1, max = 3),
-    B = B,
-    pi = pi,
-    expected_degree = expected_degree
-  )
-
-  X <- ASE(A_model)
-
-  trt <- as.matrix(A_model$Z)
-
-  # A_model <- fastRG::dcsbm(
-  #   theta = stats::runif(n, min = 1, max = 3),
-  #   B = B,
-  #   pi = pi,
-  #   expected_degree = expected_degree
-  # )
-  #
-  # A_eigs <- fastRG::svds(A_model, k = k)
-  # X <- A_eigs$u %*% diag(sqrt(A_eigs$d))
-  #
-  # trt <- model.matrix(~ A_model$z + 0) # as.matrix(A_model$Z)
-
-  C <- matrix(
-    stats::rnorm(n * dim_c),
-    nrow = n,
-    ncol = dim_c
-  )
-
-  # coefficients to later compare estimates to
-
-  # back out coefficients by computing E[X|trt] on population data
-  fit <- stats::lm(as.matrix(X) ~ trt + 0)
-
-  theta_0 <- matrix(0, nrow = 1, ncol = k)
-  theta_t <- stats::coef(fit)
-  theta_c <- matrix(0, nrow = dim_c, ncol = k)
-  theta_tc <- matrix(0, nrow = dim_c, ncol = k)
-
-  model <- list(
-    n = n,
-    k = k,
-    X = X,
-    trt = trt,
-    C = C,
-    A_model = A_model,
-    theta_0 = theta_0,
-    theta_t = theta_t,
-    theta_c = theta_c,
-    theta_tc = theta_tc
-  )
-
-  class(model) <- c("block", "mediator", "mrdpg")
-
-  model
-}
-
-#' Title
-#'
-#' @param n TODO
-#' @param k TODO
-#' @param dim_c TODO
-#'
-#' @return TODO
-#' @export
-#'
-#' @examples
-#'
-#' library(broom)
-#' library(estimatr)
-#' library(ggplot2)
-#' library(tidyr)
-#'
-#' set.seed(26)
-#'
-#' mblock <- model_mediator_block2(n = 100, k = 5, dim_c = 3)
-#'
-#' plot_expected_a_pre_trt(mblock)
-#' plot_expected_a_post_trt(mblock)
-#' plot_expected_a_pre_post_diff(mblock)
-#'
-#' graph <- sample_tidygraph(mblock)
-#' graph
-#'
-#' fit <- nodelm(US(A, 5) ~ trt1 + trt2 + trt3 + trt4 + trt5 + C1 + C2 + C3 , graph = graph)
-#'
-#' true_coefs <- tibble(
-#'   outcome = 1:5,
-#'   `(Intercept)` = drop(mblock$theta_0),
-#'   trt1 = mblock$theta_t[1, ],
-#'   trt2 = mblock$theta_t[2, ],
-#'   trt3 = mblock$theta_t[3, ],
-#'   trt4 = mblock$theta_t[4, ],
-#'   trt5 = mblock$theta_t[5, ],
-#'   C1 = mblock$theta_c[1, ],
-#'   C2 = mblock$theta_c[2, ],
-#'   C3 = mblock$theta_c[3, ]
-#' ) |>
-#'   tidyr::pivot_longer(
-#'     cols = -outcome,
-#'     names_to = "term",
-#'     values_to = "estimate"
-#'   )
-#'
-#' tidy(fit) |>
-#'   ggplot(aes(x = term, ymin = conf.low, y = estimate, ymax = conf.high)) +
-#'   geom_pointrange() +
-#'   geom_point(
-#'     data = true_coefs,
-#'     aes(x = term, y = estimate),
-#'     color = "red",
-#'     shape = 4,
-#'     size = 2,
-#'     inherit.aes = FALSE
-#'   ) +
-#'   geom_hline(yintercept = 0, linetype = "dashed") +
-#'   coord_flip() +
-#'   facet_wrap(
-#'     vars(outcome),
-#'     labeller = "label_both"
-#'   ) +
-#'   theme_classic()
-#'
-model_mediator_block2 <- function(n, k = 5, dim_c = 3, expected_degree = 10) {
-
-  B <- matrix(0.000, nrow = k, ncol = k)
-  diag(B) <- 1
-
-  pi <- rep(1 / k, k)
-
-  A_model <- fastRG::dcsbm(
-    theta = rep(1, n), # stats::runif(n, min = 1, max = 3),
-    B = B,
-    pi = pi,
-    expected_degree = expected_degree
-  )
-
-  X <- ASE(A_model)
-
-  if (k > 1) {
-    trt <- model.matrix(~ A_model$z + 0)
+  if (intervene) {
+    A_model <- model$A_model
   } else {
-    trt <- matrix(1, nrow = n, ncol = 1)
+    A_pre <- model$A_model
+    A_pre$X <- z_pre_trt(model)
+    A_model <- A_pre
   }
 
+  graph <- fastRG::sample_tidygraph(A_model) |>
+    dplyr::arrange(as.numeric(name)) |>
+    dplyr::mutate(!!!W_df)
 
-  C <- matrix(
-    stats::rnorm(n * dim_c),
-    nrow = n,
-    ncol = dim_c
-  )
-
-  # coefficients to later compare estimates to
-
-  # back out coefficients by computing E[X|trt] on population data
-  fit <- stats::lm(as.matrix(X) ~ trt + 0)
-
-  theta_0 <- matrix(0, nrow = 1, ncol = k)
-  theta_t <- stats::coef(fit)
-  theta_c <- matrix(0, nrow = dim_c, ncol = k)
-  theta_tc <- matrix(0, nrow = dim_c, ncol = k)
-
-  model <- list(
-    n = n,
-    k = k,
-    X = X,
-    trt = trt,
-    C = C,
-    A_model = A_model,
-    theta_0 = theta_0,
-    theta_t = theta_t,
-    theta_c = theta_c,
-    theta_tc = theta_tc
-  )
-
-  class(model) <- c("block", "mediator", "mrdpg")
-
-  model
+  graph
 }
 
-
-#' Title
-#'
-#' @inheritParams model_mediator_uninformative
-#'
-#' @param ztheta_0 TODO
-#' @param ztheta_t TODO
-#' @param ztheta_c TODO
-#' @param ztheta_tc TODO
-#'
-#' @return TODO
+#' @method sample_tidygraph mediator
 #' @export
-#'
-model_mediator_informative <- function(n, k = 5, ztheta_0 = NULL, ztheta_t = NULL,
-                                   ztheta_c = NULL, ztheta_tc = NULL) {
+sample_tidygraph.mediator <- function(model, ...) {
 
-  B <- matrix(0.01, nrow = k, ncol = k)
-  diag(B) <- 0.8
+  # model$W should already have appropriate column names
+  W_df <- as_tibble(as.matrix(model$W))
 
-  pi <- rep(1 / k, k)
+  graph <- fastRG::sample_tidygraph(
+    model$A_model
+  ) |>
+    dplyr::arrange(as.numeric(name)) |>
+    dplyr::mutate(!!!W_df)
 
-  # so ideally we would like to able to accommodate situations where the design
-  # matrix (typically ~ T * C) is perfectly predictive of X. but our estimator
-  # (probably?) can't handle this because then X and T * C are perfectly
-  # colinear and there's an identification issue
-  #
-  # so here we simulate from a related situation. we generate T as usual, and
-  # then generate two copies of C, called C_true and C_obs. we calculate X
-  # as in the perfectly colinear model using C_true. but we only show the
-  # estimator C_obs. since C_true and C_obs are two samples from the same
-  # latent position model, C_obs should be informative, but not perfectly
-  # informative of A
-
-  C_true_model <- fastRG::dcsbm(
-    theta = stats::runif(n, min = 1, max = 3),
-    B = B,
-    pi = pi,
-    expected_density = 0.1,
-    sort_nodes = TRUE  # key, this is but we make sure C_true and C_obs are related
-  )
-
-  C_obs_model <- fastRG::dcsbm(
-    theta = stats::runif(n, min = 1, max = 3),
-    B = B,
-    pi = pi,
-    expected_density = 0.1,
-    sort_nodes = TRUE
-  )
-
-  # transformations are applied to this matrix because it is easiest to
-  # reason about
-  zC <- C_true_model$X
-
-  C_true_eigs <- fastRG::svds(C_true_model, k = k)
-  C_obs_eigs <- fastRG::svds(C_obs_model, k = k)
-
-  C_true <- C_true_eigs$u %*% diag(sqrt(C_true_eigs$d))
-  C_obs <- C_obs_eigs$u %*% diag(sqrt(C_obs_eigs$d))
-
-  trt <- stats::rbinom(n, size = 1, prob = 0.5)
-
-  dim_c <- k
-
-  if (is.null(ztheta_0)) {
-    ztheta_0 <- matrix(0, nrow = 1, ncol = k)
-  }
-
-  if (is.null(ztheta_t)) {
-    ztheta_t <- matrix(0, nrow = 1, ncol = k)
-  }
-
-  if (is.null(ztheta_c)) {
-    ztheta_c <- diag(x = 1, nrow = dim_c, ncol = k)
-  }
-
-  if (is.null(ztheta_tc)) {
-    ztheta_tc <- matrix(0, nrow = dim_c, ncol = k)
-  }
-
-  # here we perform the intervention in Z space so we can take the post-trt
-  # Z and plug it into a new fastRG object to simulate from
-
-  ones <- matrix(1, nrow = n)
-  zX <- ones %*% ztheta_0 + trt %*% ztheta_t + zC %*% ztheta_c + trt * zC %*% ztheta_tc
-
-  A_model <- fastRG::undirected_factor_model(X = zX, S = C_true_model$S)
-
-  A_eigs <- fastRG::svds(A_model, k = k)
-  X <- A_eigs$u %*% diag(sqrt(A_eigs$d))
-
-  # EX = X since we are in the noiseless case
-  EX <- as.matrix(X)
-
-  fit <- stats::lm(EX ~ trt * as.matrix(C_obs))
-  # summary(fit)
-
-  # can check for perfect fit by running `summary(fit)`, which should
-  # give a warning
-
-  theta_c_terms <- paste0("as.matrix(C_obs)", 1:k)
-  theta_tc_terms <- paste0("trt:as.matrix(C_obs)", 1:k)
-
-  theta_0 <- stats::coef(fit)["(Intercept)", , drop = FALSE]
-  theta_t <- stats::coef(fit)["trt", , drop = FALSE]
-  theta_c <- stats::coef(fit)[theta_c_terms, , drop = FALSE]
-  theta_tc <- stats::coef(fit)[theta_tc_terms, , drop = FALSE]
-
-  model <- list(
-    n = n,
-    k = k,
-    X = X,
-    trt = trt,
-    C = C_obs,
-    C_true = C_true,
-    A_model = A_model,
-    theta_0 = theta_0,
-    theta_t = theta_t,
-    theta_c = theta_c,
-    theta_tc = theta_tc,
-    C_true_model = C_true_model,
-    C_obs_model = C_obs_model,
-    zC = zC,
-    zX = zX,
-    ztheta_0 = ztheta_0,
-    ztheta_t = ztheta_t,
-    ztheta_c = ztheta_c,
-    ztheta_tc = ztheta_tc
-  )
-
-  class(model) <- c("perfect", "mediator", "mrdpg")
-
-  model
+  graph
 }
-
-
-
-#' Title
-#'
-#' @inheritParams model_mediator_uninformative
-#'
-#' @param ztheta_0 TODO
-#' @param ztheta_t TODO
-#' @param ztheta_c TODO
-#' @param ztheta_tc TODO
-#'
-#' @return TODO
-#' @export
-#'
-#' @examples
-#'
-#' perf <- model_mediator_perfect(n = 100)
-#'
-#' graph <- sample_tidygraph(perf)
-#' graph
-#'
-#' igraph::as_adj(graph)
-#'
-#'
-#' coef(perf)
-#'
-#' perf$X - perf$C
-#'
-model_mediator_perfect <- function(n, k = 5, ztheta_0 = NULL, ztheta_t = NULL,
-                                   ztheta_c = NULL, ztheta_tc = NULL, expected_degree = 10) {
-
-  B <- matrix(0.01, nrow = k, ncol = k)
-  diag(B) <- 0.8
-
-  pi <- rep(1 / k, k)
-
-  C_model <- fastRG::dcsbm(
-    theta = stats::runif(n, min = 1, max = 3),
-    B = B,
-    pi = pi,
-    expected_degree = expected_degree
-  )
-
-  # transformations are applied to this matrix because it is easiest to
-  # reason about
-  zC <- C_model$X
-
-  C <- ASE(C_model)
-
-  trt <- stats::rbinom(n, size = 1, prob = 0.5)
-
-  dim_c <- k
-
-  if (is.null(ztheta_0)) {
-    ztheta_0 <- matrix(0, nrow = 1, ncol = k)
-  }
-
-  if (is.null(ztheta_t)) {
-    ztheta_t <- matrix(0, nrow = 1, ncol = k)
-  }
-
-  if (is.null(ztheta_c)) {
-    ztheta_c <- diag(x = 1, nrow = dim_c, ncol = k)
-  }
-
-  if (is.null(ztheta_tc)) {
-    ztheta_tc <- matrix(0, nrow = dim_c, ncol = k)
-  }
-
-  # here we perform the intervention in Z space so we can take the post-trt
-  # Z and plug it into a new fastRG object to simulate from
-
-  ones <- matrix(1, nrow = n)
-  zX <- ones %*% ztheta_0 + trt %*% ztheta_t + zC %*% ztheta_c + trt * zC %*% ztheta_tc
-
-  A_model <- fastRG::undirected_factor_model(X = zX, S = C_model$S)
-
-  X <- ASE(A_model)
-
-  # EX = X since we are in the noiseless case
-  EX <- as.matrix(X)
-
-  # back out the ASE space regression coefficients
-  # this fit needs to be perfect or the parameterization is bad
-  # we need to prove that this is always the case but have not yet
-  fit <- stats::lm(EX ~ as.matrix(C) + 0)
-
-  # can check for perfect fit by running `summary(fit)`, which should
-  # give a warning
-
-  theta_c_terms <- paste0("as.matrix(C)", 1:k)
-  theta_tc_terms <- paste0("trt:as.matrix(C)", 1:k)
-
-  theta_0 <- ztheta_0 # stats::coef(fit)["(Intercept)", , drop = FALSE]
-  theta_t <- ztheta_t # stats::coef(fit)["trt", , drop = FALSE]
-  theta_c <- stats::coef(fit) # [theta_c_terms, , drop = FALSE]
-  theta_tc <- ztheta_tc #stats::coef(fit)[theta_tc_terms, , drop = FALSE]
-
-  model <- list(
-    n = n,
-    k = k,
-    X = X,
-    trt = trt,
-    C = C,
-    A_model = A_model,
-    theta_0 = theta_0,
-    theta_t = theta_t,
-    theta_c = theta_c,
-    theta_tc = theta_tc,
-    C_model = C_model,
-    zC = zC,
-    zX = zX,
-    ztheta_0 = ztheta_0,
-    ztheta_t = ztheta_t,
-    ztheta_c = ztheta_c,
-    ztheta_tc = ztheta_tc
-  )
-
-  class(model) <- c("perfect", "mediator", "mrdpg")
-
-  model
-}
-

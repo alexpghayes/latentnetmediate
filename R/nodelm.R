@@ -36,7 +36,13 @@ U <- function(A, rank, ...) {
 #' @export
 US <- function(A, rank, ...) {
   s <- irlba::irlba(A, nu = rank, nv = rank, ...)
-  us <- s$u %*% diag(sqrt(s$d))
+
+  if (rank > 1) {
+    us <- s$u %*% diag(sqrt(s$d))
+  } else {
+    us <- s$u %*% matrix(sqrt(s$d))
+  }
+
   colnames(us) <- as.character(1:rank)
   us
 }
@@ -54,7 +60,13 @@ V <- function(A, rank, ...) {
 #' @export
 VS <- function(A, rank, ...) {
   s <- irlba::irlba(A, nu = rank, nv = rank, ...)
-  vs <- s$v %*% diag(sqrt(s$d))
+
+  if (rank > 1) {
+    vs <- s$v %*% diag(sqrt(s$d))
+  } else {
+    vs <- s$v %*% matrix(sqrt(s$d))
+  }
+
   colnames(vs) <- as.character(1:rank)
   vs
 }
