@@ -93,6 +93,7 @@
 #'
 "smoking"
 
+
 #' Top level gender-flaired Reddit comments
 #'
 #' Reddit is an online forum divided into topic-specific subforums called
@@ -145,3 +146,32 @@
 #'   June 6, 2022.
 #'
 "reddit"
+
+#' Leukemia cases by census tract in New York
+#'
+#' TODO
+#'
+#'
+#' @references Wakefield, J., and A. Kim. "A Bayesian Model for Cluster
+#'   Detection." Biostatistics 14, no. 4 (September 1, 2013):
+#'   752–65. https://doi.org/10.1093/biostatistics/kxt001.
+#'
+#' @format An undirected [tidygraph::tbl_graph()] graph object, made up
+#'   of a node table and an edge table.
+#'
+#'   The node table has columns:
+#'
+#'   - `population` (numeric): TODO
+#'   - `cases` (numeric): TODO
+#'   - `censustract_fips` (list of character vectors): TODO
+#'
+#'   and the edge table has columns:
+#'
+#'   - `from` (int): Id of source census tract
+#'   - `to` (int): Id of neighboring census tract
+#'
+#' @source Extracted from the `SpatialEpi` package on July 29, 2022. See
+#'   [SpatialEpi::NYleukemia] for details and Wakefield and Kim (2013) for
+#'   details.
+#'
+"leukemia"
