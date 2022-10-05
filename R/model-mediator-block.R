@@ -37,7 +37,7 @@ model_mediator_block <- function(n, k = 5, expected_degree = NULL) {
   )
 
   W <- as.matrix(A_model$Z[, 1:ceiling(k / 2)])
-  colnames(W) <- paste0("W", 1:ncol(W))
+  colnames(W) <- c("trt", paste0("C", 2:ncol(W)))
 
   model_mediator(A_model, W, subclass = "block")
 }

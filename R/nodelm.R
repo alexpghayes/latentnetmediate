@@ -26,7 +26,7 @@ NULL
 #' @rdname ase_specials
 #' @export
 U <- function(A, rank, ...) {
-  s <- irlba::irlba(A, nu = rank, nv = rank, ...)
+  s <- RSpectra::svds(A, k = rank, nu = rank, nv = rank, ...) # irlba::irlba(A, nu = rank, nv = rank, ...)
   u <- s$u
   colnames(u) <- as.character(1:rank)
   u
@@ -35,7 +35,7 @@ U <- function(A, rank, ...) {
 #' @rdname ase_specials
 #' @export
 US <- function(A, rank, ...) {
-  s <- irlba::irlba(A, nu = rank, nv = rank, ...)
+  s <- RSpectra::svds(A, k = rank, nu = rank, nv = rank, ...) # irlba::irlba(A, nu = rank, nv = rank, ...)
 
   if (rank > 1) {
     us <- s$u %*% diag(sqrt(s$d))
@@ -50,7 +50,7 @@ US <- function(A, rank, ...) {
 #' @rdname ase_specials
 #' @export
 V <- function(A, rank, ...) {
-  s <- irlba::irlba(A, nu = rank, nv = rank, ...)
+  s <- RSpectra::svds(A, k = rank, nu = rank, nv = rank, ...) # irlba::irlba(A, nu = rank, nv = rank, ...)
   v <- s$v
   colnames(v) <- as.character(1:rank)
   v
@@ -59,7 +59,7 @@ V <- function(A, rank, ...) {
 #' @rdname ase_specials
 #' @export
 VS <- function(A, rank, ...) {
-  s <- irlba::irlba(A, nu = rank, nv = rank, ...)
+  s <- RSpectra::svds(A, k = rank, nu = rank, nv = rank, ...) # irlba::irlba(A, nu = rank, nv = rank, ...)
 
   if (rank > 1) {
     vs <- s$v %*% diag(sqrt(s$d))

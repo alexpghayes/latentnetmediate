@@ -1,0 +1,126 @@
+---
+title: "Glasgow"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Glasgow}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+glasgow
+
+cross-sectional analysis for each time point
+s129 subset
+
+sex, money
+
+smoke, cannabis, alcohol
+binary models
+
+Except for participants’ sex and age, which were recorded at baseline, other variables were collected at three different time occasions. Information on substance use (tobacco, alcohol, cannabis), leisure time activities, music taste, romantic Fig. 2 Steps of the proposed method: starting from a network (a), a latent space model maps it into a space of smaller dimension, a plane in (b). The latent coordinates are then used as mediators (c) 123 C. Di Maria et al
+
+relationships and several others are available. Moreover, social matrices representing friendship relationships among participants are included in the dataset. The subsample of subjects selected for the analysis consists of the 129 students present at all three measurement times. We conducted a cross-sectional analysis for each time point. Our interest lies on the way two exposures, Sex, participant’s gender, and Money, the amount of pocket money each participant had per month, affect substance use through the relationship network. Sex is a binary variable, 0 denotes male and 1 female, Money is a continuous variable ranging from 0 to 40 pounds at the first time, from 0 to 50 pounds at the second time and from 0 to 70 pounds at the third. As it will be explained in the next section, we used the variable as it is, when it plays the role of exposure in the mediation model, and a categorical version obtained through the quartiles of Money at time 3, when it needs to be included in the latent space model as covariate. The categorisation choice is clearly arbitrary, but generates meaningful categories with acceptable ranges. Figure 3 represents the network at time 3, where nodes are coloured according to Sex (a) and categories of Money (b). The social networks representing relationships among students are defined by non-symmetric matrices, since in the data collection phase students were asked to name up to six friends. The lists thus obtained are partially overlapping, but in some cases the relationship of friendship is not reciprocal. Each cell aij can take three values: 0 if subjects i  j are not friends, 1 if subject i considers j as a friend and 2 if i considers j as a best friend. We transformed these matrices into adjacency matrices by merging the last two categories and coding them with 1, to simply indicate friendship. The three response variables, Smoke, Cannabis and Alcohol, are measured at each time point and are categorical. Smoke has three categories: 0 indicates nonsmoker, 1 occasional and 2 regular smoker (i.e. more than once a week). Cannabis has four levels: 1-never used, 2-tried once, 3 occasional and 4 regular user. Finally, Fig. 3 Graphical representation of the social network at time 3 with nodes coloured according to Sex and categories of Money: on the left panel (a), = male and = female, on the right panel (b) = 1 (0–7£), = 2 (7–12£), = 3 (12–20£), = 4 (20–70£) 123 Networks as mediating variables: a Bayesian..
+
+Alcohol is a five-category variable coded as follows: 1 non user, 2 once or twice a year, 3 once a month, 4 once a week and 5 more than once a week. This variable presents some missing values: we excluded subjects lacking two or three values and, for subjects presenting only a missing, we imputed it on the basis of the other two collected. This led to the exclusion of 12 students. We converted all variables into binary ones by appropriately merging categories: 2 and 3 for Smoke, to distinguish between smokers (occasional and regular) and non smokers, 1–2 versus 3–4 for Cannabis and 1–2 versus 3–4–5 for Alcohol, respectively, to denote no or sporadic consumption versus regular consumption. In fact, nothing would have prevented us from using categorical responses. However, this would have entailed fitting multinomial models and deriving expressions for the indirect effect involving more complex derivatives. For the sake of simplicity, and to make our application easier to understand, we preferred to convert response variables into binary and to estimate logistic models.
+
+
+```{r}
+library(netmediate)
+library(tidygraph)
+
+glasgow1 <- glasgow[[1]] |> 
+  activate(nodes) |> 
+  filter(selection129) |> 
+  mutate(
+    smokes_dimaria = as.numeric(tobacco_int > 1),
+    drinks_dimaria = as.numeric(alcohol_int > 2),
+    weed_dimaria = as.numeric(cannabis_int > 2)
+  ) |> 
+  select(age, sex_fct, contains("dimaria")) |> 
+  activate(edges) |> 
+  filter(friendship != "Structurally missing") |> 
+  activate(nodes)
+  
+
+glasgow1
+
+A1 <- igraph::as_adj(glasgow1)
+
+image(as.matrix(A1))
+range(A1)
+```
+
+```{r}
+library(gdim)
+
+cv_eigs <- eigcv(A1, k_max = 50)
+cv_eigs
+```
+
+```{r}
+plot(cv_eigs)  # suggests k ~= 4 or 5, maybe up to 9
+```
+
+```{r}
+library(vsp)
+
+fa1 <- vsp(A1, rank = 9, degree_normalize = FALSE)
+fa1
+
+plot_mixing_matrix(fa1)
+screeplot(fa1)
+```
+
+
+```{r}
+plot_ipr_pairs(fa1)
+```
+
+
+```{r}
+library(tidyverse)
+library(vsp)
+
+fa1 %>% 
+  get_varimax_y(1:9) %>%
+  dplyr::select(-id) %>% 
+  GGally::ggpairs(ggplot2::aes(alpha = 0.001), progress = FALSE) +
+  ggplot2::theme_minimal()
+```
+
+
+```{r}
+fa1 %>% 
+  get_varimax_z(1:9) %>%
+  dplyr::select(-id) %>% 
+  dplyr::mutate(leverage = purrr::pmap_dbl(., sum)) %>% 
+  dplyr::select(-leverage) %>%
+  GGally::ggpairs(ggplot2::aes(alpha = 0.001), progress = FALSE) +
+  ggplot2::theme_minimal()
+```
+looks like Y factors are better than Z factors
+
+```{r}
+V1 <- VS(A1, 9)
+
+m_fit <- nodelm(V1 ~ sex_fct, graph = glasgow1)
+anova(m_fit)
+
+o_fit <- nodelm(smokes_dimaria ~ sex_fct + V1, data = glasgow1)
+summary(o_fit)
+
+ols <- nodelm(smokes_dimaria ~ sex_fct, data = glasgow1)
+summary(ols)
+```
+
+
+

@@ -62,9 +62,9 @@ model_mediator_uninformative <- function(n, k = 5, dim_w = 3) {
     S <- matrix(s$d)
   }
 
-  W <- s$u %*% S
+  W <- cbind(1, W) # s$u %*% S)
 
-  colnames(W) <- paste0("W", 1:ncol(W))
+  colnames(W) <- c("intercept", "trt", paste0("C", 1:(dim_w - 1)))
 
   model_mediator(A_model, W, subclass = "uninformative")
 }

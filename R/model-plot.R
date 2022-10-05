@@ -148,7 +148,7 @@ plot_z_pre_post_diff <- function(model) {
   condition <- ifelse(model$trt == 1, "treatment", "control")
 
   z_pre_df <- as.matrix(z_pre) |>
-    as_tibble() |>
+    tibble::as_tibble() |>
     mutate(
       type = "pre",
       id = dplyr::row_number(),
@@ -157,7 +157,7 @@ plot_z_pre_post_diff <- function(model) {
     )
 
   z_post_df <- as.matrix(z_post) |>
-    as_tibble() |>
+    tibble::as_tibble() |>
     mutate(
       type = "post",
       id = dplyr::row_number(),

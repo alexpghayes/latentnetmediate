@@ -149,9 +149,6 @@
 
 #' Leukemia cases by census tract in New York
 #'
-#' TODO
-#'
-#'
 #' @references Wakefield, J., and A. Kim. "A Bayesian Model for Cluster
 #'   Detection." Biostatistics 14, no. 4 (September 1, 2013):
 #'   752–65. https://doi.org/10.1093/biostatistics/kxt001.
@@ -171,7 +168,29 @@
 #'   - `to` (int): Id of neighboring census tract
 #'
 #' @source Extracted from the `SpatialEpi` package on July 29, 2022. See
-#'   [SpatialEpi::NYleukemia] for details and Wakefield and Kim (2013) for
-#'   details.
+#'   [SpatialEpi::NYleukemia] for details, as well as
+#'   Wakefield and Kim (2013).
 #'
 "leukemia"
+
+
+#' Teenage Friends and Lifestyle Data
+#'
+#' The canonical "Glasgow" data, as reported in the `siena` R package
+#' for network data analysis. `netmediate` simply re-exports this data
+#' in a more convenient format. See the `siena` data document for
+#' gory details.
+#'
+#' @references <https://www.stats.ox.ac.uk/~snijders/siena/Glasgow_data.htm>
+#'
+#' @format A list of three [tidygraph::tbl_graph()] directed graphs objects,
+#'   representing the same network measured at three different points in
+#'   time.
+#'
+#'   TODO: describe the tidygraphs
+#'
+#' @source Retrieved from
+#' <https://www.stats.ox.ac.uk/~snijders/siena/Glasgow_data.zip> on
+#' June 8, 2022.
+#'
+"glasgow"

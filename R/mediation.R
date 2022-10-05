@@ -10,47 +10,76 @@
 #'
 #' @return A `network_mediation` object.
 #' @importFrom tidygraph mutate as_tibble
+#' @importFrom broom tidy
+#' @importFrom estimatr tidy
 #' @export
 #'
 #' @examples
 #'
 #' library(tidygraph)
 #'
-#' smoking |>
+#' smokeint <- smoking |>
 #'   mutate(
 #'     smokes_int = as.integer(smokes) - 1
-#'   ) |>
+#'   )
+#'
+#' netmed <- smokeint |>
 #'   netmediate(smokes_int ~ sex + 0, rank = 7)
+#'
+#' netmed
 #'
 netmediate <- function(graph, formula, rank) {
 
   node_data <- tidygraph::as_tibble(graph)
   A <- igraph::as_adjacency_matrix(graph, sparse = TRUE)
 
-  s <- irlba::irlba(A, nv = rank)
-  U <- s$u %*% diag(sqrt(s$d))
+  X <- US(A, rank = rank)
 
-  mf <- stats::model.frame(formula, data = node_data)
+  mf <- model.frame(formula, data = node_data)
   y <- stats::model.response(mf)
-  Z <- stats::model.matrix(mf, node_data)
+  W <- stats::model.matrix(mf, node_data)
 
-  outcome_model <- stats::lm(y ~ Z + U + 0)
-  mediator_model <- stats::lm(U ~ Z + 0)
+  outcome_model <- stats::lm(y ~ W + X + 0)
+  mediator_model <- stats::lm(X ~ W + 0)
 
-  num_coefs <- ncol(Z)
 
-  Z_coefs <- stats::coef(outcome_model)[1:num_coefs]
+
+  browser()
+
+  num_coefs <- ncol(W)
+
+  nde_table <- tidy(outcome_model, conf.int = TRUE)[1:num_coefs, ] |>
+    mutate(estimand = "nde") |>
+    select(term, estimand, estimate, conf.low, conf.high)
+
+  nde_table
+
+  betax <- stats::coef(outcome_model)[-c(1:num_coefs)]
+  theta <- stats::coef(mediator_model)
+
+  sigmabetax <- vcov(outcome_model)[-c(1:num_coefs), -c(1:num_coefs)]
+  sigmatheta <- vcov(mediator_model)
+
+  nie_hat <- drop(theta %*% betax)
+  nie_hat
+
+  rep(betax, each = num_coefs) %*% sigmatheta %*% rep(betax, each = num_coefs)
+
+
+  theta %*% sigmabetax %*% t(theta)
+
+  nde_hat <- stats::coef(outcome_model)[1:num_coefs]
+  covariate_names <- names(nde_hat)
 
   effects <- tibble::tibble(
-    term = names(Z_coefs),
-    nde = Z_coefs,
-    nie = drop(stats::coef(mediator_model) %*% stats::coef(outcome_model)[-c(1:num_coefs)]),
+    term = names(W_coefs),
+    nde = W_coefs,
+    nie = drop( %*% stats::coef(outcome_model)[-c(1:num_coefs)]),
     total = nde + nie
   )
 
   object <- list(
     formula = formula,
-    s = s,
     rank = rank,
     outcome_model = outcome_model,
     mediator_model = mediator_model,
@@ -61,7 +90,8 @@ netmediate <- function(graph, formula, rank) {
   object
 }
 
-
+#' @method print network_mediation
+#' @export
 print.network_mediation <- function(x, ...) {
 
   cat("A network mediation object\n")

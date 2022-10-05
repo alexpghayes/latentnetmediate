@@ -93,7 +93,7 @@ sample_tidygraph <- function(model, ...) {
 sample_tidygraph.perfect <- function(model, intervene = TRUE, ...) {
 
   # model$W should already have appropriate column names
-  W_df <- as_tibble(as.matrix(model$W))
+  W_df <- tibble::as_tibble(as.matrix(model$W))
 
   if (intervene) {
     A_model <- model$A_model
@@ -115,7 +115,7 @@ sample_tidygraph.perfect <- function(model, intervene = TRUE, ...) {
 sample_tidygraph.mediator <- function(model, ...) {
 
   # model$W should already have appropriate column names
-  W_df <- as_tibble(as.matrix(model$W))
+  W_df <- tibble::as_tibble(as.matrix(model$W))
 
   graph <- fastRG::sample_tidygraph(
     model$A_model

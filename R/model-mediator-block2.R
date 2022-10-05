@@ -13,7 +13,7 @@
 #'
 #' set.seed(26)
 #'
-#' mblock <- model_mediator_block2(n = 100, k = 5, dim_c = 3)
+#' mblock <- model_mediator_block2(n = 100, k = 5)
 #'
 #' graph <- sample_tidygraph(mblock)
 #' graph
@@ -43,7 +43,15 @@ model_mediator_block2 <- function(n, k = 5, expected_degree = NULL) {
     W <- matrix(1, nrow = n, ncol = 1)
   }
 
-  colnames(W) <- paste0("W", 1:ncol(W))
+  # add intercept and subject one block membership column to
+  # avoid identification/multicolinearity issue
+  W <- cbind(1,  W[, -1, drop = FALSE])
+
+  if (k == 2) {
+    colnames(W) <- c("intercept", "trt")
+  } else {
+    colnames(W) <- c("intercept", "trt", paste0("C", 1:(k - 2)))
+  }
 
   model_mediator(A_model, W, subclass = "block2")
 }

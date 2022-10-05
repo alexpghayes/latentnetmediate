@@ -67,18 +67,12 @@ A_no_trt <- igraph::as_adjacency_matrix(graph_no_trt)
 plot_sparse_adjacency_matrix(A_trt)
 plot_sparse_adjacency_matrix(A_no_trt)
 
-plot_tidygraph_matrix(A_trt)
-plot_tidygraph_matrix(A_no_trt)
+plot_tidygraph_matrix(graph_trt)
+plot_tidygraph_matrix(graph_no_trt)
 
 plot_z_pre_post_diff(perf)
 
-nodelm(US(A_trt, 5) ~ . - name - 1, graph = graph)
+nodelm(US(A, 5) ~ . - name - 1, graph = graph_trt)
 
-
-# should be very close to the identity matrix
-coef(perf_trt)
-
-# should be very close to zero
-perf_trt$zX - perf_trt$W
 
 }

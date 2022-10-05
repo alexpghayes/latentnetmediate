@@ -27,10 +27,20 @@
 #' m_fit
 #' o_fit
 #'
+#' mrdpg$nde
+#' coef(o_fit)
+#'
+#' coef(m_fit)
+#' coef(o_fit)
+#'
 model_uninformative <- function(n, k, ...) {
-  m <- model_mediator_uninformative(n, k, ...)
-  model_outcome_normal(m, beta_x = rep(3, k))
+  m <- model_mediator_uninformative(n, k) # , ...)
+  o <- model_outcome_normal(m, beta_x = rep(3, k))
+  o$nde <- o$beta_w["trt"]
+  o$nie <- drop(o$mediator$Theta %*% o$beta_x)["trt"]
+  o
 }
+
 
 #' Title
 #'
@@ -57,7 +67,10 @@ model_uninformative <- function(n, k, ...) {
 #'
 model_degree <- function(n, k, ...) {
   m <- model_mediator_block3(n, k, ...)
-  model_outcome_normal(m)
+  o <- model_outcome_normal(m)
+  o$nde <- o$beta_w["trt"]
+  o$nie <- drop(o$mediator$Theta %*% o$beta_x)["trt"]
+  o
 }
 
 #' Title
@@ -85,7 +98,10 @@ model_degree <- function(n, k, ...) {
 #'
 model_block <- function(n, k, ...) {
   m <- model_mediator_block2(n, k, ...)
-  model_outcome_normal(m)
+  o <- model_outcome_normal(m)
+  o$nde <- o$beta_w["trt"]
+  o$nie <- drop(o$mediator$Theta %*% o$beta_x)["trt"]
+  o
 }
 
 #' Title
@@ -113,7 +129,10 @@ model_block <- function(n, k, ...) {
 #'
 model_shift <- function(n, k, ...) {
   m <- model_mediator_informative(n, k, ...)
-  model_outcome_normal(m)
+  o <- model_outcome_normal(m)
+  o$nde <- o$beta_w["trt"]
+  o$nie <- drop(o$mediator$Theta %*% o$beta_x)["trt"]
+  o
 }
 
 #' Title
@@ -141,7 +160,10 @@ model_shift <- function(n, k, ...) {
 #'
 model_canonical <- function(n, k, ...) {
   m <- model_mediator_informative(n, k, ...)
-  model_outcome_normal(m)
+  o <- model_outcome_normal(m)
+  o$nde <- o$beta_w["trt"]
+  o$nie <- drop(o$mediator$Theta %*% o$beta_x)["trt"]
+  o
 }
 
 #' Title
@@ -168,6 +190,12 @@ model_canonical <- function(n, k, ...) {
 #' o_fit
 #'
 model_perfect <- function(n, k, ...) {
+
   m <- model_mediator_perfect(n, k, ...)
-  model_outcome_normal(m)
+  o <- model_outcome_normal(m)
+
+  # this isn't the fully generally case, it only holds when theta_tc = 0
+  o$nde <- 2
+  o$nie <- 2
+  o
 }

@@ -38,4 +38,7 @@ o_fit <- nodelm(y ~ . - name - 1 + US(A, 5), graph = graph)
 m_fit
 o_fit
 
+mrdpg$nde
+coef(o_fit)
+
 }
