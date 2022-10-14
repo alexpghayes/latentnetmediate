@@ -45,7 +45,6 @@ glasgow1 <- glasgow[[1]] |>
     drinks_dimaria = as.numeric(alcohol_int > 2),
     weed_dimaria = as.numeric(cannabis_int > 2)
   ) |> 
-  select(age, sex_fct, contains("dimaria")) |> 
   activate(edges) |> 
   filter(friendship != "Structurally missing") |> 
   activate(nodes)
@@ -58,6 +57,73 @@ A1 <- igraph::as_adj(glasgow1)
 image(as.matrix(A1))
 range(A1)
 ```
+
+```{r}
+library(ggraph)
+
+set.seed(27)
+
+layout <- glasgow1 |> 
+  mutate(
+    in_degree = centrality_degree(mode = "in")
+  ) |>
+  create_layout(layout = 'stress')
+
+layout |> 
+  ggraph() + 
+  geom_edge_fan(
+    arrow = arrow(length = unit(1, 'mm')), 
+    end_cap = circle(2.5, 'mm')
+  ) + 
+  geom_node_point(aes(size = in_degree)) + 
+  labs(
+    title = "Friendships in a secondary school in Glasgow",
+    subtitle = "s129 dataset from the Teenage Friends and Lifestyle Study, 1995",
+    caption = "Each node represents one student",
+    size = "Popularity (in-degree)"
+  ) +
+  theme_graph()
+
+```
+
+
+```{r}
+layout |> 
+  ggraph() + 
+  geom_edge_fan(
+    arrow = arrow(length = unit(1, 'mm')), 
+    end_cap = circle(2.5, 'mm')
+  ) + 
+  geom_node_point(aes(color = money, size = in_degree)) + 
+  labs(
+    title = "Friendships in a secondary school in Glasgow",
+    subtitle = "s129 dataset from the Teenage Friends and Lifestyle Study, 1995",
+    caption = "Each node represents one student",
+    size = "Popularity (in-degree)",
+    color = "Weekly spending money"
+  ) +
+  theme_graph()
+```
+
+
+```{r}
+layout |> 
+  ggraph() +
+  geom_edge_fan(
+    arrow = arrow(length = unit(1, 'mm')), 
+    end_cap = circle(2.5, 'mm')
+  ) + 
+  geom_node_point(aes(color = tobacco_fct, size = in_degree)) + 
+  labs(
+    title = "Friendships in a secondary school in Glasgow",
+    subtitle = "s129 dataset from the Teenage Friends and Lifestyle Study, 1995",
+    caption = "Each node represents one student",
+    size = "Popularity (in-degree)",
+    color = "Tobacco usage"
+  ) +
+  theme_graph()
+```
+
 
 ```{r}
 library(gdim)

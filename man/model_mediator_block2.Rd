@@ -23,7 +23,7 @@ Title
 
 set.seed(26)
 
-mblock <- model_mediator_block2(n = 100, k = 5, dim_c = 3)
+mblock <- model_mediator_block2(n = 100, k = 5)
 
 graph <- sample_tidygraph(mblock)
 graph

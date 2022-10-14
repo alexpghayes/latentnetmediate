@@ -29,12 +29,24 @@ node_constant <- tibble(
   )
 
 code_alcohol <- function(alcohol) {
-  case_when(
+  chr <- case_when(
     alcohol == 5 ~ "More than once a week",
     alcohol == 4 ~ "Once a week",
     alcohol == 3 ~ "Once a month",
     alcohol == 2 ~ "Once or twice a year",
     TRUE ~ "Never"
+  )
+
+  factor(
+    chr,
+    levels = c(
+      "More than once a week",
+      "Once a week",
+      "Once a month",
+      "Once or twice a year",
+      "Never"
+    ),
+    ordered = TRUE
   )
 }
 

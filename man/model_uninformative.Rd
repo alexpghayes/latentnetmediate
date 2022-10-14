@@ -41,4 +41,7 @@ o_fit
 mrdpg$nde
 coef(o_fit)
 
+coef(m_fit)
+coef(o_fit)
+
 }

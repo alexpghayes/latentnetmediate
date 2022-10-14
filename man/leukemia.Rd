@@ -23,14 +23,14 @@ and the edge table has columns:
 }
 \source{
 Extracted from the \code{SpatialEpi} package on July 29, 2022. See
-\link[SpatialEpi:NYleukemia]{SpatialEpi::NYleukemia} for details and Wakefield and Kim (2013) for
-details.
+\link[SpatialEpi:NYleukemia]{SpatialEpi::NYleukemia} for details, as well as
+Wakefield and Kim (2013).
 }
 \usage{
 leukemia
 }
 \description{
-TODO
+Leukemia cases by census tract in New York
 }
 \references{
 Wakefield, J., and A. Kim. "A Bayesian Model for Cluster

@@ -33,7 +33,7 @@ netmediate <- function(graph, formula, rank) {
   node_data <- tidygraph::as_tibble(graph)
   A <- igraph::as_adjacency_matrix(graph, sparse = TRUE)
 
-  X <- US(A, rank = rank)
+  X <- VS(A, rank = rank)
 
   mf <- model.frame(formula, data = node_data)
   y <- stats::model.response(mf)
@@ -42,40 +42,26 @@ netmediate <- function(graph, formula, rank) {
   outcome_model <- stats::lm(y ~ W + X + 0)
   mediator_model <- stats::lm(X ~ W + 0)
 
-
-
-  browser()
-
   num_coefs <- ncol(W)
 
-  nde_table <- tidy(outcome_model, conf.int = TRUE)[1:num_coefs, ] |>
+  nde_table <- broom::tidy(outcome_model, conf.int = TRUE)[1:num_coefs, ] |>
     mutate(estimand = "nde") |>
     select(term, estimand, estimate, conf.low, conf.high)
 
-  nde_table
+  betaw_hat <- stats::coef(outcome_model)[1:num_coefs]
+  betax_hat <- stats::coef(outcome_model)[-c(1:num_coefs)]
+  theta_hat <- stats::coef(mediator_model)
 
-  betax <- stats::coef(outcome_model)[-c(1:num_coefs)]
-  theta <- stats::coef(mediator_model)
+  sigmabetax_hat <- vcov(outcome_model)[-c(1:num_coefs), -c(1:num_coefs)]
+  sigmatheta_hat <- vcov(mediator_model)
 
-  sigmabetax <- vcov(outcome_model)[-c(1:num_coefs), -c(1:num_coefs)]
-  sigmatheta <- vcov(mediator_model)
-
-  nie_hat <- drop(theta %*% betax)
-  nie_hat
-
-  rep(betax, each = num_coefs) %*% sigmatheta %*% rep(betax, each = num_coefs)
-
-
-  theta %*% sigmabetax %*% t(theta)
-
-  nde_hat <- stats::coef(outcome_model)[1:num_coefs]
-  covariate_names <- names(nde_hat)
+  nie_hat <- drop(theta_hat %*% betax_hat)
 
   effects <- tibble::tibble(
-    term = names(W_coefs),
-    nde = W_coefs,
-    nie = drop( %*% stats::coef(outcome_model)[-c(1:num_coefs)]),
-    total = nde + nie
+    term = names(betaw_hat),
+    nde = betaw_hat,
+    nie = nie_hat,
+    total = betaw_hat + nie_hat
   )
 
   object <- list(
@@ -143,8 +129,7 @@ sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10) 
   node_data <- tidygraph::as_tibble(graph)
   A <- igraph::as_adjacency_matrix(graph, sparse = TRUE)
 
-  s <- irlba::irlba(A, nv = max_rank)
-  U_max <- s$u %*% diag(sqrt(s$d))
+  X_max <- VS(A, max_rank)
 
   mf <- stats::model.frame(formula, data = node_data)
   y <- stats::model.response(mf)
@@ -153,20 +138,22 @@ sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10) 
 
   effects_at_rank <- function(rank) {
 
-    U <- U_max[, 1:rank]
+    X <- X_max[, 1:rank]
 
-    outcome_model <- stats::lm(y ~ Z + U + 0)
-    mediator_model <- stats::lm(U ~ Z + 0)
+    outcome_model <- stats::lm(y ~ Z + X + 0)
+    mediator_model <- stats::lm(X ~ Z + 0)
 
     Z_coefs <- stats::coef(outcome_model)[1:num_coefs]
+    coef_names <- stringr::str_remove(names(Z_coefs), "Z")
 
     effects <- tibble::tibble(
       rank = rank,
-      term = names(Z_coefs),
+      term = coef_names,
       nde = Z_coefs,
       nie = drop(stats::coef(mediator_model) %*% stats::coef(outcome_model)[-c(1:num_coefs)]),
       total = nde + nie
-    )
+    ) |>
+      filter(!stringr::str_detect(term, "Intercept"))
   }
 
   ranks <- seq(2, max_rank, length.out = min(ranks_to_consider, max_rank - 1))
@@ -210,8 +197,5 @@ plot.rank_sensitivity_curve <- function(x, ...) {
       title = "Estimated effects as a function of latent space dimension",
       color = "Effect",
       x = "Latent dimension of network"
-    ) +
-    theme(
-      axis.title.y = element_blank()
     )
 }
