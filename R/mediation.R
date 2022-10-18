@@ -189,9 +189,7 @@ plot.rank_sensitivity_curve <- function(x, ...) {
     aes(x = rank, y = value, color = effect) +
     geom_line() +
     geom_point() +
-    geom_hline(yintercept = 0, linetype = "dashed") +
     scale_color_viridis_d() +
-    theme_classic(14) +
     facet_wrap(vars(term)) +
     labs(
       title = "Estimated effects as a function of latent space dimension",

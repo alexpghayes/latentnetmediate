@@ -194,3 +194,32 @@
 #' June 8, 2022.
 #'
 "glasgow"
+
+#' Child maltreatment data
+#'
+#' @references Freier, Anna, Johannes Kruse, Bjarne Schmalbach, Sandra Zara,
+#'   Samuel Werner, Elmar Brähler, Jörg M. Fegert, and Hanna Kampling.
+#'   "Supplementary Data for the Mediation Effect of Personality Functioning
+#'    – Gender Differences, Separate Analyses of Depression and Anxiety
+#'     Symptoms and Inferential Statistics of the Relationship between
+#'     Personality Functioning and Different Types of Child Maltreatment."
+#'   Data in Brief 42 (June 2022): 108272.
+#'   <https://doi.org/10.1016/j.dib.2022.108272>.
+#'
+#'   ———. "The Mediation Effect of Personality Functioning between Different
+#'   Types of Child Maltreatment and the Development of Depression/Anxiety
+#'   Symptoms – A German Representative Study."
+#'   Journal of Affective Disorders 299 (February 2022): 408–15.
+#'   <https://doi.org/10.1016/j.jad.2021.12.020>.
+#'
+#' @format A [tidygraph::tbl_graph()] object representing a bipartite
+#'   graph.
+#'
+#'   TODO: describe the tidygraphs
+#'
+#' @source Retrieved from
+#' <https://data.mendeley.com/datasets/95yysn7cns/1> on
+#' October 18, 2022.
+#'
+"maltreatment"
+

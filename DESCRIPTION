@@ -16,8 +16,7 @@ Description: Uses spectral network regression to estimate natural direct
     inferences about natural direct and indirect effects.
 Config/testthat/edition: 3
 Encoding: UTF-8
-LazyData: true
-LazyDataCompression: bzip2
+LazyData: false
 URL: https://github.com/alexpghayes/netmediate,
     https://alexpghayes.github.io/netmediate/
 BugReports: https://github.com/alexpghayes/netmediate/issues
