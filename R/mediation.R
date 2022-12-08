@@ -18,22 +18,28 @@
 #'
 #' library(tidygraph)
 #'
+#' data(smoking)
+#'
 #' smokeint <- smoking |>
 #'   mutate(
 #'     smokes_int = as.integer(smokes) - 1
 #'   )
 #'
 #' netmed <- smokeint |>
-#'   netmediate(smokes_int ~ sex + 0, rank = 7)
+#'   netmediate(smokes_int ~ sex, rank = 7)
 #'
 #' netmed
 #'
 netmediate <- function(graph, formula, rank) {
 
+  # doesn't handle missing data
+
   node_data <- tidygraph::as_tibble(graph)
   A <- igraph::as_adjacency_matrix(graph, sparse = TRUE)
 
-  X <- VS(A, rank = rank)
+  n <- nrow(A)
+
+  X <- US(A, rank = rank)
 
   mf <- model.frame(formula, data = node_data)
   y <- stats::model.response(mf)
@@ -42,11 +48,17 @@ netmediate <- function(graph, formula, rank) {
   outcome_model <- stats::lm(y ~ W + X + 0)
   mediator_model <- stats::lm(X ~ W + 0)
 
-  num_coefs <- ncol(W)
+  num_coefs <- nrow(coef(mediator_model))
 
   nde_table <- broom::tidy(outcome_model, conf.int = TRUE)[1:num_coefs, ] |>
     mutate(estimand = "nde") |>
     select(term, estimand, estimate, conf.low, conf.high)
+
+  nie_hat <- drop(theta_hat %*% betax_hat)
+
+  nie_table <- tibble::enframe(nie_hat, name = "term", value = "estimate") |>
+    mutate(estimand = "nie") |>
+    select(term, estimand, estimate)
 
   betaw_hat <- stats::coef(outcome_model)[1:num_coefs]
   betax_hat <- stats::coef(outcome_model)[-c(1:num_coefs)]
@@ -55,14 +67,41 @@ netmediate <- function(graph, formula, rank) {
   sigmabetax_hat <- vcov(outcome_model)[-c(1:num_coefs), -c(1:num_coefs)]
   sigmatheta_hat <- vcov(mediator_model)
 
-  nie_hat <- drop(theta_hat %*% betax_hat)
+  # need to re-arrange sigmatheta_hat from enormous square into something
+  # more tensor-y / considering each covariate one at a time
 
-  effects <- tibble::tibble(
-    term = names(betaw_hat),
-    nde = betaw_hat,
-    nie = nie_hat,
-    total = betaw_hat + nie_hat
-  )
+  coef_names <- names(betaw_hat)
+
+  # everything following is under the assumption that Theta_tc = 0
+  # for convenience since it's a pain to handle Theta_tc != 0
+
+  for (i in seq_along(coef_names)) {
+
+    nm <- coef_names[i]
+
+    indices <- which(
+      stringr::str_detect(
+        colnames(sigmatheta_hat),
+        stringr::coll(nm)
+      )
+    )
+
+    thetat_hat <- theta_hat[i, ]
+    sigmathetat_hat <- sigmatheta_hat[indices, indices, drop = FALSE]
+
+    # delta method
+    nie_var <- t(betax_hat) %*% sigmathetat_hat %*% betax_hat +
+      t(thetat_hat) %*% sigmabetax_hat %*% thetat_hat
+
+    nie_table[i, "conf.low"] <- nie_hat[i] - 1.96 * sqrt(nie_var)
+    nie_table[i, "conf.high"] <- nie_hat[i] + 1.96 * sqrt(nie_var)
+  }
+
+  effects <- dplyr::bind_rows(nde_table, nie_table) |>
+    filter(!stringr::str_detect(term, "Intercept")) |>
+    mutate(
+      term = stringr::str_replace(term, "W", "")
+    )
 
   object <- list(
     formula = formula,
