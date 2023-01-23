@@ -9,22 +9,18 @@ set.seed(27)
 
 con_in <- gzfile(here("data-raw", "reddit", "2018.json"))
 
+# id variable is unique for each post
 reddit_raw <- stream_in(con_in, pagesize = 5000)
 
 veitch_subreddits <- c("keto", "OkCupid", "childfree")
 
 reddit_fulltext <- reddit_raw |>
   as_tibble() |>
-  select(gender, body, author, score, subreddit) |>
+  select(gender, body, author, score, subreddit, id) |>
   filter(subreddit %in% veitch_subreddits) |>
-  mutate(
-    post_id = row_number()
-  ) |>
   mutate_at(vars(score), as.integer)
 
 usethis::use_data(reddit_fulltext, overwrite = TRUE)
-
-# reddit_fulltext <- slice_sample(reddit_fulltext, n = 100) # TODO: remove this once a large lazyload DB is no longer a nuisance
 
 # limited anonymization of author handles
 
@@ -37,30 +33,48 @@ pseudonyms <- reddit_fulltext |>
   )
 
 post_data <- reddit_fulltext |>
-  select(gender, author, score, subreddit, post_id) |>
-  rename(author_gender = gender) |>
-  mutate(post_id_chr = as.character(post_id)) |>
+  select(-body) |>
+  rename(flair = gender) |>
   left_join(pseudonyms, by = "author") |>
+  mutate(node_type = "post") |>
   select(-author)
 
 tokenized <- reddit_fulltext |>
-  select(post_id, body) |>
+  select(id, body) |>
   unnest_tokens(word, body, token = "tweets") |>
-  count(post_id, word)
+  count(id, word)
 
-A <- cast_sparse(tokenized, row = post_id, column = word, value = n)
+A <- cast_sparse(tokenized, row = id, column = word, value = n)
 
-distinct(tokenized)
+distinct(tokenized) |>
+  arrange(desc(n))
+
+# do any words match post ids? will cause trouble if so
+tokenized |>
+  filter(id == word)
 
 ig <- igraph::graph_from_incidence_matrix(A, weighted = TRUE)
+
+# why the node_type thing is needed below is unclear to me, but it seems to be
+# important. consider yourself warned
 
 reddit <- as_tbl_graph(ig) |>
   mutate(
     node_type = ifelse(type, "word", "post")
   ) |>
   left_join(
-    post_data, by = c("name" = "post_id_chr")
-  ) |>
-  select(-post_id)
+    post_data,
+    by = c(
+      "name" = "id",
+      "node_type" = "node_type"  # needed to avoid joining post data to word nodes
+    )
+  )
+
+# check that no post data was joined to word nodes. the following tibble
+# should have exactly four rows
+
+reddit |>
+  as_tibble() |>
+  count(node_type, subreddit)
 
 usethis::use_data(reddit, overwrite = TRUE)

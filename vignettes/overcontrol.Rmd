@@ -17,11 +17,14 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(netmediate)
 
+data(addhealth, package = "netmediate")
+
 graph <- addhealth[[36]]
 graph
 
 A <- igraph::as_adjacency_matrix(graph)
 ```
+
 ```{r}
 library(gdim)
 

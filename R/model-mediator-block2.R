@@ -53,5 +53,7 @@ model_mediator_block2 <- function(n, k = 5, expected_degree = NULL) {
     colnames(W) <- c("intercept", "trt", paste0("C", 1:(k - 2)))
   }
 
-  model_mediator(A_model, W, subclass = "block2")
+  m <- model_mediator(A_model, W, subclass = "block2")
+  m$model_name <- "block"
+  m
 }

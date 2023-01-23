@@ -118,15 +118,15 @@ plot_expected_a_pre_post_diff <- function(model) {
 
 plot_shift <- function(data, mapping) {
   color_map <- c(
-    "treated-stayed" = "blue1",
-    "start" = "darkgray",
-    "finish" = "firebrick2",
-    "stayed" = "darkgray"
+    "treated-stayed" = "#1B9E77",
+    "start" = "#999999",
+    "finish" = "#D95F02",
+    "stayed" = "#999999"
   )
 
   ggplot(data = data, mapping = mapping) +
     geom_point(aes(color = color)) +
-    geom_line(aes(group = id), color = "firebrick2") +
+    geom_line(aes(group = id), color = "#D95F02") +
     geom_vline(xintercept = 0) +
     geom_hline(yintercept = 0) +
     scale_color_manual(values = color_map) +

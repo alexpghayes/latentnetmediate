@@ -30,16 +30,26 @@
 #'
 #' netmed
 #'
-netmediate <- function(graph, formula, rank) {
+netmediate <- function(graph, formula, rank, coembedding = c("U", "V")) {
 
   # doesn't handle missing data
 
   node_data <- tidygraph::as_tibble(graph)
-  A <- igraph::as_adjacency_matrix(graph, sparse = TRUE)
 
-  n <- nrow(A)
+  if (igraph::is.bipartite(graph)) {
+    A <- igraph::as_incidence_matrix(graph, sparse = TRUE, attr = "weight")
+    A <- as(A, "CsparseMatrix")
+  } else {
+    A <- igraph::as_adjacency_matrix(graph, sparse = TRUE)
+  }
 
-  X <- US(A, rank = rank)
+  coembedding <- rlang::arg_match(coembedding)
+
+  if (coembedding == "U") {
+    X <- US(A, rank = rank)  # use scaled left singular vectors
+  } else {
+    X <- VS(A, rank = rank)  # use scaled right singular vectors
+  }
 
   mf <- model.frame(formula, data = node_data)
   y <- stats::model.response(mf)
@@ -54,15 +64,15 @@ netmediate <- function(graph, formula, rank) {
     mutate(estimand = "nde") |>
     select(term, estimand, estimate, conf.low, conf.high)
 
+  betaw_hat <- stats::coef(outcome_model)[1:num_coefs]
+  betax_hat <- stats::coef(outcome_model)[-c(1:num_coefs)]
+  theta_hat <- stats::coef(mediator_model)
+
   nie_hat <- drop(theta_hat %*% betax_hat)
 
   nie_table <- tibble::enframe(nie_hat, name = "term", value = "estimate") |>
     mutate(estimand = "nie") |>
     select(term, estimand, estimate)
-
-  betaw_hat <- stats::coef(outcome_model)[1:num_coefs]
-  betax_hat <- stats::coef(outcome_model)[-c(1:num_coefs)]
-  theta_hat <- stats::coef(mediator_model)
 
   sigmabetax_hat <- vcov(outcome_model)[-c(1:num_coefs), -c(1:num_coefs)]
   sigmatheta_hat <- vcov(mediator_model)
@@ -139,6 +149,23 @@ print.network_mediation <- function(x, ...) {
   invisible(x)
 }
 
+#' @method plot network_mediation
+#' @export
+plot.network_mediation <- function(x, ...) {
+
+  x$effects |>
+    ggplot() +
+    aes(
+      x = term,
+      ymin = conf.low,
+      y = estimate,
+      ymax = conf.high,
+      color = estimand
+    ) +
+    geom_pointrange(position = position_dodge(width = 1))
+
+}
+
 #' Estimate mediated effects for a variety of embedding dimensions
 #'
 #' @inheritParams netmediate
@@ -161,38 +188,97 @@ print.network_mediation <- function(x, ...) {
 #'  sensitivity_curve(smokes_int ~ sex, max_rank = 25, 25)
 #'
 #' rank_curve
-#' plot(rank_curve)
+#' plot(rank_curve) +
+#'   theme_classic(18)
 #'
-sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10) {
+sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
+                              coembedding = c("U", "V")) {
+
+  # doesn't handle missing data
 
   node_data <- tidygraph::as_tibble(graph)
-  A <- igraph::as_adjacency_matrix(graph, sparse = TRUE)
 
-  X_max <- VS(A, max_rank)
+  if (igraph::is.bipartite(graph)) {
+    A <- igraph::as_incidence_matrix(graph, sparse = TRUE, attr = "weight")
+    A <- as(A, "CsparseMatrix")
+  } else {
+    A <- igraph::as_adjacency_matrix(graph, sparse = TRUE)
+  }
 
-  mf <- stats::model.frame(formula, data = node_data)
+  coembedding <- rlang::arg_match(coembedding)
+
+  if (coembedding == "U") {
+    X_max <- US(A, rank = max_rank)  # use scaled left singular vectors
+  } else {
+    X_max <- VS(A, rank = max_rank)  # use scaled right singular vectors
+  }
+
+  mf <- model.frame(formula, data = node_data)
   y <- stats::model.response(mf)
-  Z <- stats::model.matrix(mf, node_data)
-  num_coefs <- ncol(Z)
+  W <- stats::model.matrix(mf, node_data)
 
   effects_at_rank <- function(rank) {
 
-    X <- X_max[, 1:rank]
+    X <- X_max[, 1:rank, drop = FALSE]
 
-    outcome_model <- stats::lm(y ~ Z + X + 0)
-    mediator_model <- stats::lm(X ~ Z + 0)
+    outcome_model <- stats::lm(y ~ W + X + 0)
+    mediator_model <- stats::lm(X ~ W + 0)
 
-    Z_coefs <- stats::coef(outcome_model)[1:num_coefs]
-    coef_names <- stringr::str_remove(names(Z_coefs), "Z")
+    num_coefs <- nrow(coef(mediator_model))
 
-    effects <- tibble::tibble(
-      rank = rank,
-      term = coef_names,
-      nde = Z_coefs,
-      nie = drop(stats::coef(mediator_model) %*% stats::coef(outcome_model)[-c(1:num_coefs)]),
-      total = nde + nie
-    ) |>
-      filter(!stringr::str_detect(term, "Intercept"))
+    nde_table <- broom::tidy(outcome_model, conf.int = TRUE)[1:num_coefs, ] |>
+      mutate(estimand = "nde") |>
+      select(term, estimand, estimate, conf.low, conf.high)
+
+    betaw_hat <- stats::coef(outcome_model)[1:num_coefs]
+    betax_hat <- stats::coef(outcome_model)[-c(1:num_coefs)]
+    theta_hat <- stats::coef(mediator_model)
+
+    nie_hat <- drop(theta_hat %*% betax_hat)
+
+    nie_table <- tibble::enframe(nie_hat, name = "term", value = "estimate") |>
+      mutate(estimand = "nie") |>
+      select(term, estimand, estimate)
+
+    sigmabetax_hat <- vcov(outcome_model)[-c(1:num_coefs), -c(1:num_coefs)]
+    sigmatheta_hat <- vcov(mediator_model)
+
+    # need to re-arrange sigmatheta_hat from enormous square into something
+    # more tensor-y / considering each covariate one at a time
+
+    coef_names <- names(betaw_hat)
+
+    # everything following is under the assumption that Theta_tc = 0
+    # for convenience since it's a pain to handle Theta_tc != 0
+
+    for (i in seq_along(coef_names)) {
+
+      nm <- coef_names[i]
+
+      indices <- which(
+        stringr::str_detect(
+          colnames(sigmatheta_hat),
+          stringr::coll(nm)
+        )
+      )
+
+      thetat_hat <- theta_hat[i, ]
+      sigmathetat_hat <- sigmatheta_hat[indices, indices, drop = FALSE]
+
+      # delta method
+      nie_var <- t(betax_hat) %*% sigmathetat_hat %*% betax_hat +
+        t(thetat_hat) %*% sigmabetax_hat %*% thetat_hat
+
+      nie_table[i, "conf.low"] <- nie_hat[i] - 1.96 * sqrt(nie_var)
+      nie_table[i, "conf.high"] <- nie_hat[i] + 1.96 * sqrt(nie_var)
+    }
+
+    effects <- dplyr::bind_rows(nde_table, nie_table) |>
+      filter(!stringr::str_detect(term, "Intercept")) |>
+      mutate(
+        term = stringr::str_replace(term, "W", ""),
+        rank = rank
+      )
   }
 
   ranks <- seq(2, max_rank, length.out = min(ranks_to_consider, max_rank - 1))
@@ -212,27 +298,28 @@ plot.rank_sensitivity_curve <- function(x, ...) {
   }
 
   x |>
-    tidyr::pivot_longer(
-      c("nie", "nde", "total"),
-      names_to = "effect"
-    ) |>
     dplyr::mutate(
       effect = dplyr::recode(
-        effect,
-        nde = "Natural Direct Effect",
-        nie = "Natural Indirect Effect",
-        total = "Average Treatment Effect"
+        estimand,
+        nde = "Direct",
+        nie = "Indirect"
       )
     ) |>
     ggplot() +
-    aes(x = rank, y = value, color = effect) +
+    aes(
+      x = rank, ymin = conf.low, y = estimate, ymax = conf.high,
+      color = effect, fill = effect
+    ) +
+    geom_ribbon(alpha = 0.3) +
     geom_line() +
     geom_point() +
-    scale_color_viridis_d() +
+    scale_fill_brewer(palette = "Dark2") +
+    scale_color_brewer(palette = "Dark2") +
     facet_wrap(vars(term)) +
     labs(
       title = "Estimated effects as a function of latent space dimension",
-      color = "Effect",
+      color = "Natural Effect",
+      fill = "Natural Effect",
       x = "Latent dimension of network"
     )
 }

@@ -25,13 +25,15 @@ A \code{network_mediation} object.
 
 library(tidygraph)
 
+data(smoking)
+
 smokeint <- smoking |>
   mutate(
     smokes_int = as.integer(smokes) - 1
   )
 
 netmed <- smokeint |>
-  netmediate(smokes_int ~ sex + 0, rank = 7)
+  netmediate(smokes_int ~ sex, rank = 7)
 
 netmed
 
