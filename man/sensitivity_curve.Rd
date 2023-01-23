@@ -4,7 +4,13 @@
 \alias{sensitivity_curve}
 \title{Estimate mediated effects for a variety of embedding dimensions}
 \usage{
-sensitivity_curve(graph, formula, max_rank, ranks_to_consider = 10)
+sensitivity_curve(
+  graph,
+  formula,
+  max_rank,
+  ranks_to_consider = 10,
+  coembedding = c("U", "V")
+)
 }
 \arguments{
 \item{graph}{A \code{\link[tidygraph:tbl_graph]{tidygraph::tbl_graph()}} object.}
@@ -36,6 +42,7 @@ rank_curve <- smoking |>
  sensitivity_curve(smokes_int ~ sex, max_rank = 25, 25)
 
 rank_curve
-plot(rank_curve)
+plot(rank_curve) +
+  theme_classic(18)
 
 }

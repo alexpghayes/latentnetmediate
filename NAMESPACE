@@ -2,6 +2,7 @@
 
 S3method(coef,mediator)
 S3method(coef,outcome)
+S3method(plot,network_mediation)
 S3method(plot,rank_sensitivity_curve)
 S3method(print,network_mediation)
 S3method(sample_tidygraph,mediator)

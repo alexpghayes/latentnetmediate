@@ -4,7 +4,7 @@
 \alias{netmediate}
 \title{Estimate network direct and indirect effects via a spectral method}
 \usage{
-netmediate(graph, formula, rank)
+netmediate(graph, formula, rank, coembedding = c("U", "V"))
 }
 \arguments{
 \item{graph}{A \code{\link[tidygraph:tbl_graph]{tidygraph::tbl_graph()}} object.}
