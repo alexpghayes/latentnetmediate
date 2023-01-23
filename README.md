@@ -12,6 +12,7 @@ coverage](https://codecov.io/gh/alexpghayes/netmediate/branch/main/graph/badge.s
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/alexpghayes/netmediate/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/alexpghayes/netmediate/actions/workflows/R-CMD-check.yaml)
+[![.github/workflows/R-CMD-check](https://github.com/alexpghayes/netmediate/actions/workflows/.github/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/alexpghayes/netmediate/actions/workflows/.github/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of netmediate is to …
@@ -32,9 +33,6 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(netmediate)
-#> Registered S3 method overwritten by 'GGally':
-#>   method from   
-#>   +.gg   ggplot2
 ## basic example code
 ```
 

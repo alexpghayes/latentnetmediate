@@ -20,6 +20,7 @@ knitr::opts_chunk$set(
 [![Codecov test coverage](https://codecov.io/gh/alexpghayes/netmediate/branch/main/graph/badge.svg)](https://app.codecov.io/gh/alexpghayes/netmediate?branch=main)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/alexpghayes/netmediate/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/alexpghayes/netmediate/actions/workflows/R-CMD-check.yaml)
+[![.github/workflows/R-CMD-check](https://github.com/alexpghayes/netmediate/actions/workflows/.github/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/alexpghayes/netmediate/actions/workflows/.github/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of netmediate is to ...
