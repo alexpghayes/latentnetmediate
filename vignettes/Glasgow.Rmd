@@ -207,6 +207,6 @@ The TL;DR is basically that all reasonable confidence intervals for the direct a
 glasgow1 |> 
   as_tibble() |> 
   lm(smokes_dimaria ~ sex_fct, data = _) |> 
-  broom::tidy(conf.int = TRUE)
+  confint()
 ```
 
