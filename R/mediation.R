@@ -287,12 +287,10 @@ sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
   curve
 }
 
-#' Estimate mediated effects for a variety of embedding dimensions
+#' Estimate mediated effects for a variety of embedding dimensions using custom embedding
 #'
 #' @inheritParams netmediate
-#' @param max_rank Maximum rank to consider (integer).
-#' @param ranks_to_consider How many distinct ranks to consider (integer).
-#'   Optional, defaults to 10.
+#' @param X_max TODO
 #'
 #' @return A `rank_sensitivity_curve` object, which is a subclass of a
 #'   [tibble::tibble()].

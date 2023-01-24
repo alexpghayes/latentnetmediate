@@ -2,7 +2,7 @@
 % Please edit documentation in R/mediation.R
 \name{sensitivity_curve_custom}
 \alias{sensitivity_curve_custom}
-\title{Estimate mediated effects for a variety of embedding dimensions}
+\title{Estimate mediated effects for a variety of embedding dimensions using custom embedding}
 \usage{
 sensitivity_curve_custom(graph, formula, X_max)
 }
@@ -13,17 +13,14 @@ sensitivity_curve_custom(graph, formula, X_max)
 outcome ~ nodal_formula. For now, no interactiosn or fancy stuff
 are allowed in the formula.}
 
-\item{max_rank}{Maximum rank to consider (integer).}
-
-\item{ranks_to_consider}{How many distinct ranks to consider (integer).
-Optional, defaults to 10.}
+\item{X_max}{TODO}
 }
 \value{
 A \code{rank_sensitivity_curve} object, which is a subclass of a
 \code{\link[tibble:tibble]{tibble::tibble()}}.
 }
 \description{
-Estimate mediated effects for a variety of embedding dimensions
+Estimate mediated effects for a variety of embedding dimensions using custom embedding
 }
 \examples{
 
