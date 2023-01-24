@@ -152,7 +152,6 @@ plot_ipr_pairs(fa1)
 The varimax factors look decently clear in the plots below
 
 ```{r}
-library(tidyverse)
 library(vsp)
 
 fa1 %>% 

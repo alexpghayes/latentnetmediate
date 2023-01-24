@@ -25,6 +25,8 @@ RoxygenNote: 7.2.1.9000
 Suggests: 
     covr,
     DT,
+    gdim,
+    ggraph,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
@@ -44,6 +46,7 @@ Imports:
     methods,
     purrr,
     rlang,
+    RSpectra,
     tibble,
     tidygraph,
     tidyr,

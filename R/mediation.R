@@ -38,7 +38,7 @@ netmediate <- function(graph, formula, rank, coembedding = c("U", "V")) {
 
   if (igraph::is.bipartite(graph)) {
     A <- igraph::as_incidence_matrix(graph, sparse = TRUE, attr = "weight")
-    A <- as(A, "CsparseMatrix")
+    A <- methods::as(A, "CsparseMatrix")
   } else {
     A <- igraph::as_adjacency_matrix(graph, sparse = TRUE)
   }
@@ -51,7 +51,7 @@ netmediate <- function(graph, formula, rank, coembedding = c("U", "V")) {
     X <- VS(A, rank = rank)  # use scaled right singular vectors
   }
 
-  mf <- model.frame(formula, data = node_data)
+  mf <- stats::model.frame(formula, data = node_data)
   y <- stats::model.response(mf)
   W <- stats::model.matrix(mf, node_data)
 
@@ -61,8 +61,8 @@ netmediate <- function(graph, formula, rank, coembedding = c("U", "V")) {
   num_coefs <- nrow(coef(mediator_model))
 
   nde_table <- broom::tidy(outcome_model, conf.int = TRUE)[1:num_coefs, ] |>
-    mutate(estimand = "nde") |>
-    select(term, estimand, estimate, conf.low, conf.high)
+    dplyr::mutate(estimand = "nde") |>
+    dplyr::select(term, estimand, estimate, conf.low, conf.high)
 
   betaw_hat <- stats::coef(outcome_model)[1:num_coefs]
   betax_hat <- stats::coef(outcome_model)[-c(1:num_coefs)]
@@ -74,8 +74,8 @@ netmediate <- function(graph, formula, rank, coembedding = c("U", "V")) {
     mutate(estimand = "nie") |>
     select(term, estimand, estimate)
 
-  sigmabetax_hat <- vcov(outcome_model)[-c(1:num_coefs), -c(1:num_coefs)]
-  sigmatheta_hat <- vcov(mediator_model)
+  sigmabetax_hat <- stats::vcov(outcome_model)[-c(1:num_coefs), -c(1:num_coefs)]
+  sigmatheta_hat <- stats::vcov(mediator_model)
 
   # need to re-arrange sigmatheta_hat from enormous square into something
   # more tensor-y / considering each covariate one at a time
@@ -108,8 +108,8 @@ netmediate <- function(graph, formula, rank, coembedding = c("U", "V")) {
   }
 
   effects <- dplyr::bind_rows(nde_table, nie_table) |>
-    filter(!stringr::str_detect(term, "Intercept")) |>
-    mutate(
+    dplyr::filter(!stringr::str_detect(term, "Intercept")) |>
+    dplyr::mutate(
       term = stringr::str_replace(term, "W", "")
     )
 
@@ -200,7 +200,7 @@ sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
 
   if (igraph::is.bipartite(graph)) {
     A <- igraph::as_incidence_matrix(graph, sparse = TRUE, attr = "weight")
-    A <- as(A, "CsparseMatrix")
+    A <- methods::as(A, "CsparseMatrix")
   } else {
     A <- igraph::as_adjacency_matrix(graph, sparse = TRUE)
   }
@@ -213,7 +213,7 @@ sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
     X_max <- VS(A, rank = max_rank)  # use scaled right singular vectors
   }
 
-  mf <- model.frame(formula, data = node_data)
+  mf <- stats::model.frame(formula, data = node_data)
   y <- stats::model.response(mf)
   W <- stats::model.matrix(mf, node_data)
 
@@ -227,8 +227,8 @@ sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
     num_coefs <- nrow(coef(mediator_model))
 
     nde_table <- broom::tidy(outcome_model, conf.int = TRUE)[1:num_coefs, ] |>
-      mutate(estimand = "nde") |>
-      select(term, estimand, estimate, conf.low, conf.high)
+      dplyr::mutate(estimand = "nde") |>
+      dplyr::select(term, estimand, estimate, conf.low, conf.high)
 
     betaw_hat <- stats::coef(outcome_model)[1:num_coefs]
     betax_hat <- stats::coef(outcome_model)[-c(1:num_coefs)]
@@ -237,11 +237,11 @@ sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
     nie_hat <- drop(theta_hat %*% betax_hat)
 
     nie_table <- tibble::enframe(nie_hat, name = "term", value = "estimate") |>
-      mutate(estimand = "nie") |>
-      select(term, estimand, estimate)
+      dplyr::mutate(estimand = "nie") |>
+      dplyr::select(term, estimand, estimate)
 
-    sigmabetax_hat <- vcov(outcome_model)[-c(1:num_coefs), -c(1:num_coefs)]
-    sigmatheta_hat <- vcov(mediator_model)
+    sigmabetax_hat <- stats::vcov(outcome_model)[-c(1:num_coefs), -c(1:num_coefs)]
+    sigmatheta_hat <- stats::vcov(mediator_model)
 
     # need to re-arrange sigmatheta_hat from enormous square into something
     # more tensor-y / considering each covariate one at a time
@@ -274,8 +274,8 @@ sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
     }
 
     effects <- dplyr::bind_rows(nde_table, nie_table) |>
-      filter(!stringr::str_detect(term, "Intercept")) |>
-      mutate(
+      dplyr::filter(!stringr::str_detect(term, "Intercept")) |>
+      dplyr::mutate(
         term = stringr::str_replace(term, "W", ""),
         rank = rank
       )

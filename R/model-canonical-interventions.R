@@ -41,38 +41,6 @@ model_uninformative <- function(n, k, ...) {
   o
 }
 
-
-#' Title
-#'
-#' @inheritParams model_mediator_block3
-#' @inheritDotParams model_mediator_block3
-#'
-#' @return TODO
-#' @export
-#'
-#' @examples
-#'
-#' set.seed(26)
-#'
-#' mrdpg <- model_degree(n = 100, k = 5)
-#'
-#' graph <- sample_tidygraph(mrdpg)
-#' graph
-#'
-#' m_fit <- nodelm(US(A, 5) ~ . - name - y - 1, graph = graph)
-#' o_fit <- nodelm(y ~ . - name - 1 + US(A, 5), graph = graph)
-#'
-#' m_fit
-#' o_fit
-#'
-model_degree <- function(n, k, ...) {
-  m <- model_mediator_block3(n, k, ...)
-  o <- model_outcome_normal(m)
-  o$nde <- o$beta_w["trt"]
-  o$nie <- drop(o$mediator$Theta %*% o$beta_x)["trt"]
-  o
-}
-
 #' Title
 #'
 #' @inheritParams model_mediator_block2

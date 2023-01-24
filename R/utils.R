@@ -4,6 +4,8 @@ utils::globalVariables(
     "conf.low",
     "conf.high",
     "color",
+    "estimate",
+    "estimand",
     "id",
     "i",
     "j",
