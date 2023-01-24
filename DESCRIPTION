@@ -29,6 +29,7 @@ Suggests:
     ggraph,
     knitr,
     rmarkdown,
+    scales,
     testthat (>= 3.0.0)
 Depends: 
     R (>= 4.2.0)

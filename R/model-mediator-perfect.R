@@ -24,36 +24,6 @@
 #'
 #' perf <- model_mediator_perfect(n = 100, k = 5, ztheta_tc = ztheta_tc)
 #'
-#' expected_z_pre_trt(perf)
-#' expected_z_post_trt(perf)
-#'
-#' expected_a_pre_trt(perf)
-#' expected_a_post_trt(perf)
-#'
-#' plot_expected_a_pre_trt(perf)
-#' plot_expected_a_post_trt(perf)
-#'
-#' plot_expected_a_pre_post_diff(perf)
-#'
-#' graph_trt <- sample_tidygraph(perf)
-#' graph_no_trt <- sample_tidygraph(perf, intervene = FALSE)
-#' graph_trt
-#' graph_no_trt
-#'
-#' A_trt <- igraph::as_adjacency_matrix(graph_trt)
-#' A_no_trt <- igraph::as_adjacency_matrix(graph_no_trt)
-#'
-#' plot_sparse_adjacency_matrix(A_trt)
-#' plot_sparse_adjacency_matrix(A_no_trt)
-#'
-#' plot_tidygraph_matrix(graph_trt)
-#' plot_tidygraph_matrix(graph_no_trt)
-#'
-#' plot_z_pre_post_diff(perf)
-#'
-#' nodelm(US(A, 5) ~ . - name - 1, graph = graph_trt)
-#'
-#'
 model_mediator_perfect <- function(n, k = 5, ztheta_0 = NULL, ztheta_t = NULL,
                                    ztheta_c = NULL, ztheta_tc = NULL, expected_degree = NULL) {
 

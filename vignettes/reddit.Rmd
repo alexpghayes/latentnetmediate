@@ -63,6 +63,8 @@ The question then is how precisely to do the regularization to make the magic wo
 library(invertiforms) # RoheLab/invertiforms
 library(RSpectra)
 library(scales)
+library(tidyr)
+library(dplyr)
 
 rank <- 50
 
@@ -71,13 +73,13 @@ tau <- 10^seq(-2, 4, length.out = num_tau)
 
 laplacians <- tibble(tau = tau) %>%
   mutate(
-    scaler = map(tau, ~ RegularizedLaplacian(A_okc, .x, .x)),
-    L_tau = map(scaler, ~ transform(.x, A_okc))
+    scaler = purrr::map(tau, ~ RegularizedLaplacian(A_okc, .x, .x)),
+    L_tau = purrr::map(scaler, ~ transform(.x, A_okc))
   )
 
 decomposed <- laplacians %>%
   mutate(
-    svd = map(L_tau, svds, k = rank)
+    svd = purrr::map(L_tau, svds, k = rank)
   )
 
 cumulative_participation <- function(U) {
@@ -86,8 +88,8 @@ cumulative_participation <- function(U) {
 
 localization <- decomposed %>%
   mutate(
-    u = map_dbl(svd, ~ cumulative_participation(.x$u)),
-    v = map_dbl(svd, ~ cumulative_participation(.x$v))
+    u = purrr::map_dbl(svd, ~ cumulative_participation(.x$u)),
+    v = purrr::map_dbl(svd, ~ cumulative_participation(.x$v))
   )
 
 # these are the same now but might differ for rectangular A
@@ -149,7 +151,7 @@ these look pretty good to me
 ```{r}
 y_hubs <- fa_L_okc |>
   get_varimax_y(1:fa_L_okc$rank) |>
-  set_names(nm = c("id", paste0("y", 1:fa_L_okc$rank))) |>
+  rlang::set_names(nm = c("id", paste0("y", 1:fa_L_okc$rank))) |>
   tidyr::gather(
     factor,
     loading,
@@ -172,7 +174,7 @@ data(reddit_fulltext, package = "netmediate")
 
 z_hubs <- fa_L_okc |>
   get_varimax_z(1:fa_L_okc$rank) |>
-  set_names(nm = c("id", paste0("z", 1:fa_L_okc$rank))) |>
+  rlang::set_names(nm = c("id", paste0("z", 1:fa_L_okc$rank))) |>
   tidyr::gather(
     factor,
     loading,
