@@ -188,8 +188,7 @@ plot.network_mediation <- function(x, ...) {
 #'  sensitivity_curve(smokes_int ~ sex, max_rank = 25, 25)
 #'
 #' rank_curve
-#' plot(rank_curve) +
-#'   theme_classic(18)
+#' plot(rank_curve)
 #'
 sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
                               coembedding = c("U", "V")) {
@@ -330,8 +329,7 @@ sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
 #' curve_custom <- sensitivity_curve_custom(smoking2, smokes_int ~ sex, X_max)
 #' curve_custom
 #'
-#' plot(curve_custom) +
-#'   theme_classic(18)
+#' plot(curve_custom)
 #'
 sensitivity_curve_custom <- function(graph, formula, X_max) {
 

@@ -93,6 +93,8 @@ of nodal covariates.
 }
 \examples{
 
+data(addhealth, package = "netmediate")
+
 ### some examples where data is specified as a tidygraph
 
 # a regression that does not use any node embeddings

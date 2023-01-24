@@ -56,7 +56,6 @@ X_max <- s_max$u \%*\% diag(sqrt(s_max$d))
 curve_custom <- sensitivity_curve_custom(smoking2, smokes_int ~ sex, X_max)
 curve_custom
 
-plot(curve_custom) +
-  theme_classic(18)
+plot(curve_custom)
 
 }

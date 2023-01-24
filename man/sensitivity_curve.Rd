@@ -42,7 +42,6 @@ rank_curve <- smoking |>
  sensitivity_curve(smokes_int ~ sex, max_rank = 25, 25)
 
 rank_curve
-plot(rank_curve) +
-  theme_classic(18)
+plot(rank_curve)
 
 }
