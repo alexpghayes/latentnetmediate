@@ -25,7 +25,7 @@ RoxygenNote: 7.2.1.9000
 Suggests: 
     covr,
     DT,
-    gdim,
+    gdim (>= 0.0.0.9000),
     ggraph,
     knitr,
     rmarkdown,
@@ -54,5 +54,6 @@ Imports:
     vsp
 License: MIT + file LICENSE
 VignetteBuilder: knitr
-Remotes: 
-    RoheLab/fastRG
+Remotes:  
+    RoheLab/fastRG,
+    RoheLab/gdim
