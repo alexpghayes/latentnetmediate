@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 library(netmediate)
 library(tidygraph)
 library(igraph)
+library(ggplot2)
 library(gdim)
 library(vsp)
 library(invertiforms)
