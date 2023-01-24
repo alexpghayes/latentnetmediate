@@ -288,6 +288,132 @@ sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
   curve
 }
 
+#' Estimate mediated effects for a variety of embedding dimensions
+#'
+#' @inheritParams netmediate
+#' @param max_rank Maximum rank to consider (integer).
+#' @param ranks_to_consider How many distinct ranks to consider (integer).
+#'   Optional, defaults to 10.
+#'
+#' @return A `rank_sensitivity_curve` object, which is a subclass of a
+#'   [tibble::tibble()].
+#' @export
+#'
+#' @examples
+#'
+#' library(tidygraph)
+#' library(invertiforms)
+#'
+#' # suppose you want to use the degree-normalized Laplacian embedding
+#' # instead of the adjacency spectral embedding. you can do that as
+#' # follows
+#'
+#' data(smoking)
+#'
+#' smoking2 <- smoking |>
+#'   mutate(
+#'     smokes_int = as.integer(smokes) - 1
+#'   )
+#'
+#' A <- igraph::as_adj(smoking2)
+#'
+#' # here we construct our "custom" embeddings
+#'
+#' iform <- NormalizedLaplacian(A)
+#' L <- transform(iform, A)
+#'
+#' s_max <- RSpectra::svds(L, 10, 10)
+#' X_max <- s_max$u %*% diag(sqrt(s_max$d))
+#'
+#' # and now we plug them into the product-of-coefs estimator
+#'
+#' curve_custom <- sensitivity_curve_custom(smoking2, smokes_int ~ sex, X_max)
+#' curve_custom
+#'
+#' plot(curve_custom) +
+#'   theme_classic(18)
+#'
+sensitivity_curve_custom <- function(graph, formula, X_max) {
+
+  # doesn't handle missing data
+
+  node_data <- tidygraph::as_tibble(graph)
+
+  mf <- model.frame(formula, data = node_data)
+  y <- stats::model.response(mf)
+  W <- stats::model.matrix(mf, node_data)
+
+  effects_at_rank <- function(rank) {
+
+    X <- X_max[, 1:rank, drop = FALSE]
+
+    outcome_model <- stats::lm(y ~ W + X + 0)
+    mediator_model <- stats::lm(X ~ W + 0)
+
+    num_coefs <- nrow(coef(mediator_model))
+
+    nde_table <- broom::tidy(outcome_model, conf.int = TRUE)[1:num_coefs, ] |>
+      mutate(estimand = "nde") |>
+      select(term, estimand, estimate, conf.low, conf.high)
+
+    betaw_hat <- stats::coef(outcome_model)[1:num_coefs]
+    betax_hat <- stats::coef(outcome_model)[-c(1:num_coefs)]
+    theta_hat <- stats::coef(mediator_model)
+
+    nie_hat <- drop(theta_hat %*% betax_hat)
+
+    nie_table <- tibble::enframe(nie_hat, name = "term", value = "estimate") |>
+      mutate(estimand = "nie") |>
+      select(term, estimand, estimate)
+
+    sigmabetax_hat <- vcov(outcome_model)[-c(1:num_coefs), -c(1:num_coefs)]
+    sigmatheta_hat <- vcov(mediator_model)
+
+    # need to re-arrange sigmatheta_hat from enormous square into something
+    # more tensor-y / considering each covariate one at a time
+
+    coef_names <- names(betaw_hat)
+
+    # everything following is under the assumption that Theta_tc = 0
+    # for convenience since it's a pain to handle Theta_tc != 0
+
+    for (i in seq_along(coef_names)) {
+
+      nm <- coef_names[i]
+
+      indices <- which(
+        stringr::str_detect(
+          colnames(sigmatheta_hat),
+          stringr::coll(nm)
+        )
+      )
+
+      thetat_hat <- theta_hat[i, ]
+      sigmathetat_hat <- sigmatheta_hat[indices, indices, drop = FALSE]
+
+      # delta method
+      nie_var <- t(betax_hat) %*% sigmathetat_hat %*% betax_hat +
+        t(thetat_hat) %*% sigmabetax_hat %*% thetat_hat
+
+      nie_table[i, "conf.low"] <- nie_hat[i] - 1.96 * sqrt(nie_var)
+      nie_table[i, "conf.high"] <- nie_hat[i] + 1.96 * sqrt(nie_var)
+    }
+
+    effects <- dplyr::bind_rows(nde_table, nie_table) |>
+      filter(!stringr::str_detect(term, "Intercept")) |>
+      mutate(
+        term = stringr::str_replace(term, "W", ""),
+        rank = rank
+      )
+  }
+
+  ranks <- 2:ncol(X_max)
+
+  curve <- purrr::map_dfr(ranks, effects_at_rank)
+  class(curve) <- c("rank_sensitivity_curve", class(curve))
+  curve
+}
+
 #' @method plot rank_sensitivity_curve
 #' @export
 #' @import ggplot2

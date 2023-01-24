@@ -24,12 +24,14 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1.9000
 Suggests: 
     covr,
+    DT,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
 Depends: 
     R (>= 4.2.0)
 Imports: 
+    broom,
     dplyr,
     estimatr,
     fastRG (>= 0.3.0.9004),
