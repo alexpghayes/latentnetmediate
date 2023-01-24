@@ -11,25 +11,3 @@ authors:
 
 development:
   mode: auto
-
-reference:
-  - title: Estimation
-    contents:
-    - netmediate
-    - sensitivity_curve
-    - nodelm
-    - nodelm_robust
-    - ase_specials
-    - vsp_specials
-  - title: Simulating data
-    contents:
-    - sample_tidygraph
-    - model_mediator_uninformative
-    - model_mediator_block
-    - model_mediator_informative
-    - plot_expected_a_pre_trt
-  - title: Datasets
-    contents:
-    - smoking
-    - addhealth
-    - reddit

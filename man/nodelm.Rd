@@ -94,6 +94,7 @@ of nodal covariates.
 \examples{
 
 data(addhealth, package = "netmediate")
+data(smoking, package = "netmediate")
 
 ### some examples where data is specified as a tidygraph
 

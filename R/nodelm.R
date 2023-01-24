@@ -145,6 +145,7 @@ Y <- function(A, rank, ..., degree_normalize = FALSE) {
 #' @examples
 #'
 #' data(addhealth, package = "netmediate")
+#' data(smoking, package = "netmediate")
 #'
 #' ### some examples where data is specified as a tidygraph
 #'

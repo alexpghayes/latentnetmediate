@@ -71,8 +71,8 @@ netmediate <- function(graph, formula, rank, coembedding = c("U", "V")) {
   nie_hat <- drop(theta_hat %*% betax_hat)
 
   nie_table <- tibble::enframe(nie_hat, name = "term", value = "estimate") |>
-    mutate(estimand = "nie") |>
-    select(term, estimand, estimate)
+    dplyr::mutate(estimand = "nie") |>
+    dplyr::select(term, estimand, estimate)
 
   sigmabetax_hat <- stats::vcov(outcome_model)[-c(1:num_coefs), -c(1:num_coefs)]
   sigmatheta_hat <- stats::vcov(mediator_model)
