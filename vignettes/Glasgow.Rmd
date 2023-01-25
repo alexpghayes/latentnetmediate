@@ -209,3 +209,55 @@ glasgow1 |>
   confint()
 ```
 
+# Estimates using symmetrized network
+
+These estimates match Veitch more closely and smaller in magnitude
+
+```{r}
+glasgow1_sym <- glasgow1 |> 
+  igraph::as.undirected() |>
+  as_tbl_graph()
+
+v_curve_sym <- sensitivity_curve(
+  glasgow1_sym,
+  smokes_dimaria ~ sex_fct,
+  max_rank = 15
+)
+
+plot(v_curve_sym) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  theme_minimal() +
+  labs(
+    subtitle = "Using embeddings from symmetrized adjacency matrix"
+  )
+```
+
+# Estimates using regularized (directed) graph Laplacian
+
+```{r}
+library(invertiforms)
+
+iform <- RegularizedLaplacian(A1)
+L_okc <- transform(iform, A1)
+
+max_rank <- 15
+
+s_max <- RSpectra::svds(L_okc, max_rank, max_rank)
+X_max <- s_max$v %*% diag(sqrt(s_max$d))  # use right embeddings here
+
+# and now we plug them into the product-of-coefs estimator
+
+curve_custom <- sensitivity_curve_custom(
+  glasgow1_sym,
+  smokes_dimaria ~ sex_fct,
+  X_max
+)
+
+plot(curve_custom) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  theme_minimal() +
+  labs(
+    subtitle = "Using embeddings from regularized graph Laplacian"
+  )
+```
+
