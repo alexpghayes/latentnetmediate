@@ -174,6 +174,30 @@ logistic models.</p>
 <span>  <span class="fu"><a href="https://tidygraph.data-imaginist.com/reference/activate.html" class="external-link">activate</a></span><span class="op">(</span><span class="va">edges</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">friendship</span> <span class="op">!=</span> <span class="st">"Structurally missing"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://tidygraph.data-imaginist.com/reference/activate.html" class="external-link">activate</a></span><span class="op">(</span><span class="va">nodes</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">glasgow2</span> <span class="op">&lt;-</span> <span class="va">glasgow</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://tidygraph.data-imaginist.com/reference/activate.html" class="external-link">activate</a></span><span class="op">(</span><span class="va">nodes</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">selection129</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    smokes_dimaria <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">tobacco_int</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    drinks_dimaria <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">alcohol_int</span> <span class="op">&gt;</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>    weed_dimaria <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">cannabis_int</span> <span class="op">&gt;</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://tidygraph.data-imaginist.com/reference/activate.html" class="external-link">activate</a></span><span class="op">(</span><span class="va">edges</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">friendship</span> <span class="op">!=</span> <span class="st">"Structurally missing"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://tidygraph.data-imaginist.com/reference/activate.html" class="external-link">activate</a></span><span class="op">(</span><span class="va">nodes</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">glasgow3</span> <span class="op">&lt;-</span> <span class="va">glasgow</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://tidygraph.data-imaginist.com/reference/activate.html" class="external-link">activate</a></span><span class="op">(</span><span class="va">nodes</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">selection129</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    smokes_dimaria <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">tobacco_int</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    drinks_dimaria <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">alcohol_int</span> <span class="op">&gt;</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>    weed_dimaria <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">cannabis_int</span> <span class="op">&gt;</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://tidygraph.data-imaginist.com/reference/activate.html" class="external-link">activate</a></span><span class="op">(</span><span class="va">edges</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">friendship</span> <span class="op">!=</span> <span class="st">"Structurally missing"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://tidygraph.data-imaginist.com/reference/activate.html" class="external-link">activate</a></span><span class="op">(</span><span class="va">nodes</span><span class="op">)</span></span>
 <span>  </span>
 <span><span class="va">glasgow1</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tbl_graph: 129 nodes and 449 edges</span></span></span>
@@ -409,11 +433,13 @@ diagnostic, perhaps all the way to 10</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Estimated effects of sex on smoking as function of latent dimension at time 1"</span>,</span>
 <span>    subtitle <span class="op">=</span> <span class="st">"using U sqrt(S) as embedding"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="Glasgow_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 <p>Then we use the right embedding (<span class="math inline">\(V
-S^{1/2}\)</span>) and get</p>
+S^{1/2}\)</span>, personally these factors seem most compelling to me)
+and get</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">v_curve</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sensitivity_curve.html">sensitivity_curve</a></span><span class="op">(</span><span class="va">glasgow1</span>, <span class="va">smokes_dimaria</span> <span class="op">~</span> <span class="va">sex_fct</span>, max_rank <span class="op">=</span> <span class="fl">15</span>, coembedding <span class="op">=</span> <span class="st">"V"</span><span class="op">)</span></span>
 <span></span>
@@ -421,6 +447,7 @@ S^{1/2}\)</span>) and get</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Estimated effects of sex on smoking as function of latent dimension at time 1"</span>,</span>
 <span>    subtitle <span class="op">=</span> <span class="st">"using V sqrt(S) as embedding"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="Glasgow_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
@@ -439,8 +466,6 @@ the ATE is barely inconsistent with a null effect itself.</p>
 <div class="section level2">
 <h2 id="estimates-using-symmetrized-network">Estimates using symmetrized network<a class="anchor" aria-label="anchor" href="#estimates-using-symmetrized-network"></a>
 </h2>
-<p>These estimates match Veitch more closely and smaller in
-magnitude</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">glasgow1_sym</span> <span class="op">&lt;-</span> <span class="va">glasgow1</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/as.directed.html" class="external-link">as.undirected</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -456,6 +481,7 @@ magnitude</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Estimated effects of sex on smoking as function of latent dimension at time 1"</span>,</span>
 <span>    subtitle <span class="op">=</span> <span class="st">"Using embeddings from symmetrized adjacency matrix"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="Glasgow_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
@@ -491,9 +517,89 @@ magnitude</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Estimated effects of sex on smoking as function of latent dimension at time 1"</span>,</span>
 <span>    subtitle <span class="op">=</span> <span class="st">"Using embeddings from regularized graph Laplacian"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="Glasgow_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
+<div class="section level3">
+<h3 id="other-analyses">Other analyses<a class="anchor" aria-label="anchor" href="#other-analyses"></a>
+</h3>
+<div class="section level4">
+<h4 id="sex-on-smoking-at-time-2">Sex on smoking at time 2<a class="anchor" aria-label="anchor" href="#sex-on-smoking-at-time-2"></a>
+</h4>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">glasgow2</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/sensitivity_curve.html">sensitivity_curve</a></span><span class="op">(</span><span class="va">smokes_dimaria</span> <span class="op">~</span> <span class="va">sex_fct</span>, max_rank <span class="op">=</span> <span class="fl">15</span>, coembedding <span class="op">=</span> <span class="st">"V"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Estimated effects of sex on smoking as function of latent dimension at time 2"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"using V sqrt(S) as embedding"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="Glasgow_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
+</div>
+<div class="section level4">
+<h4 id="sex-on-smoking-at-time-3">Sex on smoking at time 3<a class="anchor" aria-label="anchor" href="#sex-on-smoking-at-time-3"></a>
+</h4>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">glasgow3</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/sensitivity_curve.html">sensitivity_curve</a></span><span class="op">(</span><span class="va">smokes_dimaria</span> <span class="op">~</span> <span class="va">sex_fct</span>, max_rank <span class="op">=</span> <span class="fl">15</span>, coembedding <span class="op">=</span> <span class="st">"V"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Estimated effects of sex on smoking as function of latent dimension at time 3"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"using V sqrt(S) as embedding"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="Glasgow_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
+</div>
+<div class="section level4">
+<h4 id="wealth-on-smoking-at-time-1">Wealth on smoking at time 1<a class="anchor" aria-label="anchor" href="#wealth-on-smoking-at-time-1"></a>
+</h4>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">glasgow1</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/sensitivity_curve.html">sensitivity_curve</a></span><span class="op">(</span><span class="va">smokes_dimaria</span> <span class="op">~</span> <span class="va">money</span>, max_rank <span class="op">=</span> <span class="fl">15</span>, coembedding <span class="op">=</span> <span class="st">"V"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Estimated effects of spending money on smoking as function of latent dimension at time 1"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"using V sqrt(S) as embedding"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="Glasgow_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+</div>
+<div class="section level4">
+<h4 id="wealth-on-smoking-at-time-2">Wealth on smoking at time 2<a class="anchor" aria-label="anchor" href="#wealth-on-smoking-at-time-2"></a>
+</h4>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">glasgow2</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/sensitivity_curve.html">sensitivity_curve</a></span><span class="op">(</span><span class="va">smokes_dimaria</span> <span class="op">~</span> <span class="va">money</span>, max_rank <span class="op">=</span> <span class="fl">15</span>, coembedding <span class="op">=</span> <span class="st">"V"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Estimated effects of spending money on smoking as function of latent dimension at time 2"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"using V sqrt(S) as embedding"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="Glasgow_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
+</div>
+<div class="section level4">
+<h4 id="wealth-on-smoking-at-time-3">Wealth on smoking at time 3<a class="anchor" aria-label="anchor" href="#wealth-on-smoking-at-time-3"></a>
+</h4>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">glasgow3</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/sensitivity_curve.html">sensitivity_curve</a></span><span class="op">(</span><span class="va">smokes_dimaria</span> <span class="op">~</span> <span class="va">money</span>, max_rank <span class="op">=</span> <span class="fl">15</span>, coembedding <span class="op">=</span> <span class="st">"V"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Estimated effects of spending money on smoking as function of latent dimension at time 3"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"using V sqrt(S) as embedding"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="Glasgow_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
