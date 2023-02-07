@@ -99,6 +99,8 @@ nodelm_robust(as.integer(smokes) ~ sex + U(A, 5) , graph = smoking)
 library(Matrix)
 library(tidygraph)
 
+data(addhealth, package = "netmediate")
+
 B <- igraph::as_adjacency_matrix(addhealth[[36]], attr = "weight")
 
 node <- addhealth[[36]] |>

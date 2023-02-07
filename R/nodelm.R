@@ -249,6 +249,8 @@ nodelm <- function(formula, graph = NULL, data = NULL, attr = NULL, ...) {
 #' library(Matrix)
 #' library(tidygraph)
 #'
+#' data(addhealth, package = "netmediate")
+#'
 #' B <- igraph::as_adjacency_matrix(addhealth[[36]], attr = "weight")
 #'
 #' node <- addhealth[[36]] |>

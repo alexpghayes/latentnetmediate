@@ -180,6 +180,11 @@ plot.network_mediation <- function(x, ...) {
 #' @examples
 #'
 #' library(tidygraph)
+#' library(dplyr)
+#'
+#' data(smoking, package = "netmediate")
+#'
+#' # example with fully observed node data
 #'
 #' rank_curve <- smoking |>
 #'   mutate(
@@ -189,6 +194,31 @@ plot.network_mediation <- function(x, ...) {
 #'
 #' rank_curve
 #' plot(rank_curve)
+#'
+#' # example with some missing node data. in this case, all edges are
+#' # used to estimate embeddings, but once the embeddings are in hand,
+#' # the regression only considers complete cases
+#'
+#' data(glasgow, package = "netmediate")
+#'
+#' glasgow1 <- glasgow[[1]] |>
+#'   activate(nodes) |>
+#'   filter(selection129) |>
+#'   mutate(
+#'     smokes_dimaria = as.numeric(tobacco_int > 1)
+#'   ) |>
+#'   activate(edges) |>
+#'   filter(friendship != "Structurally missing") |>
+#'   activate(nodes)
+#'
+#' # verify that there is some missing data, in this case treatment indicators
+#' glasgow1 |>
+#'   as_tibble() |>
+#'   count(is.na(money))
+#'
+#' glasgow1 |>
+#'   sensitivity_curve(smokes_dimaria ~ money, max_rank = 15, coembedding = "V") |>
+#'   plot()
 #'
 sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
                               coembedding = c("U", "V")) {
@@ -212,9 +242,23 @@ sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
     X_max <- VS(A, rank = max_rank)  # use scaled right singular vectors
   }
 
+  # if there is missing node-level data, model.frame() will apply the
+  # na.action argument, which defaults to na.omit(). this causes problems
+  # later: mf will be a node-level data frame with num_complete_cases rows
+  # and X_max will be a matrix with num_all_nodes rows. so we need to match
+  # these two data sources up.
+
   mf <- stats::model.frame(formula, data = node_data)
   y <- stats::model.response(mf)
   W <- stats::model.matrix(mf, node_data)
+
+  # NULL when no data is dropped, otherwise a named integer vector of
+  dropped_indices <- attr(mf, "na.action")
+
+  # drop observations from X_max with missing node-level data
+  if (!is.null(dropped_indices)) {
+    X_max <- X_max[-dropped_indices, ]
+  }
 
   effects_at_rank <- function(rank) {
 
@@ -338,6 +382,14 @@ sensitivity_curve_custom <- function(graph, formula, X_max) {
   mf <- stats::model.frame(formula, data = node_data)
   y <- stats::model.response(mf)
   W <- stats::model.matrix(mf, node_data)
+
+  # NULL when no data is dropped, otherwise a named integer vector of
+  dropped_indices <- attr(mf, "na.action")
+
+  # drop observations from X_max with missing node-level data
+  if (!is.null(dropped_indices)) {
+    X_max <- X_max[-dropped_indices, ]
+  }
 
   effects_at_rank <- function(rank) {
 

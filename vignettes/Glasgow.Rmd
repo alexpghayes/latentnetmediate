@@ -49,6 +49,30 @@ glasgow1 <- glasgow[[1]] |>
   activate(edges) |> 
   filter(friendship != "Structurally missing") |> 
   activate(nodes)
+
+glasgow2 <- glasgow[[2]] |> 
+  activate(nodes) |> 
+  filter(selection129) |> 
+  mutate(
+    smokes_dimaria = as.numeric(tobacco_int > 1),
+    drinks_dimaria = as.numeric(alcohol_int > 2),
+    weed_dimaria = as.numeric(cannabis_int > 2)
+  ) |> 
+  activate(edges) |> 
+  filter(friendship != "Structurally missing") |> 
+  activate(nodes)
+
+glasgow3 <- glasgow[[3]] |> 
+  activate(nodes) |> 
+  filter(selection129) |> 
+  mutate(
+    smokes_dimaria = as.numeric(tobacco_int > 1),
+    drinks_dimaria = as.numeric(alcohol_int > 2),
+    weed_dimaria = as.numeric(cannabis_int > 2)
+  ) |> 
+  activate(edges) |> 
+  filter(friendship != "Structurally missing") |> 
+  activate(nodes)
   
 glasgow1
 ```
@@ -183,11 +207,12 @@ plot(u_curve) +
   geom_hline(yintercept = 0, linetype = "dashed") +
   theme_minimal() +
   labs(
+    title = "Estimated effects of sex on smoking as function of latent dimension at time 1",
     subtitle = "using U sqrt(S) as embedding"
   )
 ```
 
-Then we use the right embedding ($V S^{1/2}$) and get
+Then we use the right embedding ($V S^{1/2}$, personally these factors seem most compelling to me) and get
 
 ```{r}
 v_curve <- sensitivity_curve(glasgow1, smokes_dimaria ~ sex_fct, max_rank = 15, coembedding = "V")
@@ -196,6 +221,7 @@ plot(v_curve) +
   geom_hline(yintercept = 0, linetype = "dashed") +
   theme_minimal() +
   labs(
+    title = "Estimated effects of sex on smoking as function of latent dimension at time 1",
     subtitle = "using V sqrt(S) as embedding"
   )
 ```
@@ -210,8 +236,6 @@ glasgow1 |>
 ```
 
 # Estimates using symmetrized network
-
-These estimates match Veitch more closely and smaller in magnitude
 
 ```{r}
 glasgow1_sym <- glasgow1 |> 
@@ -228,6 +252,7 @@ plot(v_curve_sym) +
   geom_hline(yintercept = 0, linetype = "dashed") +
   theme_minimal() +
   labs(
+    title = "Estimated effects of sex on smoking as function of latent dimension at time 1",
     subtitle = "Using embeddings from symmetrized adjacency matrix"
   )
 ```
@@ -257,7 +282,81 @@ plot(curve_custom) +
   geom_hline(yintercept = 0, linetype = "dashed") +
   theme_minimal() +
   labs(
+    title = "Estimated effects of sex on smoking as function of latent dimension at time 1",
     subtitle = "Using embeddings from regularized graph Laplacian"
   )
 ```
 
+## Other analyses
+
+### Sex on smoking at time 2
+
+```{r}
+glasgow2 |> 
+  sensitivity_curve(smokes_dimaria ~ sex_fct, max_rank = 15, coembedding = "V") |> 
+  plot() +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  theme_minimal() +
+  labs(
+    title = "Estimated effects of sex on smoking as function of latent dimension at time 2",
+    subtitle = "using V sqrt(S) as embedding"
+  )
+```
+
+### Sex on smoking at time 3
+
+```{r}
+glasgow3 |> 
+  sensitivity_curve(smokes_dimaria ~ sex_fct, max_rank = 15, coembedding = "V") |> 
+  plot() +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  theme_minimal() +
+  labs(
+    title = "Estimated effects of sex on smoking as function of latent dimension at time 3",
+    subtitle = "using V sqrt(S) as embedding"
+  )
+```
+
+### Wealth on smoking at time 1
+
+```{r}
+glasgow1 |> 
+  sensitivity_curve(smokes_dimaria ~ money, max_rank = 15, coembedding = "V") |> 
+  plot() +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  theme_minimal() +
+  labs(
+    title = "Estimated effects of spending money on smoking as function of latent dimension at time 1",
+    subtitle = "using V sqrt(S) as embedding"
+  )
+```
+
+
+### Wealth on smoking at time 2
+
+```{r}
+glasgow2 |> 
+  sensitivity_curve(smokes_dimaria ~ money, max_rank = 15, coembedding = "V") |> 
+  plot() +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  theme_minimal() +
+  labs(
+    title = "Estimated effects of spending money on smoking as function of latent dimension at time 2",
+    subtitle = "using V sqrt(S) as embedding"
+  )
+```
+
+
+### Wealth on smoking at time 3
+
+```{r}
+glasgow3 |> 
+  sensitivity_curve(smokes_dimaria ~ money, max_rank = 15, coembedding = "V") |> 
+  plot() +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  theme_minimal() +
+  labs(
+    title = "Estimated effects of spending money on smoking as function of latent dimension at time 3",
+    subtitle = "using V sqrt(S) as embedding"
+  )
+```

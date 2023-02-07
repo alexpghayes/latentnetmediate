@@ -34,6 +34,11 @@ Estimate mediated effects for a variety of embedding dimensions
 \examples{
 
 library(tidygraph)
+library(dplyr)
+
+data(smoking, package = "netmediate")
+
+# example with fully observed node data
 
 rank_curve <- smoking |>
   mutate(
@@ -43,5 +48,30 @@ rank_curve <- smoking |>
 
 rank_curve
 plot(rank_curve)
+
+# example with some missing node data. in this case, all edges are
+# used to estimate embeddings, but once the embeddings are in hand,
+# the regression only considers complete cases
+
+data(glasgow, package = "netmediate")
+
+glasgow1 <- glasgow[[1]] |>
+  activate(nodes) |>
+  filter(selection129) |>
+  mutate(
+    smokes_dimaria = as.numeric(tobacco_int > 1)
+  ) |>
+  activate(edges) |>
+  filter(friendship != "Structurally missing") |>
+  activate(nodes)
+
+# verify that there is some missing data, in this case treatment indicators
+glasgow1 |>
+  as_tibble() |>
+  count(is.na(money))
+
+glasgow1 |>
+  sensitivity_curve(smokes_dimaria ~ money, max_rank = 15, coembedding = "V") |>
+  plot()
 
 }
