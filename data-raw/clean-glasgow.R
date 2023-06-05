@@ -19,7 +19,7 @@ node_constant <- tibble(
   selection50 = selection50
 ) |>
   mutate(
-    sex_fct = as.factor(recode(sex.F, `1` = "male", `2` = "female"))
+    sex_fct = as.factor(recode(sex.F, `1` = "Male", `2` = "Female"))
   ) |>
   bind_cols(familysmoking) |>
   janitor::clean_names() |>
