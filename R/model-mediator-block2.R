@@ -50,7 +50,7 @@ model_mediator_block2 <- function(n, k = 5, expected_degree = NULL) {
   if (k == 2) {
     colnames(W) <- c("intercept", "trt")
   } else {
-    colnames(W) <- c("intercept", "trt", paste0("C", 1:(k - 2)))
+    colnames(W) <- c("intercept", "trt", left_padded_sequence(paste0("C", 1:(k - 2))))
   }
 
   m <- model_mediator(A_model, W, subclass = "block2")

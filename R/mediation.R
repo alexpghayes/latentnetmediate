@@ -223,8 +223,6 @@ plot.network_mediation <- function(x, ...) {
 sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
                               coembedding = c("U", "V")) {
 
-  # doesn't handle missing data
-
   node_data <- tidygraph::as_tibble(graph)
 
   if (igraph::is.bipartite(graph)) {
@@ -301,9 +299,11 @@ sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
       indices <- which(
         stringr::str_detect(
           colnames(sigmatheta_hat),
-          stringr::coll(nm)
+          paste0(nm, "$")
         )
       )
+
+      stopifnot(length(indices) == length(betax_hat))
 
       thetat_hat <- theta_hat[i, ]
       sigmathetat_hat <- sigmatheta_hat[indices, indices, drop = FALSE]
