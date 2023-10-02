@@ -13,7 +13,7 @@
 #'
 #' set.seed(26)
 #'
-#' mblock <- model_mediator_block2(n = 100, k = 5)
+#' mblock <- model_mediator_block2(n = 100, k = 15)
 #'
 #' graph <- sample_tidygraph(mblock)
 #' graph
@@ -50,7 +50,7 @@ model_mediator_block2 <- function(n, k = 5, expected_degree = NULL) {
   if (k == 2) {
     colnames(W) <- c("intercept", "trt")
   } else {
-    colnames(W) <- c("intercept", "trt", left_padded_sequence(paste0("C", 1:(k - 2))))
+    colnames(W) <- c("intercept", "trt", paste0("C", left_padded_sequence(1:(k - 2))))
   }
 
   m <- model_mediator(A_model, W, subclass = "block2")
