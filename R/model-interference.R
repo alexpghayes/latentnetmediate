@@ -23,7 +23,7 @@ model_interference <- function(A_model, W, beta_w = NULL, rho = 1, sigma = 1, ..
   # needed: conditional expectation, network itself, nodal covariates, and interfered outcomes
 
   # this specifically requires that there is a treatment column in w
-  # call the contagion term rho, such that
+  # call the interference term rho, such that
   #
   #   y = beta_w w + rho * sum_j A_ij trt_j + varepsilon
   #
@@ -70,18 +70,47 @@ sample_tidygraph.interference <- function(model, ...) {
   # this column must exist in W in interference models
   trt <- model$W[, "trt"]
 
-  # TODO: is this going to handle multi-edges okay?
-  # TODO: degree-normalization goes here
+  # estimator options (3 x 2 grid)
+  #
+  #   1. peer term
+  #     - interference over network (A)
+  #     - interference over oracle latent space (P)
+  #     - interference over estimated latent space (Phat)
+  #   2. normalization
+  #     - yes
+  #     - no
+  #
+  # model options: interference over A or over P (2x2 grid instead of 2x3 grid)
+
   A <- igraph::as_adj(graph)
   deg <- igraph::degree(graph)
   L <- Matrix::rowScale(A, 1 / deg)
 
-  y <- as.numeric(model$W %*% model$beta_w + model$rho * L %*% trt + varepsilon)
+  X <- ASE(model$A_model)
+
+  peer_trts <- as.numeric(A %*% trt)
+  latent_trts <- as.numeric(X %*% crossprod(X, trt))
+
+  # TODO: could be wrong, eyeballing this for first pass
+  latent_deg <- as.numeric(X %*% crossprod(X, rep(1, model$n)))
+
+  latent_D <- Matrix::Diagonal(model$n, 1 / latent_deg)
+
+  latent_L <- Matrix::rowScale(A, 1 / latent_deg)
+
+  normed_peer_trts <- as.numeric(L %*% trt)
+  normed_latent_peer_trts <- as.numeric(latent_D %*% X %*% crossprod(X, trt))
+
+  y <- as.numeric(model$W %*% model$beta_w + model$rho * peer_trts + varepsilon)
 
   graph <- graph %>%
     tidygraph::activate(nodes) %>%
     tidygraph::mutate(
-      y = y
+      y = y,
+      peer_trts = peer_trts,                 # starting with this, since it's easiest
+      normed_peer_trts = normed_peer_trts,
+      latent_trts = latent_trts,
+      normed_latent_peer_trts = normed_latent_peer_trts
     )
 
   graph
