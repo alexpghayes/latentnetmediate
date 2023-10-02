@@ -125,7 +125,10 @@ plot_shift <- function(data, mapping) {
   )
 
   ggplot(data = data, mapping = mapping) +
-    geom_point(aes(color = color)) +
+    geom_point(
+      data = \(x) dplyr::filter(x, color != "start"),
+      aes(color = color)
+    ) +
     geom_line(aes(group = id), color = "#D95F02") +
     geom_vline(xintercept = 0) +
     geom_hline(yintercept = 0) +
