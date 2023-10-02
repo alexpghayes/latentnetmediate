@@ -303,7 +303,9 @@ sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
         )
       )
 
-      stopifnot(length(indices) == length(betax_hat))
+      if (length(indices) != length(betax_hat)) {
+        stop("Could not correctly match regression terms with variance estimates. Please open an issue with a reproducible example at <https://github.com/alexpghayes/netmediate/issues>.")
+      }
 
       thetat_hat <- theta_hat[i, ]
       sigmathetat_hat <- sigmatheta_hat[indices, indices, drop = FALSE]
