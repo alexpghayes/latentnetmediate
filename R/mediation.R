@@ -287,7 +287,16 @@ sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
     # need to re-arrange sigmatheta_hat from enormous square into something
     # more tensor-y / considering each covariate one at a time
 
-    coef_names <- names(betaw_hat)
+    # matching terms with "(Intercept)" is messy because regex interprets
+    # the parentheses as specials. to avoid this, we do a hack and replace
+    # the "(Intercept)" wherever we see it. this same issue may come up
+    # if other term names include regex special characters
+    clean_term_names <- function(term_names) {
+      stringr::str_replace_all(term_names, fixed("(Intercept)"), "Intercept")
+    }
+
+    coef_names <- clean_term_names(names(betaw_hat))
+    sigma_names <- clean_term_names(colnames(sigmatheta_hat))
 
     # everything following is under the assumption that Theta_tc = 0
     # for convenience since it's a pain to handle Theta_tc != 0
@@ -298,13 +307,13 @@ sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
 
       indices <- which(
         stringr::str_detect(
-          colnames(sigmatheta_hat),
+          sigma_names,
           paste0(nm, "$")
         )
       )
 
       if (length(indices) != length(betax_hat)) {
-        stop("Could not correctly match regression terms with variance estimates. Please open an issue with a reproducible example at <https://github.com/alexpghayes/netmediate/issues>.")
+        stop("Could not correctly match regression terms with variance estimates. Please open an issue with a reproducible example at <https://github.com/alexpghayes/netmediate/issues>. In the meantime, consider trying again, but avoid using any regex special characters in nodal covariate feature names.")
       }
 
       thetat_hat <- theta_hat[i, ]
