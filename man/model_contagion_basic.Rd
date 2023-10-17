@@ -4,7 +4,7 @@
 \alias{model_contagion_basic}
 \title{Title}
 \usage{
-model_contagion_basic(n, k = 5, dim_c = 3)
+model_contagion_basic(n, k = 5, dim_c = 3, rho = 0.1)
 }
 \arguments{
 \item{n}{TODO}
@@ -23,7 +23,7 @@ Title
 
 set.seed(26)
 
-b <- model_contagion_basic(n = 100, k = 5, dim_c = 3)
+b <- model_contagion_basic(n = 2000, k = 5, dim_c = 3)
 
 graph <- sample_tidygraph(b)
 graph

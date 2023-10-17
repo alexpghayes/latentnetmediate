@@ -78,7 +78,6 @@ model_contagion <- function(A_model, W, ..., beta_w = NULL, beta_x = NULL, rho =
   }
 
   names(beta_w) <- colnames(W)
-  names(beta_x) <- colnames(X)
 
   new_contagion(
     n = nrow(W),
@@ -108,6 +107,9 @@ sample_tidygraph.contagion <- function(model, ...) {
 
   varepsilon <- stats::rnorm(model$n, sd = model$sigma)
   X <- ASE(model$A_model)
+
+  # a little weird to do this here rather than in model_contagion(), but whatever
+  names(model$beta_x) <- colnames(X)
 
   I <- Matrix::Diagonal(model$n, 1)
 
@@ -146,22 +148,72 @@ sample_tidygraph.contagion <- function(model, ...) {
   y_latent_no_x <- pre_mult_latent %*% (model$W %*% model$beta_w + varepsilon)
   y_latent_x <- pre_mult_latent %*% (model$W %*% model$beta_w + X %*% model$beta_x + varepsilon)
 
-  ##### auxiliary data for oracle estimators
+  ##### auxiliary data for estimators
 
-  # TODO: return this later, it's actually a bit more involved
-  # because the oracle estimator depends on the model, plus the precise
-  # definition of the oracle is up in the air to some degree: do we
-  # use the true degree or the latent degrees
-  y_oracle_EDinvP <- NULL
-  y_oracle_DinvP <- NULL
+  # notation:
+  #   - G = D^{1} A, `gy` = Gy for the relevant y
+  #   - Gtilde = E[D|X]^{1} E[A|X}, `gtildey` = Gtilde y for the relevant y
+  #   - Ghat = D^{-1} Xhat Xhat^T, `ghaty` = Ghat y for the relevant y
 
-  graph %>%
-    tidygraph::activate(nodes) %>%
+  Xhat <- US(A, rank = model$k)
+  colnames(Xhat) <- paste0("Xhat", left_padded_sequence(1:model$k))
+
+  # have to repeat this for each outcome model under consideration
+
+  # NOTE: isolated nodes can induce divide by zero edge cases in the computations
+  # below (for ghat), and zeroes (for g). deal with this by setting the
+  # Gy/Gtildey/Ghaty data terms to zero, using the following helper
+  make_ghat <- function(deg, Xhat, y) {
+    ghat <- as.numeric(Matrix::rowScale(Xhat, 1 / deg) %*% crossprod(Xhat, y))
+    ghat[is.na(ghat)] <- 0
+    ghat[is.nan(ghat)] <- 0
+    ghat[is.infinite(ghat)] <- 0
+    ghat
+  }
+
+  g_y_peer_no_x <- DinvA %*% y_peer_no_x
+  gtilde_y_peer_no_x <- EDinvP %*% y_peer_no_x
+  ghat_y_peer_no_x <- make_ghat(deg, Xhat, y_peer_no_x)
+  # ghat_y_peer_no_x <- Matrix::rowScale(Xhat, 1 / deg) %*% crossprod(Xhat, y_peer_no_x)
+
+  g_y_peer_x <- DinvA %*% y_peer_x
+  gtilde_y_peer_x <- EDinvP %*% y_peer_x
+  ghat_y_peer_x <- make_ghat(deg, Xhat, y_peer_x)
+
+  g_y_latent_no_x <- DinvA %*% y_latent_no_x
+  gtilde_y_latent_no_x <- EDinvP %*% y_latent_no_x
+  ghat_y_latent_no_x <- make_ghat(deg, Xhat, y_latent_no_x)
+
+  g_y_latent_x <- DinvA %*% y_latent_x
+  gtilde_y_latent_x <- EDinvP %*% y_latent_x
+  ghat_y_latent_x <- make_ghat(deg, Xhat, y_latent_x)
+
+  # model$W should already have appropriate column names
+  X_df <- tibble::as_tibble(as.matrix(Xhat))
+
+  graph |>
+    tidygraph::activate(nodes) |>
+    tidygraph::mutate(!!!X_df) |>
     tidygraph::mutate(
       y_peer_no_x = drop(y_peer_no_x),
       y_peer_x = drop(y_peer_x),
       y_latent_no_x = drop(y_latent_no_x),
       y_latent_x = drop(y_latent_x),
-      latent_deg = drop(ED)
+
+      g_y_peer_no_x = as.numeric(g_y_peer_no_x),
+      gtilde_y_peer_no_x = as.numeric(gtilde_y_peer_no_x),
+      ghat_y_peer_no_x = as.numeric(ghat_y_peer_no_x),
+
+      g_y_peer_x = as.numeric(g_y_peer_x),
+      gtilde_y_peer_x = as.numeric(gtilde_y_peer_x),
+      ghat_y_peer_x = as.numeric(ghat_y_peer_x),
+
+      g_y_latent_no_x = as.numeric(g_y_latent_no_x),
+      gtilde_y_latent_no_x = as.numeric(gtilde_y_latent_no_x),
+      ghat_y_latent_no_x = as.numeric(ghat_y_latent_no_x),
+
+      g_y_latent_x = as.numeric(g_y_latent_x),
+      gtilde_y_latent_x = as.numeric(gtilde_y_latent_x),
+      ghat_y_latent_x = as.numeric(ghat_y_latent_x)
     )
 }
