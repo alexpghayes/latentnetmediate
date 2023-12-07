@@ -7,6 +7,7 @@
 \alias{plot_z_pre_post_diff}
 \alias{plot_sparse_adjacency_matrix}
 \alias{plot_tidygraph_matrix}
+\alias{plot_tidygraph_matrix_rownormalized}
 \title{Title}
 \usage{
 plot_expected_a_pre_trt(model)
@@ -20,6 +21,8 @@ plot_z_pre_post_diff(model)
 plot_sparse_adjacency_matrix(A)
 
 plot_tidygraph_matrix(graph)
+
+plot_tidygraph_matrix_rownormalized(graph)
 }
 \arguments{
 \item{model}{TODO}

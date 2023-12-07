@@ -215,3 +215,12 @@ plot_tidygraph_matrix <- function(graph) {
   A <- igraph::as_adjacency_matrix(graph)
   plot_sparse_adjacency_matrix(A)
 }
+
+#' @rdname plot_expected_a_pre_trt
+#' @export
+plot_tidygraph_matrix_rownormalized <- function(graph) {
+  A <- igraph::as_adjacency_matrix(graph)
+  deg <- igraph::degree(graph)
+  DinvA <- Matrix::rowScale(A, 1 / deg)
+  plot_sparse_adjacency_matrix(DinvA)
+}
