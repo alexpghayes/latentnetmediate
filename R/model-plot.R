@@ -199,6 +199,8 @@ plot_z_pre_post_diff <- function(model) {
   p
 }
 
+# TODO: these should move to fastRG probably
+
 #' @rdname plot_expected_a_pre_trt
 #' @export
 plot_sparse_adjacency_matrix <- function(A) {
