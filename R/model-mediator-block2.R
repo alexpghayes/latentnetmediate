@@ -29,7 +29,7 @@ model_mediator_block2 <- function(n, k = 5, expected_degree = NULL) {
   pi <- rep(1 / k, k)
 
   A_model <- fastRG::dcsbm(
-    theta = stats::runif(n, min = 1, max = 3),
+    theta = stats::runif(n, min = 1, max = 10),
     B = B,
     pi = pi,
     expected_degree = expected_degree,
