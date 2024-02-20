@@ -4,7 +4,7 @@
 #'
 #' @param graph A [tidygraph::tbl_graph()] object.
 #' @param formula Details about the nodal design matrix. Of the form
-#'   outcome ~ nodal_formula. For now, no interactiosn or fancy stuff
+#'   outcome ~ nodal_formula. For now, no interactions or fancy stuff
 #'   are allowed in the formula.
 #' @param rank Integer describing desired rank of embedding dimension.
 #'
@@ -190,7 +190,12 @@ plot.network_mediation <- function(x, ...) {
 #'   mutate(
 #'     smokes_int = as.integer(smokes) - 1
 #'   ) |>
-#'  sensitivity_curve(smokes_int ~ sex, max_rank = 25, 25)
+#'  sensitivity_curve(
+#'    smokes_int ~ sex,
+#'    max_rank = 25,
+#'    ranks_to_consider = 24,
+#'    se_type = "stata"
+#'  )
 #'
 #' rank_curve
 #' plot(rank_curve)
@@ -220,10 +225,14 @@ plot.network_mediation <- function(x, ...) {
 #'   sensitivity_curve(smokes_dimaria ~ money, max_rank = 15, coembedding = "V") |>
 #'   plot()
 #'
-sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
-                              coembedding = c("U", "V")) {
+sensitivity_curve <- function(graph, formula, max_rank, ..., ranks_to_consider = 10,
+                              coembedding = c("U", "V"), node_data = NULL) {
 
-  node_data <- tidygraph::as_tibble(graph)
+  rlang::check_dots_used()
+
+  if (is.null(node_data)) {
+    node_data <- tidygraph::as_tibble(graph)
+  }
 
   if (igraph::is.bipartite(graph)) {
     A <- igraph::as_incidence_matrix(graph, sparse = TRUE, attr = "weight")
@@ -262,8 +271,8 @@ sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
 
     X <- X_max[, 1:rank, drop = FALSE]
 
-    outcome_model <- stats::lm(y ~ W + X + 0)
-    mediator_model <- stats::lm(X ~ W + 0)
+    outcome_model <- estimatr::lm_robust(y ~ W + X + 0, ...)
+    mediator_model <- estimatr::lm_robust(X ~ W + 0, ...)
 
     num_coefs <- nrow(coef(mediator_model))
 
@@ -292,7 +301,7 @@ sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
     # the "(Intercept)" wherever we see it. this same issue may come up
     # if other term names include regex special characters
     clean_term_names <- function(term_names) {
-      stringr::str_replace_all(term_names, fixed("(Intercept)"), "Intercept")
+      stringr::str_replace_all(term_names, stringr::fixed("(Intercept)"), "Intercept")
     }
 
     coef_names <- clean_term_names(names(betaw_hat))
@@ -384,11 +393,13 @@ sensitivity_curve <- function(graph, formula, max_rank, ranks_to_consider = 10,
 #'
 #' plot(curve_custom)
 #'
-sensitivity_curve_custom <- function(graph, formula, X_max) {
+sensitivity_curve_custom <- function(graph, formula, X_max, ..., node_data = NULL) {
 
-  # doesn't handle missing data
+  rlang::check_dots_used()
 
-  node_data <- tidygraph::as_tibble(graph)
+  if (is.null(node_data)) {
+    node_data <- tidygraph::as_tibble(graph)
+  }
 
   mf <- stats::model.frame(formula, data = node_data)
   y <- stats::model.response(mf)
@@ -406,8 +417,8 @@ sensitivity_curve_custom <- function(graph, formula, X_max) {
 
     X <- X_max[, 1:rank, drop = FALSE]
 
-    outcome_model <- stats::lm(y ~ W + X + 0)
-    mediator_model <- stats::lm(X ~ W + 0)
+    outcome_model <- estimatr::lm_robust(y ~ W + X + 0, ...)
+    mediator_model <- estimatr::lm_robust(X ~ W + 0, ...)
 
     num_coefs <- nrow(coef(mediator_model))
 
@@ -442,10 +453,14 @@ sensitivity_curve_custom <- function(graph, formula, X_max) {
 
       indices <- which(
         stringr::str_detect(
-          colnames(sigmatheta_hat),
-          stringr::coll(nm)
+          sigma_names,
+          paste0(nm, "$")
         )
       )
+
+      if (length(indices) != length(betax_hat)) {
+        stop("Could not correctly match regression terms with variance estimates. Please open an issue with a reproducible example at <https://github.com/alexpghayes/netmediate/issues>. In the meantime, consider trying again, but avoid using any regex special characters in nodal covariate feature names.")
+      }
 
       thetat_hat <- theta_hat[i, ]
       sigmathetat_hat <- sigmatheta_hat[indices, indices, drop = FALSE]
