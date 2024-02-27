@@ -226,13 +226,11 @@ plot.network_mediation <- function(x, ...) {
 #'   plot()
 #'
 sensitivity_curve <- function(graph, formula, max_rank, ..., ranks_to_consider = 10,
-                              coembedding = c("U", "V"), node_data = NULL) {
+                              coembedding = c("U", "V")) {
 
   rlang::check_dots_used()
 
-  if (is.null(node_data)) {
-    node_data <- tidygraph::as_tibble(graph)
-  }
+  node_data <- tidygraph::as_tibble(graph)
 
   if (igraph::is.bipartite(graph)) {
     A <- igraph::as_incidence_matrix(graph, sparse = TRUE, attr = "weight")
@@ -484,6 +482,203 @@ sensitivity_curve_custom <- function(graph, formula, X_max, ..., node_data = NUL
   ranks <- 2:ncol(X_max)
 
   curve <- purrr::map_dfr(ranks, effects_at_rank)
+  class(curve) <- c("rank_sensitivity_curve", class(curve))
+  curve
+}
+
+#' Estimate mediated effects for a variety of embedding dimensions
+#'
+#' @inheritParams netmediate
+#' @param max_rank Maximum rank to consider (integer).
+#' @param ranks_to_consider How many distinct ranks to consider (integer).
+#'   Optional, defaults to 10.
+#'
+#' @return A `rank_sensitivity_curve` object, which is a subclass of a
+#'   [tibble::tibble()].
+#' @export
+#'
+#' @examples
+#'
+#' library(tidygraph)
+#' library(dplyr)
+#'
+#' data(smoking, package = "netmediate")
+#'
+#' # example with fully observed node data
+#'
+#' rank_curve <- smoking |>
+#'   mutate(
+#'     smokes_int = as.integer(smokes) - 1
+#'   ) |>
+#'  sensitivity_curve(
+#'    smokes_int ~ sex,
+#'    max_rank = 25,
+#'    ranks_to_consider = 24,
+#'    se_type = "stata"
+#'  )
+#'
+#' rank_curve
+#' plot(rank_curve)
+#'
+#' # example with some missing node data. in this case, all edges are
+#' # used to estimate embeddings, but once the embeddings are in hand,
+#' # the regression only considers complete cases
+#'
+#' data(glasgow, package = "netmediate")
+#'
+#' glasgow1 <- glasgow[[1]] |>
+#'   activate(nodes) |>
+#'   filter(selection129) |>
+#'   mutate(
+#'     smokes_dimaria = as.numeric(tobacco_int > 1)
+#'   ) |>
+#'   activate(edges) |>
+#'   filter(friendship != "Structurally missing") |>
+#'   activate(nodes)
+#'
+#' # verify that there is some missing data, in this case treatment indicators
+#' glasgow1 |>
+#'   as_tibble() |>
+#'   count(is.na(money))
+#'
+#' glasgow1 |>
+#'   sensitivity_curve(smokes_dimaria ~ money, max_rank = 15, coembedding = "V") |>
+#'   plot()
+#'
+sensitivity_curve_long <- function(graph, formula, max_rank, ..., ranks_to_consider = 10,
+                                   coembedding = c("U", "V"), node_data = NULL) {
+
+  # rlang::check_dots_used()
+
+  # node_data must have a column called name that matches the name feature of the graph
+
+  if (igraph::is.bipartite(graph)) {
+    A <- igraph::as_incidence_matrix(graph, sparse = TRUE, attr = "weight")
+    A <- methods::as(A, "CsparseMatrix")
+  } else {
+    A <- igraph::as_adjacency_matrix(graph, sparse = TRUE)
+  }
+
+  coembedding <- rlang::arg_match(coembedding)
+
+  if (coembedding == "U") {
+    X_max <- US(A, rank = max_rank)  # use scaled left singular vectors
+    rownames(X_max) <- rownames(A)
+  } else {
+    X_max <- VS(A, rank = max_rank)  # use scaled right singular vectors
+    rownames(X_max) <- colnames(A)
+  }
+
+  # if there is missing node-level data, model.frame() will apply the
+  # na.action argument, which defaults to na.omit(). this causes problems
+  # later: mf will be a node-level data frame with num_complete_cases rows
+  # and X_max will be a matrix with num_all_nodes rows. so we need to match
+  # these two data sources up.
+
+  X_max_df <- X_max |>
+    as.data.frame() |>
+    as_tibble(rownames = "name")
+
+  node_data_and_X_max <- node_data |>
+    left_join(X_max_df, by = "name")
+
+  mf <- stats::model.frame(formula, data = node_data_and_X_max)
+  y <- stats::model.response(mf)
+  W <- stats::model.matrix(mf, node_data)
+
+  # NULL when no data is dropped, otherwise a named integer vector of
+  dropped_indices <- attr(mf, "na.action")
+
+  if (!is.null(dropped_indices)) {
+    node_data_and_X_max <- node_data_and_X_max[-dropped_indices, ]
+  }
+
+  X_max <- node_data_and_X_max |>
+    select(all_of(colnames(X_max))) |>
+    as.matrix()
+
+  effects_at_rank <- function(rank, ...) {
+
+    X <- X_max[, 1:rank, drop = FALSE]
+
+    outcome_model <- estimatr::lm_robust(y ~ W + X + 0, ...)
+    mediator_model <- estimatr::lm_robust(X ~ W + 0, ...)
+
+    browser()
+
+    num_coefs <- nrow(coef(mediator_model))
+
+    nde_table <- broom::tidy(outcome_model, conf.int = TRUE)[1:num_coefs, ] |>
+      dplyr::mutate(estimand = "nde") |>
+      dplyr::select(term, estimand, estimate, conf.low, conf.high)
+
+    betaw_hat <- stats::coef(outcome_model)[1:num_coefs]
+    betax_hat <- stats::coef(outcome_model)[-c(1:num_coefs)]
+    theta_hat <- stats::coef(mediator_model)
+
+    nie_hat <- drop(theta_hat %*% betax_hat)
+
+    nie_table <- tibble::enframe(nie_hat, name = "term", value = "estimate") |>
+      dplyr::mutate(estimand = "nie") |>
+      dplyr::select(term, estimand, estimate)
+
+    sigmabetax_hat <- stats::vcov(outcome_model)[-c(1:num_coefs), -c(1:num_coefs)]
+    sigmatheta_hat <- stats::vcov(mediator_model)
+
+    # need to re-arrange sigmatheta_hat from enormous square into something
+    # more tensor-y / considering each covariate one at a time
+
+    # matching terms with "(Intercept)" is messy because regex interprets
+    # the parentheses as specials. to avoid this, we do a hack and replace
+    # the "(Intercept)" wherever we see it. this same issue may come up
+    # if other term names include regex special characters
+    clean_term_names <- function(term_names) {
+      stringr::str_replace_all(term_names, stringr::fixed("(Intercept)"), "Intercept")
+    }
+
+    coef_names <- clean_term_names(names(betaw_hat))
+    sigma_names <- clean_term_names(colnames(sigmatheta_hat))
+
+    # everything following is under the assumption that Theta_tc = 0
+    # for convenience since it's a pain to handle Theta_tc != 0
+
+    for (i in seq_along(coef_names)) {
+
+      nm <- coef_names[i]
+
+      indices <- which(
+        stringr::str_detect(
+          sigma_names,
+          paste0(nm, "$")
+        )
+      )
+
+      if (length(indices) != length(betax_hat)) {
+        stop("Could not correctly match regression terms with variance estimates. Please open an issue with a reproducible example at <https://github.com/alexpghayes/netmediate/issues>. In the meantime, consider trying again, but avoid using any regex special characters in nodal covariate feature names.")
+      }
+
+      thetat_hat <- theta_hat[i, ]
+      sigmathetat_hat <- sigmatheta_hat[indices, indices, drop = FALSE]
+
+      # delta method
+      nie_var <- t(betax_hat) %*% sigmathetat_hat %*% betax_hat +
+        t(thetat_hat) %*% sigmabetax_hat %*% thetat_hat
+
+      nie_table[i, "conf.low"] <- nie_hat[i] - 1.96 * sqrt(nie_var)
+      nie_table[i, "conf.high"] <- nie_hat[i] + 1.96 * sqrt(nie_var)
+    }
+
+    effects <- dplyr::bind_rows(nde_table, nie_table) |>
+      dplyr::filter(!stringr::str_detect(term, "Intercept")) |>
+      dplyr::mutate(
+        term = stringr::str_replace(term, "W", ""),
+        rank = rank
+      )
+  }
+
+  ranks <- seq(2, max_rank, length.out = min(ranks_to_consider, max_rank - 1))
+
+  curve <- purrr::map_dfr(ranks, \(rank) effects_at_rank(rank, ...))
   class(curve) <- c("rank_sensitivity_curve", class(curve))
   curve
 }

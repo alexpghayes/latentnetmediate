@@ -4,13 +4,13 @@
 \alias{sensitivity_curve_custom}
 \title{Estimate mediated effects for a variety of embedding dimensions using custom embedding}
 \usage{
-sensitivity_curve_custom(graph, formula, X_max)
+sensitivity_curve_custom(graph, formula, X_max, ..., node_data = NULL)
 }
 \arguments{
 \item{graph}{A \code{\link[tidygraph:tbl_graph]{tidygraph::tbl_graph()}} object.}
 
 \item{formula}{Details about the nodal design matrix. Of the form
-outcome ~ nodal_formula. For now, no interactiosn or fancy stuff
+outcome ~ nodal_formula. For now, no interactions or fancy stuff
 are allowed in the formula.}
 
 \item{X_max}{TODO}

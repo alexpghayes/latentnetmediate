@@ -10,7 +10,7 @@ netmediate(graph, formula, rank, coembedding = c("U", "V"))
 \item{graph}{A \code{\link[tidygraph:tbl_graph]{tidygraph::tbl_graph()}} object.}
 
 \item{formula}{Details about the nodal design matrix. Of the form
-outcome ~ nodal_formula. For now, no interactiosn or fancy stuff
+outcome ~ nodal_formula. For now, no interactions or fancy stuff
 are allowed in the formula.}
 
 \item{rank}{Integer describing desired rank of embedding dimension.}

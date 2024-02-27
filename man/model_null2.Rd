@@ -27,7 +27,7 @@ Title
 
 set.seed(26)
 
-mrdpg <- model_null(n = 100, k = 5)
+mrdpg <- model_null2(n = 100, k = 5)
 
 graph <- sample_tidygraph(mrdpg)
 graph
