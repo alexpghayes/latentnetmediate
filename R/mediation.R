@@ -604,8 +604,6 @@ sensitivity_curve_long <- function(graph, formula, max_rank, ..., ranks_to_consi
     outcome_model <- estimatr::lm_robust(y ~ W + X + 0, ...)
     mediator_model <- estimatr::lm_robust(X ~ W + 0, ...)
 
-    browser()
-
     num_coefs <- nrow(coef(mediator_model))
 
     nde_table <- broom::tidy(outcome_model, conf.int = TRUE)[1:num_coefs, ] |>
