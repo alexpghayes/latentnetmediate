@@ -144,8 +144,8 @@ Y <- function(A, rank, ..., degree_normalize = FALSE) {
 #'
 #' @examples
 #'
-#' data(addhealth, package = "netmediate")
-#' data(smoking, package = "netmediate")
+#' data(addhealth, package = "latentnetmediate")
+#' data(smoking, package = "latentnetmediate")
 #'
 #' ### some examples where data is specified as a tidygraph
 #'
@@ -249,7 +249,7 @@ nodelm <- function(formula, graph = NULL, data = NULL, attr = NULL, ...) {
 #' library(Matrix)
 #' library(tidygraph)
 #'
-#' data(addhealth, package = "netmediate")
+#' data(addhealth, package = "latentnetmediate")
 #'
 #' B <- igraph::as_adjacency_matrix(addhealth[[36]], attr = "weight")
 #'

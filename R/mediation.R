@@ -30,7 +30,7 @@
 #'
 #' netmed
 #'
-netmediate <- function(graph, formula, rank, coembedding = c("U", "V")) {
+netmediate <- function(graph, formula, rank, coembedding = c("U", "V", "Z", "Y")) {
 
   # doesn't handle missing data
 
@@ -47,8 +47,14 @@ netmediate <- function(graph, formula, rank, coembedding = c("U", "V")) {
 
   if (coembedding == "U") {
     X <- US(A, rank = rank)  # use scaled left singular vectors
-  } else {
+  } else if (coembedding == "V") {
     X <- VS(A, rank = rank)  # use scaled right singular vectors
+  } else if (coembedding == "Z") {
+    X <- Z(A, rank = rank)  # use scaled right singular vectors
+  } else if (coembedding == "Y") {
+    X <- Y(A, rank = rank)  # use scaled right singular vectors
+  } else {
+    stop("Invalid coembedding")
   }
 
   mf <- stats::model.frame(formula, data = node_data)
@@ -182,7 +188,7 @@ plot.network_mediation <- function(x, ...) {
 #' library(tidygraph)
 #' library(dplyr)
 #'
-#' data(smoking, package = "netmediate")
+#' data(smoking, package = "latentnetmediate")
 #'
 #' # example with fully observed node data
 #'
@@ -204,7 +210,7 @@ plot.network_mediation <- function(x, ...) {
 #' # used to estimate embeddings, but once the embeddings are in hand,
 #' # the regression only considers complete cases
 #'
-#' data(glasgow, package = "netmediate")
+#' data(glasgow, package = "latentnetmediate")
 #'
 #' glasgow1 <- glasgow[[1]] |>
 #'   activate(nodes) |>
@@ -414,6 +420,7 @@ sensitivity_curve_custom <- function(graph, formula, X_max, ..., node_data = NUL
   effects_at_rank <- function(rank) {
 
     X <- X_max[, 1:rank, drop = FALSE]
+    colnames(X) <- paste0("X", 1:ncol(X))
 
     outcome_model <- estimatr::lm_robust(y ~ W + X + 0, ...)
     mediator_model <- estimatr::lm_robust(X ~ W + 0, ...)
@@ -437,10 +444,12 @@ sensitivity_curve_custom <- function(graph, formula, X_max, ..., node_data = NUL
     sigmabetax_hat <- stats::vcov(outcome_model)[-c(1:num_coefs), -c(1:num_coefs)]
     sigmatheta_hat <- stats::vcov(mediator_model)
 
-    # need to re-arrange sigmatheta_hat from enormous square into something
-    # more tensor-y / considering each covariate one at a time
+    clean_term_names <- function(term_names) {
+      stringr::str_replace_all(term_names, stringr::fixed("(Intercept)"), "Intercept")
+    }
 
-    coef_names <- names(betaw_hat)
+    coef_names <- clean_term_names(names(betaw_hat))
+    sigma_names <- clean_term_names(colnames(sigmatheta_hat))
 
     # everything following is under the assumption that Theta_tc = 0
     # for convenience since it's a pain to handle Theta_tc != 0
@@ -502,7 +511,7 @@ sensitivity_curve_custom <- function(graph, formula, X_max, ..., node_data = NUL
 #' library(tidygraph)
 #' library(dplyr)
 #'
-#' data(smoking, package = "netmediate")
+#' data(smoking, package = "latentnetmediate")
 #'
 #' # example with fully observed node data
 #'
@@ -524,7 +533,7 @@ sensitivity_curve_custom <- function(graph, formula, X_max, ..., node_data = NUL
 #' # used to estimate embeddings, but once the embeddings are in hand,
 #' # the regression only considers complete cases
 #'
-#' data(glasgow, package = "netmediate")
+#' data(glasgow, package = "latentnetmediate")
 #'
 #' glasgow1 <- glasgow[[1]] |>
 #'   activate(nodes) |>
