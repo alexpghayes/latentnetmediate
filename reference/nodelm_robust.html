@@ -4,7 +4,7 @@ graph Laplacian L, and regularized graph Laplacian L_tau to
 model formulas for convenient network regression. Primarily designed
 to work with tidygraph::tbl_graph() objects, but can also be used
 with a matrix representation of a graph together with a data.frame()
-of nodal covariates."><title>Use spectral node embeddings in OLS with robust standard errors — nodelm_robust • netmediate</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Use spectral node embeddings in OLS with robust standard errors — nodelm_robust"><meta property="og:description" content="A helper function that exposes the adjacency matrix A, normalized
+of nodal covariates."><title>Use spectral node embeddings in OLS with robust standard errors — nodelm_robust • latentnetmediate</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Use spectral node embeddings in OLS with robust standard errors — nodelm_robust"><meta property="og:description" content="A helper function that exposes the adjacency matrix A, normalized
 graph Laplacian L, and regularized graph Laplacian L_tau to
 model formulas for convenient network regression. Primarily designed
 to work with tidygraph::tbl_graph() objects, but can also be used
@@ -18,9 +18,9 @@ of nodal covariates."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/
 
     <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
     
-    <a class="navbar-brand me-2" href="../index.html">netmediate</a>
+    <a class="navbar-brand me-2" href="../index.html">latentnetmediate</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9001</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9006</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,19 +31,11 @@ of nodal covariates."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Glasgow.html">Glasgow</a>
-    <a class="dropdown-item" href="../articles/interventions.html">Identified interventions under a linear mediated RDPG</a>
-    <a class="dropdown-item" href="../articles/reddit.html">reddit</a>
-  </div>
-</li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
       <ul class="navbar-nav"><li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/alexpghayes/netmediate/" aria-label="github">
+  <a class="external-link nav-link" href="https://github.com/alexpghayes/latentnetmediate/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -56,7 +48,7 @@ of nodal covariates."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Use spectral node embeddings in OLS with robust standard errors</h1>
-      <small class="dont-index">Source: <a href="https://github.com/alexpghayes/netmediate/blob/HEAD/R/nodelm.R" class="external-link"><code>R/nodelm.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alexpghayes/latentnetmediate/blob/HEAD/R/nodelm.R" class="external-link"><code>R/nodelm.R</code></a></small>
       <div class="d-none name"><code>nodelm_robust.Rd</code></div>
     </div>
 
@@ -191,27 +183,27 @@ details.</p>
 <span class="r-in"><span><span class="co"># the adjacency matrix and the normalized graph Laplacian</span></span></span>
 <span class="r-in"><span><span class="fu">nodelm_robust</span><span class="op">(</span><span class="va">grade</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="fu"><a href="ase_specials.html">U</a></span><span class="op">(</span><span class="va">A</span>, <span class="fl">5</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="ase_specials.html">V</a></span><span class="op">(</span><span class="va">L</span>, <span class="fl">3</span><span class="op">)</span>, graph <span class="op">=</span> <span class="va">addhealth</span><span class="op">[[</span><span class="fl">36</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std. Error     t value      Pr(&gt;|t|)    CI Lower</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)   9.87906808 0.03357891 294.2045102  0.000000e+00   9.8132176</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sexmale      -0.03808973 0.04422251  -0.8613199  3.891578e-01  -0.1248130</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)1     -2.26900328 0.58334800  -3.8896221  1.034472e-04  -3.4129878</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)2      0.34123909 1.24902570   0.2732042  7.847225e-01  -2.1081839</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)3    -14.13067471 0.67374641 -20.9732838  5.111310e-89 -15.4519365</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)4      1.85735499 0.46794470   3.9691762  7.448645e-05   0.9396841</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)5      5.56469667 1.32587107   4.1970119  2.814545e-05   2.9645747</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V(L, 3)1      0.47594959 1.60270359   0.2969667  7.665206e-01  -2.6670595</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V(L, 3)2      1.07513268 1.36373787   0.7883719  4.305660e-01  -1.5992486</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V(L, 3)3     47.55028195 1.54140084  30.8487454 2.374995e-173  44.5274917</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)   9.87934123 0.03360119 294.0176290  0.000000e+00   9.8134471</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sexmale      -0.03804066 0.04422524  -0.8601570  3.897983e-01  -0.1247693</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)1     -2.27029557 0.58329181  -3.8922123  1.023563e-04  -3.4141699</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)2      0.33828108 1.24915054   0.2708089  7.865640e-01  -2.1113868</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)3    -14.13248367 0.67382758 -20.9734419  5.097222e-89 -15.4539047</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)4      1.85826748 0.46787645   3.9717055  7.370557e-05   0.9407304</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)5      5.56795840 1.32618364   4.1984822  2.796484e-05   2.9672235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V(L, 3)1      0.52627629 1.64213265   0.3204834  7.486330e-01  -2.6940558</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V(L, 3)2      0.85441741 1.53932913   0.5550583  5.789125e-01  -2.1643101</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V(L, 3)3     47.54782188 1.54149212  30.8453227 2.555583e-173  44.5248526</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 CI Upper   DF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)   9.94491858 2152</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sexmale       0.04863357 2152</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)1     -1.12501879 2152</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)2      2.79066210 2152</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)3    -12.80941289 2152</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)4      2.77502587 2152</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)5      8.16481860 2152</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V(L, 3)1      3.61895864 2152</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V(L, 3)2      3.74951395 2152</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V(L, 3)3     50.57307219 2152</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)   9.94523541 2152</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sexmale       0.04868801 2152</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)1     -1.12642127 2152</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)2      2.78794893 2152</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)3    -12.81106267 2152</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)4      2.77580454 2152</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)5      8.16869331 2152</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V(L, 3)1      3.74660835 2152</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V(L, 3)2      3.87314490 2152</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V(L, 3)3     50.57079113 2152</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">nodelm_robust</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">smokes</span><span class="op">)</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="fu"><a href="ase_specials.html">U</a></span><span class="op">(</span><span class="va">A</span>, <span class="fl">5</span><span class="op">)</span> , graph <span class="op">=</span> <span class="va">smoking</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                Estimate Std. Error    t value     Pr(&gt;|t|)   CI Lower  CI Upper</span>
@@ -231,10 +223,10 @@ details.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)4    155</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> U(A, 5)5    155</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://Matrix.R-forge.R-project.org/" class="external-link">Matrix</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://Matrix.R-forge.R-project.org" class="external-link">Matrix</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidygraph.data-imaginist.com" class="external-link">tidygraph</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">addhealth</span>, package <span class="op">=</span> <span class="st">"netmediate"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">addhealth</span>, package <span class="op">=</span> <span class="st">"latentnetmediate"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">B</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/as_adjacency_matrix.html" class="external-link">as_adjacency_matrix</a></span><span class="op">(</span><span class="va">addhealth</span><span class="op">[[</span><span class="fl">36</span><span class="op">]</span><span class="op">]</span>, attr <span class="op">=</span> <span class="st">"weight"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>

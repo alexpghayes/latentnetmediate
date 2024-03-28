@@ -1,117 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/404.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/404.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/LICENSE-text.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/LICENSE.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/articles/Glasgow.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/authors.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/articles/index.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/index.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/articles/interventions.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/ASE.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/articles/reddit.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/addhealth.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/authors.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/ase_specials.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/index.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/glasgow.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/ASE.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/addhealth.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/leukemia.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/ase_specials.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/maltreatment.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/glasgow.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/model_block.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/index.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/model_canonical.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/leukemia.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/model_mediator_block.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/maltreatment.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/model_mediator_block2.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/model_block.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/model_mediator_informative.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/model_canonical.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/model_mediator_perfect.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/model_interference_basic.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/model_mediator_uninformative.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/model_mediator_block.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/model_null.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/model_mediator_block2.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/model_null2.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/model_mediator_informative.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/model_outcome_normal.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/model_mediator_perfect.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/model_outcome_t.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/model_mediator_uninformative.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/model_perfect.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/model_outcome_normal.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/model_shift.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/model_perfect.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/model_uninformative.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/model_shift.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/netmediate.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/model_uninformative.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/nodelm.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/netmediate.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/nodelm_robust.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/nodelm.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/plot_expected_a_pre_trt.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/nodelm_robust.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/reddit.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/plot_expected_a_pre_trt.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/sample_tidygraph.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/reddit.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/sensitivity_curve.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/sample_tidygraph.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/sensitivity_curve_custom.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/sensitivity_curve.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/sensitivity_curve_long.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/sensitivity_curve_custom.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/smoking.html</loc>
   </url>
   <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/smoking.html</loc>
-  </url>
-  <url>
-    <loc>https://alexpghayes.github.io/netmediate/reference/vsp_specials.html</loc>
+    <loc>https://alexpghayes.github.io/latentnetmediate/reference/vsp_specials.html</loc>
   </url>
 </urlset>
