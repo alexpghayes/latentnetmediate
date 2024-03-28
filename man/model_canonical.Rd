@@ -18,6 +18,10 @@ model_canonical(n, k, ...)
     \item{\code{ztheta_t}}{TODO}
     \item{\code{ztheta_c}}{TODO}
     \item{\code{ztheta_tc}}{TODO}
+    \item{\code{expected_degree}}{If specified, the desired expected degree
+of the graph. Specifying \code{expected_degree} simply rescales \code{S}
+to achieve this. Defaults to \code{NULL}. Do not specify both
+\code{expected_degree} and \code{expected_density} at the same time.}
   }}
 }
 \value{

@@ -8,6 +8,7 @@
 #' @param ztheta_t TODO
 #' @param ztheta_c TODO
 #' @param ztheta_tc TODO
+#' @inheritParams fastRG::undirected_factor_model
 #'
 #' @return TODO
 #' @export

@@ -14,6 +14,8 @@ outcome ~ nodal_formula. For now, no interactions or fancy stuff
 are allowed in the formula.}
 
 \item{rank}{Integer describing desired rank of embedding dimension.}
+
+\item{coembedding}{TODO}
 }
 \value{
 A \code{network_mediation} object.

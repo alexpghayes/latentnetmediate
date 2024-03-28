@@ -9,6 +9,10 @@ model_outcome_normal(mediator, beta_w = NULL, beta_x = NULL, sigma = 1)
 \arguments{
 \item{mediator}{TODO}
 
+\item{beta_w}{TODO}
+
+\item{beta_x}{TODO}
+
 \item{sigma}{TODO}
 }
 \value{

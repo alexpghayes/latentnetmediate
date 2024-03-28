@@ -9,7 +9,11 @@ model_outcome_t(mediator, beta_w = NULL, beta_x = NULL, df = 5)
 \arguments{
 \item{mediator}{TODO}
 
-\item{sigma}{TODO}
+\item{beta_w}{TODO}
+
+\item{beta_x}{TODO}
+
+\item{df}{TODO}
 }
 \value{
 TODO

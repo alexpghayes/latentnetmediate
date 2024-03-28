@@ -3,6 +3,8 @@
 #'
 #' @param mediator TODO
 #' @param sigma TODO
+#' @param beta_w TODO
+#' @param beta_x TODO
 #'
 #' @return TODO
 #' @export

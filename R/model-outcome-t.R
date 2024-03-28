@@ -2,7 +2,9 @@
 #' Mediator-pass through with normal errors
 #'
 #' @param mediator TODO
-#' @param sigma TODO
+#' @param df TODO
+#' @param beta_w TODO
+#' @param beta_x TODO
 #'
 #' @return TODO
 #' @export

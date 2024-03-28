@@ -59,6 +59,7 @@ threshold <- function(X, threshold = 1e-10) {
 #'
 #' @param model TODO
 #' @param A TODO
+#' @param graph TODO
 #'
 #' @return TODO
 #' @export

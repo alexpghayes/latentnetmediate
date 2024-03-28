@@ -28,6 +28,8 @@ plot_tidygraph_matrix_rownormalized(graph)
 \item{model}{TODO}
 
 \item{A}{TODO}
+
+\item{graph}{TODO}
 }
 \value{
 TODO

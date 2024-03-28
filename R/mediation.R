@@ -7,6 +7,7 @@
 #'   outcome ~ nodal_formula. For now, no interactions or fancy stuff
 #'   are allowed in the formula.
 #' @param rank Integer describing desired rank of embedding dimension.
+#' @param coembedding TODO
 #'
 #' @return A `network_mediation` object.
 #' @importFrom tidygraph mutate as_tibble
@@ -178,6 +179,7 @@ plot.network_mediation <- function(x, ...) {
 #' @param max_rank Maximum rank to consider (integer).
 #' @param ranks_to_consider How many distinct ranks to consider (integer).
 #'   Optional, defaults to 10.
+#' @inheritDotParams estimatr::lm_robust
 #'
 #' @return A `rank_sensitivity_curve` object, which is a subclass of a
 #'   [tibble::tibble()].
@@ -359,6 +361,8 @@ sensitivity_curve <- function(graph, formula, max_rank, ..., ranks_to_consider =
 #'
 #' @inheritParams netmediate
 #' @param X_max TODO
+#' @param node_data TODO
+#' @inheritDotParams estimatr::lm_robust
 #'
 #' @return A `rank_sensitivity_curve` object, which is a subclass of a
 #'   [tibble::tibble()].
@@ -498,6 +502,8 @@ sensitivity_curve_custom <- function(graph, formula, X_max, ..., node_data = NUL
 #' Estimate mediated effects for a variety of embedding dimensions
 #'
 #' @inheritParams netmediate
+#' @inheritDotParams estimatr::lm_robust
+#' @param node_data TODO
 #' @param max_rank Maximum rank to consider (integer).
 #' @param ranks_to_consider How many distinct ranks to consider (integer).
 #'   Optional, defaults to 10.
