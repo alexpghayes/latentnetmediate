@@ -66,6 +66,61 @@ are allowed in the formula.</p></dd>
 <dt>X_max</dt>
 <dd><p>TODO</p></dd>
 
+
+<dt>...</dt>
+<dd><p>Arguments passed on to <code><a href="https://declaredesign.org/r/estimatr/reference/lm_robust.html" class="external-link">estimatr::lm_robust</a></code></p><dl><dt><code>data</code></dt>
+<dd><p>A <code>data.frame</code></p></dd>
+
+    <dt><code>weights</code></dt>
+<dd><p>the bare (unquoted) names of the weights variable in the
+supplied data.</p></dd>
+
+    <dt><code>subset</code></dt>
+<dd><p>An optional bare (unquoted) expression specifying a subset
+of observations to be used.</p></dd>
+
+    <dt><code>clusters</code></dt>
+<dd><p>An optional bare (unquoted) name of the variable that
+corresponds to the clusters in the data.</p></dd>
+
+    <dt><code>fixed_effects</code></dt>
+<dd><p>An optional right-sided formula containing the fixed
+effects that will be projected out of the data, such as <code>~ blockID</code>. Do not
+pass multiple-fixed effects with intersecting groups. Speed gains are greatest for
+variables with large numbers of groups and when using "HC1" or "stata" standard errors.
+See 'Details'.</p></dd>
+
+    <dt><code>se_type</code></dt>
+<dd><p>The sort of standard error sought. If <code>clusters</code> is
+not specified the options are "HC0", "HC1" (or "stata", the equivalent),
+ "HC2" (default), "HC3", or
+"classical". If <code>clusters</code> is specified the options are "CR0", "CR2" (default), or "stata". Can also specify "none", which may speed up estimation of the coefficients.</p></dd>
+
+    <dt><code>ci</code></dt>
+<dd><p>logical. Whether to compute and return p-values and confidence
+intervals, TRUE by default.</p></dd>
+
+    <dt><code>alpha</code></dt>
+<dd><p>The significance level, 0.05 by default.</p></dd>
+
+    <dt><code>return_vcov</code></dt>
+<dd><p>logical. Whether to return the variance-covariance
+matrix for later usage, TRUE by default.</p></dd>
+
+    <dt><code>try_cholesky</code></dt>
+<dd><p>logical. Whether to try using a Cholesky
+decomposition to solve least squares instead of a QR decomposition,
+FALSE by default. Using a Cholesky decomposition may result in speed gains, but should only
+be used if users are sure their model is full-rank (i.e., there is no
+perfect multi-collinearity)</p></dd>
+
+  
+</dl></dd>
+
+
+<dt>node_data</dt>
+<dd><p>TODO</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
