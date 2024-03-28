@@ -27,7 +27,7 @@ Extracted from the \code{SpatialEpi} package on July 29, 2022. See
 Wakefield and Kim (2013).
 }
 \usage{
-leukemia
+data(leukemia)
 }
 \description{
 Leukemia cases by census tract in New York

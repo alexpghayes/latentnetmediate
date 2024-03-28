@@ -11,7 +11,7 @@ and an edge table.
 The node table has columns:
 \itemize{
 \item \code{sex} (factor): Sex of student, coded as \code{male} or \code{female}.
-\item \code{smokes} (factor): Whether student smokes. Levels are \code{smokes} and \verb{doesnt smoke}.
+\item \code{smokes} (factor): Whether student smokes. Levels are \code{smokes} and \verb{doesn't smoke}.
 }
 
 and the edge table has columns:
@@ -24,7 +24,7 @@ and the edge table has columns:
 Obtained from Haiyan Liu over email on April 28, 2022.
 }
 \usage{
-smoking
+data(smoking)
 }
 \description{
 Data collected by the Lab for Big Data Methodology at the

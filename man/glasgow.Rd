@@ -17,11 +17,11 @@ Retrieved from
 June 8, 2022.
 }
 \usage{
-glasgow
+data(glasgow)
 }
 \description{
 The canonical "Glasgow" data, as reported in the \code{siena} R package
-for network data analysis. \code{latentnetmediate} simply re-exports this data
+for network data analysis. \code{netmediate} simply re-exports this data
 in a more convenient format. See the \code{siena} data document for
 gory details.
 }

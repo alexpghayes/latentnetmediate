@@ -16,7 +16,7 @@ Retrieved from
 October 18, 2022.
 }
 \usage{
-maltreatment
+data(maltreatment)
 }
 \description{
 Child maltreatment data

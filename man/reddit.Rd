@@ -41,7 +41,7 @@ Downloaded from \url{https://archive.org/details/reddit_posts_2018} on
 June 6, 2022.
 }
 \usage{
-reddit
+data(reddit)
 }
 \description{
 Reddit is an online forum divided into topic-specific subforums called

@@ -87,6 +87,9 @@ of nodal covariates.
 
 ### some examples where data is specified as a tidygraph
 
+data(addhealth, package = "latentnetmediate")
+data(smoking, package = "latentnetmediate")
+
 # a regression that does not use any node embeddings
 nodelm_robust(grade ~ sex, graph = addhealth[[36]])
 
@@ -98,8 +101,6 @@ nodelm_robust(as.integer(smokes) ~ sex + U(A, 5) , graph = smoking)
 
 library(Matrix)
 library(tidygraph)
-
-data(addhealth, package = "latentnetmediate")
 
 B <- igraph::as_adjacency_matrix(addhealth[[36]], attr = "weight")
 

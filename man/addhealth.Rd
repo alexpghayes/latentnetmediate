@@ -28,7 +28,7 @@ Originally at \url{http://moreno.ss.uci.edu/data.html}, but
 ultimately accessed via \url{https://web.archive.org/web/20210115130726/http://moreno.ss.uci.edu/data.html}
 }
 \usage{
-addhealth
+data(addhealth)
 }
 \description{
 The ADD HEALTH data are constructed from the in-school questionnaire;

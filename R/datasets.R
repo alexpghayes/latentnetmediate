@@ -57,6 +57,7 @@
 #' @source Originally at \url{http://moreno.ss.uci.edu/data.html}, but
 #'   ultimately accessed via \url{https://web.archive.org/web/20210115130726/http://moreno.ss.uci.edu/data.html}
 #'
+#' @usage data(addhealth)
 "addhealth"
 
 
@@ -90,6 +91,8 @@
 #'   - `to` (int): Id of student declared as friend
 #'
 #' @source Obtained from Haiyan Liu over email on April 28, 2022.
+#'
+#' @usage data(smoking)
 #'
 "smoking"
 
@@ -145,6 +148,8 @@
 #' @source Downloaded from <https://archive.org/details/reddit_posts_2018> on
 #'   June 6, 2022.
 #'
+#' @usage data(reddit)
+#'
 "reddit"
 
 #' Leukemia cases by census tract in New York
@@ -171,6 +176,8 @@
 #'   [SpatialEpi::NYleukemia] for details, as well as
 #'   Wakefield and Kim (2013).
 #'
+#' @usage data(leukemia)
+#'
 "leukemia"
 
 
@@ -192,6 +199,8 @@
 #' @source Retrieved from
 #' <https://www.stats.ox.ac.uk/~snijders/siena/Glasgow_data.zip> on
 #' June 8, 2022.
+#'
+#' @usage data(glasgow)
 #'
 "glasgow"
 
@@ -220,6 +229,8 @@
 #' @source Retrieved from
 #' <https://data.mendeley.com/datasets/95yysn7cns/1> on
 #' October 18, 2022.
+#'
+#' @usage data(maltreatment)
 #'
 "maltreatment"
 

@@ -589,7 +589,7 @@ sensitivity_curve_long <- function(graph, formula, max_rank, ..., ranks_to_consi
     as_tibble(rownames = "name")
 
   node_data_and_X_max <- node_data |>
-    left_join(X_max_df, by = "name")
+    dplyr::left_join(X_max_df, by = "name")
 
   mf <- stats::model.frame(formula, data = node_data_and_X_max)
   y <- stats::model.response(mf)
@@ -603,7 +603,7 @@ sensitivity_curve_long <- function(graph, formula, max_rank, ..., ranks_to_consi
   }
 
   X_max <- node_data_and_X_max |>
-    select(all_of(colnames(X_max))) |>
+    dplyr::select(dplyr::all_of(colnames(X_max))) |>
     as.matrix()
 
   effects_at_rank <- function(rank, ...) {
