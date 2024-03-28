@@ -11,7 +11,7 @@ and an edge table.
 The node table has columns:
 \itemize{
 \item \code{sex} (factor): Sex of student, coded as \code{male} or \code{female}.
-\item \code{smokes} (factor): Whether student smokes. Levels are \code{smokes} and \verb{doesn't smoke}.
+\item \code{smokes} (factor): Whether student smokes. Levels are \code{smokes} and \verb{doesnt smoke}.
 }
 
 and the edge table has columns:

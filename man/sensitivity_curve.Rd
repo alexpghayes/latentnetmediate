@@ -37,7 +37,7 @@ Estimate mediated effects for a variety of embedding dimensions
 library(tidygraph)
 library(dplyr)
 
-data(smoking, package = "netmediate")
+data(smoking, package = "latentnetmediate")
 
 # example with fully observed node data
 
@@ -59,7 +59,7 @@ plot(rank_curve)
 # used to estimate embeddings, but once the embeddings are in hand,
 # the regression only considers complete cases
 
-data(glasgow, package = "netmediate")
+data(glasgow, package = "latentnetmediate")
 
 glasgow1 <- glasgow[[1]] |>
   activate(nodes) |>
