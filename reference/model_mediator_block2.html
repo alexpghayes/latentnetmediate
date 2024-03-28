@@ -78,17 +78,61 @@
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">26</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">mblock</span> <span class="op">&lt;-</span> <span class="fu">model_mediator_block2</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, k <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in loadNamespace(x):</span> there is no package called ‘fastRG’</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="sample_tidygraph.html">sample_tidygraph</a></span><span class="op">(</span><span class="va">mblock</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'mblock' not found</span>
 <span class="r-in"><span><span class="va">graph</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'graph' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tbl_graph: 100 nodes and 30212 edges</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># An undirected multigraph with 1 component</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Node Data: 100 × 16 (active)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    name  intercept   trt   C01   C02   C03   C04   C05   C06   C07   C08   C09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 1             1     0     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2             1     0     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 3             1     0     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 4             1     0     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 5             1     0     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 6             1     0     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 7             1     0     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 8             1     1     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 9             1     1     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 10            1     1     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 90 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: C10 &lt;dbl&gt;, C11 &lt;dbl&gt;, C12 &lt;dbl&gt;, C13 &lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Edge Data: 30,212 × 2</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    from    to</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     1     3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>     1     3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>     1     7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 30,209 more rows</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="nodelm.html">nodelm</a></span><span class="op">(</span><span class="fu"><a href="ase_specials.html">US</a></span><span class="op">(</span><span class="va">A</span>, <span class="fl">5</span><span class="op">)</span> <span class="op">~</span> <span class="va">.</span> <span class="op">-</span> <span class="va">name</span> <span class="op">-</span> <span class="fl">1</span>, graph <span class="op">=</span> <span class="va">graph</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'graph' not found</span>
 <span class="r-in"><span><span class="va">fit</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'fit' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> stats::lm(formula = formula, data = data)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            1         2         3         4         5       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> intercept   0.88191  -1.09034  -0.14746   1.06560  -0.38799</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> trt        -0.29636   0.32635   0.12622  -0.43850   0.24574</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C01         0.37203  -0.86122   0.24443   2.97344  -4.87058</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C02         6.67505   3.60286   0.19891  -1.64619   0.50415</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C03        -0.09179  -0.08589   0.30554   0.01138  -0.06579</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C04         1.17503  -4.93926   6.82207  -4.16883   0.87727</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C05        -0.29808   0.46053   0.15176  -0.63255   0.31646</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C06         0.11155  -0.24993   0.11604   0.55818   0.07505</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C07        -0.23683   0.30210   0.14719  -0.44632   0.33518</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C08        -0.57152   0.75777   0.10824  -0.80318   0.41562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C09         0.16382  -0.51220   0.13522   0.79199  -0.13907</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C10         0.74689  -3.43246  -5.29718  -3.68149   0.36912</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C11         0.52058  -1.33066  -0.34457   4.37258   7.13188</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C12        -0.44757   0.66139   0.11117  -0.69813   0.33769</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C13        -0.08687   0.09283   0.17312  -0.19566   0.23852</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

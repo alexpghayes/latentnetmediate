@@ -82,32 +82,83 @@
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">26</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">mrdpg</span> <span class="op">&lt;-</span> <span class="fu">model_uninformative</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, k <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in loadNamespace(x):</span> there is no package called ‘fastRG’</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="sample_tidygraph.html">sample_tidygraph</a></span><span class="op">(</span><span class="va">mrdpg</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'mrdpg' not found</span>
 <span class="r-in"><span><span class="va">graph</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'graph' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tbl_graph: 100 nodes and 521 edges</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># An undirected multigraph with 1 component</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Node Data: 100 × 6 (active)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    name  intercept   trt     C1     C2      y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 1             1 0.560 0.068<span style="text-decoration: underline;">7</span>  2.69   0.149</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2             1 1.89  0.261  -<span style="color: #BB0000;">0.531</span> -<span style="color: #BB0000;">0.468</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 3             1 0.936 1.14    2.17   1.01 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 4             1 0.498 1.05    1.09   0.344</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 5             1 0.546 2.41    0.971  0.873</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 6             1 0.410 1.61    1.11   2.97 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 7             1 1.64  1.99   -<span style="color: #BB0000;">0.485</span> -<span style="color: #BB0000;">1.31</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 8             1 0.951 0.226   0.142 -<span style="color: #BB0000;">0.274</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 9             1 1.66  0.370   0.853  1.52 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 10            1 1.66  2.81   -<span style="color: #BB0000;">1.41</span>  -<span style="color: #BB0000;">0.359</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 90 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Edge Data: 521 × 2</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    from    to</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     4     6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>     3    14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>     4    12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 518 more rows</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">m_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="nodelm.html">nodelm</a></span><span class="op">(</span><span class="fu"><a href="ase_specials.html">US</a></span><span class="op">(</span><span class="va">A</span>, <span class="fl">5</span><span class="op">)</span> <span class="op">~</span> <span class="va">.</span> <span class="op">-</span> <span class="va">name</span> <span class="op">-</span> <span class="va">y</span> <span class="op">-</span> <span class="fl">1</span>, graph <span class="op">=</span> <span class="va">graph</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'graph' not found</span>
 <span class="r-in"><span><span class="va">o_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="nodelm.html">nodelm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">.</span> <span class="op">-</span> <span class="va">name</span> <span class="op">-</span> <span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="ase_specials.html">US</a></span><span class="op">(</span><span class="va">A</span>, <span class="fl">5</span><span class="op">)</span>, graph <span class="op">=</span> <span class="va">graph</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'graph' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">m_fit</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'm_fit' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> stats::lm(formula = formula, data = data)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            1          2          3          4          5        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> intercept   0.138750  -0.256869   0.148496   0.058331  -0.069015</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> trt         0.009625   0.030977   0.012781   0.037112  -0.009563</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1          0.010491   0.009598  -0.005428   0.001196  -0.007176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C2          0.039830   0.085808  -0.003251   0.014024  -0.002797</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="va">o_fit</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'o_fit' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> stats::lm(formula = formula, data = data)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> intercept        trt         C1         C2  US(A, 5)1  US(A, 5)2  US(A, 5)3  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1.4048     0.2453     0.4385     0.5516     3.4429    -1.6113    -2.8710  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> US(A, 5)4  US(A, 5)5  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -2.1474     2.1055  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">mrdpg</span><span class="op">$</span><span class="va">nde</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'mrdpg' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       trt </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.2273358 </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">o_fit</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'o_fit' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  intercept        trt         C1         C2  US(A, 5)1  US(A, 5)2  US(A, 5)3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1.4048210  0.2452682  0.4385177  0.5516146  3.4429378 -1.6113163 -2.8710301 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  US(A, 5)4  US(A, 5)5 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -2.1473541  2.1054510 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">m_fit</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'm_fit' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     1            2            3           4            5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> intercept 0.138749563 -0.256869263  0.148495852 0.058331167 -0.069015136</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> trt       0.009624984  0.030976510  0.012780530 0.037111693 -0.009562659</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1        0.010490521  0.009597515 -0.005427650 0.001196029 -0.007176028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C2        0.039830301  0.085808405 -0.003251126 0.014023819 -0.002797388</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">o_fit</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'o_fit' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  intercept        trt         C1         C2  US(A, 5)1  US(A, 5)2  US(A, 5)3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1.4048210  0.2452682  0.4385177  0.5516146  3.4429378 -1.6113163 -2.8710301 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  US(A, 5)4  US(A, 5)5 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -2.1473541  2.1054510 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
