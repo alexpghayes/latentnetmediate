@@ -1,43 +1,28 @@
-Package: netmediate
+Package: latentnetmediate
 Title: Estimate Latent Network Mediation Effects via Spectral Embeddings
-Version: 0.0.0.9005
-Authors@R: c(
+Version: 0.0.0.9006
+Authors@R: 
     person("Alex", "Hayes", , "alexpghayes@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0002-4985-5160"))
-  )
 Description: Uses spectral network regression to estimate natural direct
     and indirect effects in network mediation settings. The estimator
-    proceeds in two stages: first, it estimates a spectral embeddings
-    of (generalized) random dot product graphs by taking low rank
+    proceeds in two stages: first, it estimates a spectral embeddings of
+    (generalized) random dot product graphs by taking low rank
     decompositions of the graph adjacency matrix and degree-normalized
-    graph Laplacian. Then, it estimates two network regression using
-    these embeddings and an ordinary least squares estimator. Finally,
-    we combine the coefficients of the regressions to make asymptotic
+    graph Laplacian. Then, it estimates two network regression using these
+    embeddings and an ordinary least squares estimator. Finally, we
+    combine the coefficients of the regressions to make asymptotic
     inferences about natural direct and indirect effects.
-Config/testthat/edition: 3
-Encoding: UTF-8
-LazyData: false
-URL: https://github.com/alexpghayes/netmediate,
-    https://alexpghayes.github.io/netmediate/
-BugReports: https://github.com/alexpghayes/netmediate/issues
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
-Suggests: 
-    covr,
-    DT,
-    gdim (>= 0.0.0.9000),
-    ggraph,
-    knitr,
-    rmarkdown,
-    scales,
-    testthat (>= 3.0.0)
+License: MIT + file LICENSE
+URL: https://github.com/alexpghayes/latentnetmediate,
+    https://alexpghayes.github.io/latentnetmediate/
+BugReports: https://github.com/alexpghayes/latentnetmediate/issues
 Depends: 
     R (>= 4.2.0)
 Imports: 
     broom,
     dplyr,
     estimatr,
-    fastRG (>= 0.3.0.9004),
     GGally,
     ggplot2,
     igraph,
@@ -48,12 +33,13 @@ Imports:
     purrr,
     rlang,
     RSpectra,
+    stats,
     tibble,
     tidygraph,
     tidyr,
     vsp
-License: MIT + file LICENSE
-VignetteBuilder: knitr
-Remotes: 
-    RoheLab/fastRG,
-    RoheLab/gdim
+Config/testthat/edition: 3
+Encoding: UTF-8
+LazyData: false
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1.9000
