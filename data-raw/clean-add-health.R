@@ -99,4 +99,4 @@ for (i in setdiff(comms, remove)) {
   addhealth[[i]] <- graph
 }
 
-usethis::use_data(addhealth, overwrite = TRUE)
+usethis::use_data(addhealth, overwrite = TRUE, version = 3)

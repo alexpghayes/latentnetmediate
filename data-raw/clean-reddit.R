@@ -3,7 +3,6 @@ library(dplyr)
 library(here)
 library(tidytext)
 library(tidygraph)
-library(ids)
 
 set.seed(27)
 
@@ -20,28 +19,20 @@ reddit_fulltext <- reddit_raw |>
   filter(subreddit %in% veitch_subreddits) |>
   mutate_at(vars(score), as.integer)
 
-usethis::use_data(reddit_fulltext, overwrite = TRUE)
+# usethis::use_data(reddit_fulltext, overwrite = TRUE)
 
 # limited anonymization of author handles
 
 set.seed(28)
 
-pseudonyms <- reddit_fulltext |>
-  distinct(author) |>
-  mutate(
-    author_pseudonym = ids::adjective_animal(n = n())
-  )
-
 post_data <- reddit_fulltext |>
   select(-body) |>
   rename(flair = gender) |>
-  left_join(pseudonyms, by = "author") |>
-  mutate(node_type = "post") |>
-  select(-author)
+  mutate(node_type = "post")
 
 tokenized <- reddit_fulltext |>
   select(id, body) |>
-  unnest_tokens(word, body, token = "tweets") |>
+  unnest_tokens(word, body, token = "words") |>
   count(id, word)
 
 A <- cast_sparse(tokenized, row = id, column = word, value = n)
@@ -53,7 +44,7 @@ distinct(tokenized) |>
 tokenized |>
   filter(id == word)
 
-ig <- igraph::graph_from_incidence_matrix(A, weighted = TRUE)
+ig <- igraph::graph_from_biadjacency_matrix(A, weighted = TRUE)
 
 # why the node_type thing is needed below is unclear to me, but it seems to be
 # important. consider yourself warned
@@ -77,4 +68,4 @@ reddit |>
   as_tibble() |>
   count(node_type, subreddit)
 
-usethis::use_data(reddit, overwrite = TRUE)
+usethis::use_data(reddit, overwrite = TRUE, version = 3)

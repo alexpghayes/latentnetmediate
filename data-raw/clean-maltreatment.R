@@ -8,7 +8,6 @@ data_path <- here("data-raw", "maltreatment", "Raw_Data_AFreier_MediationPersona
 raw <- read_xlsx(data_path, na = c("-1", "#NULL!"))
 raw
 
-recode_ctq(raw$CTQ_Q1)
 
 recode_ctq <- function(item) {
   case_when(
@@ -19,6 +18,8 @@ recode_ctq <- function(item) {
     item == 5 ~ "very often true"
   )
 }
+
+recode_ctq(raw$CTQ_Q1)
 
 recode_phq <- function(item) {
   case_when(
@@ -81,4 +82,4 @@ maltreatment <- A |>
     wide, by = c("name" = "lfd_chr")
   )
 
-usethis::use_data(maltreatment, overwrite = TRUE)
+usethis::use_data(maltreatment, overwrite = TRUE, version = 3)

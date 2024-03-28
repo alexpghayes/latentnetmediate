@@ -1,7 +1,7 @@
 # Raw or partially processed data
 
 This folder contains four different datasets. Three of these datasets have
-been cleaned and are exported in the `netmediate` R package as data objects
+been cleaned and are exported in the `latentnetmediate` R package as data objects
 `reddit`, `addhealth` and `smoking`. See the data documentation for details.
 
 The file structure of this folder is as follows:

@@ -205,4 +205,4 @@ graph3 <- friendship.3 |>
 
 glasgow <- list(graph1, graph2, graph3)
 
-usethis::use_data(glasgow, overwrite = TRUE)
+usethis::use_data(glasgow, overwrite = TRUE, version = 3)

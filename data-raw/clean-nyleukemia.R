@@ -1,6 +1,7 @@
 library(SpatialEpi)
 library(spdep)
 library(tidygraph)
+library(tidyverse)
 
 data(NYleukemia)
 
@@ -39,9 +40,9 @@ node_data <- tibble(
   censustract_fips = tract
 )
 
-leukemia <- graph_from_adjacency_matrix(A, mode = "undirected") |>
+leukemia <- igraph::graph_from_adjacency_matrix(A, mode = "max") |>
   as_tbl_graph() |>
   activate(nodes) |>
   mutate(!!!node_data)
 
-usethis::use_data(leukemia, overwrite = TRUE)
+usethis::use_data(leukemia, overwrite = TRUE, version = 3)

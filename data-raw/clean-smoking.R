@@ -15,4 +15,4 @@ smoking <- smoking_raw |>
   ) |>
   mutate_at(vars(smokes, sex), as.factor)
 
-usethis::use_data(smoking, overwrite = TRUE)
+usethis::use_data(smoking, overwrite = TRUE, version = 3)
