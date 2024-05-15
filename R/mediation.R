@@ -598,6 +598,11 @@ sensitivity_curve_long <- function(graph, formula, max_rank, ..., ranks_to_consi
     as.data.frame() |>
     as_tibble(rownames = "name")
 
+  # as.data.frame() will convert rownames of X_max to syntactically valid
+  # names, but this can break merging on names when nodes have syntactically
+  # invalid names. rename to fix potential merge issues
+  X_max_df$name <- rownames(X_max)
+
   node_data_and_X_max <- node_data |>
     dplyr::left_join(X_max_df, by = "name")
 
