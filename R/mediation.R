@@ -571,7 +571,7 @@ sensitivity_curve_long <- function(graph, formula, max_rank, ..., ranks_to_consi
     A <- igraph::as_incidence_matrix(graph, sparse = TRUE, attr = "weight")
     A <- methods::as(A, "CsparseMatrix")
   } else {
-    A <- igraph::as_adjacency_matrix(graph, sparse = TRUE)
+    A <- igraph::as_adjacency_matrix(graph, sparse = TRUE, attr = "weight")
   }
 
   coembedding <- rlang::arg_match(coembedding)
@@ -582,6 +582,10 @@ sensitivity_curve_long <- function(graph, formula, max_rank, ..., ranks_to_consi
   } else {
     X_max <- VS(A, rank = max_rank)  # use scaled right singular vectors
     rownames(X_max) <- colnames(A)
+  }
+
+  if (any(is.na(X_max))) {
+    warning("Some values of X_max are NA, please post an issue")
   }
 
   # if there is missing node-level data, model.frame() will apply the
