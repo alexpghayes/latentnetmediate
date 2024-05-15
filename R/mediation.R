@@ -588,8 +588,6 @@ sensitivity_curve_long <- function(graph, formula, max_rank, ..., ranks_to_consi
     warning("Some values of X_max are NA, please post an issue")
   }
 
-  browser()
-
   # if there is missing node-level data, model.frame() will apply the
   # na.action argument, which defaults to na.omit(). this causes problems
   # later: mf will be a node-level data frame with num_complete_cases rows
