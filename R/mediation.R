@@ -571,7 +571,7 @@ sensitivity_curve_long <- function(graph, formula, max_rank, ..., ranks_to_consi
     A <- igraph::as_incidence_matrix(graph, sparse = TRUE, attr = "weight")
     A <- methods::as(A, "CsparseMatrix")
   } else {
-    A <- igraph::as_adjacency_matrix(graph, sparse = TRUE)
+    A <- igraph::as_adjacency_matrix(graph, sparse = TRUE, attr = "weight")
   }
 
   coembedding <- rlang::arg_match(coembedding)
@@ -584,6 +584,10 @@ sensitivity_curve_long <- function(graph, formula, max_rank, ..., ranks_to_consi
     rownames(X_max) <- colnames(A)
   }
 
+  if (any(is.na(X_max))) {
+    warning("Some values of X_max are NA, please post an issue")
+  }
+
   # if there is missing node-level data, model.frame() will apply the
   # na.action argument, which defaults to na.omit(). this causes problems
   # later: mf will be a node-level data frame with num_complete_cases rows
@@ -593,6 +597,11 @@ sensitivity_curve_long <- function(graph, formula, max_rank, ..., ranks_to_consi
   X_max_df <- X_max |>
     as.data.frame() |>
     as_tibble(rownames = "name")
+
+  # as.data.frame() will convert rownames of X_max to syntactically valid
+  # names, but this can break merging on names when nodes have syntactically
+  # invalid names. rename to fix potential merge issues
+  X_max_df$name <- rownames(X_max)
 
   node_data_and_X_max <- node_data |>
     dplyr::left_join(X_max_df, by = "name")
