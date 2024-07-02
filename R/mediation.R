@@ -179,7 +179,7 @@ plot.network_mediation <- function(x, ...) {
 #' @param max_rank Maximum rank to consider (integer).
 #' @param ranks_to_consider How many distinct ranks to consider (integer).
 #'   Optional, defaults to 10.
-#' @inheritDotParams estimatr::lm_robust
+#' @inheritDotParams lm
 #'
 #' @return A `rank_sensitivity_curve` object, which is a subclass of a
 #'   [tibble::tibble()].
@@ -277,8 +277,8 @@ sensitivity_curve <- function(graph, formula, max_rank, ..., ranks_to_consider =
 
     X <- X_max[, 1:rank, drop = FALSE]
 
-    outcome_model <- estimatr::lm_robust(y ~ W + X + 0, ...)
-    mediator_model <- estimatr::lm_robust(X ~ W + 0, ...)
+    outcome_model <- lm(y ~ W + X + 0, ...)
+    mediator_model <- lm(X ~ W + 0, ...)
 
     num_coefs <- nrow(coef(mediator_model))
 
@@ -362,7 +362,7 @@ sensitivity_curve <- function(graph, formula, max_rank, ..., ranks_to_consider =
 #' @inheritParams netmediate
 #' @param X_max TODO
 #' @param node_data TODO
-#' @inheritDotParams estimatr::lm_robust
+#' @inheritDotParams lm
 #'
 #' @return A `rank_sensitivity_curve` object, which is a subclass of a
 #'   [tibble::tibble()].
@@ -426,8 +426,8 @@ sensitivity_curve_custom <- function(graph, formula, X_max, ..., node_data = NUL
     X <- X_max[, 1:rank, drop = FALSE]
     colnames(X) <- paste0("X", 1:ncol(X))
 
-    outcome_model <- estimatr::lm_robust(y ~ W + X + 0, ...)
-    mediator_model <- estimatr::lm_robust(X ~ W + 0, ...)
+    outcome_model <- lm(y ~ W + X + 0, ...)
+    mediator_model <- lm(X ~ W + 0, ...)
 
     num_coefs <- nrow(coef(mediator_model))
 
@@ -502,7 +502,7 @@ sensitivity_curve_custom <- function(graph, formula, X_max, ..., node_data = NUL
 #' Estimate mediated effects for a variety of embedding dimensions
 #'
 #' @inheritParams netmediate
-#' @inheritDotParams estimatr::lm_robust
+#' @inheritDotParams lm
 #' @param node_data TODO
 #' @param max_rank Maximum rank to consider (integer).
 #' @param ranks_to_consider How many distinct ranks to consider (integer).
@@ -616,8 +616,8 @@ sensitivity_curve_long <- function(graph, formula, max_rank, ..., ranks_to_consi
 
     X <- X_max[, 1:rank, drop = FALSE]
 
-    outcome_model <- estimatr::lm_robust(y ~ W + X + 0, ...)
-    mediator_model <- estimatr::lm_robust(X ~ W + 0, ...)
+    outcome_model <- lm(y ~ W + X + 0, ...)
+    mediator_model <- lm(X ~ W + 0, ...)
 
     num_coefs <- nrow(coef(mediator_model))
 
