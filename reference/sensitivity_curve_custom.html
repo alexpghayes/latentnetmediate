@@ -166,25 +166,27 @@ perfect multi-collinearity)</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">curve_custom</span> <span class="op">&lt;-</span> <span class="fu">sensitivity_curve_custom</span><span class="op">(</span><span class="va">smoking2</span>, <span class="va">smokes_int</span> <span class="op">~</span> <span class="va">sex</span>, <span class="va">X_max</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">curve_custom</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       term estimand    estimate     conf.low  conf.high rank</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  sexmale      nde 0.462584057  0.324773572 0.60039454    2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  sexmale      nie 0.009638165 -0.037277910 0.05655424    2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  sexmale      nde 0.465040674  0.326993960 0.60308739    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  sexmale      nie 0.007181549 -0.041107405 0.05547050    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  sexmale      nde 0.461088465  0.321659503 0.60051743    4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  sexmale      nie 0.011133757 -0.040143343 0.06241086    4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  sexmale      nde 0.454402926  0.315351671 0.59345418    5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  sexmale      nie 0.017819297 -0.036770708 0.07240930    5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  sexmale      nde 0.408927272  0.261109268 0.55674528    6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 sexmale      nie 0.063294950 -0.006394047 0.13298395    6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 sexmale      nde 0.204860430 -0.003057296 0.41277816    7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 sexmale      nie 0.267361792  0.107097088 0.42762650    7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 sexmale      nde 0.204875869 -0.004008205 0.41375994    8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 sexmale      nie 0.267346353  0.106628566 0.42806414    8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 sexmale      nde 0.204222956 -0.006692245 0.41513816    9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 sexmale      nie 0.267999266  0.104521094 0.43147744    9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17 sexmale      nde 0.198839427 -0.008447035 0.40612589   10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18 sexmale      nie 0.273382795  0.110201014 0.43656458   10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 18 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    term    estimand estimate conf.low conf.high  rank</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> sexmale nde       0.463    0.337      0.588      2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> sexmale nie       0.009<span style="text-decoration: underline;">64</span> -<span style="color: #BB0000;">0.034</span><span style="color: #BB0000; text-decoration: underline;">1</span>     0.053<span style="text-decoration: underline;">4</span>     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> sexmale nde       0.465    0.339      0.591      3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> sexmale nie       0.007<span style="text-decoration: underline;">18</span> -<span style="color: #BB0000;">0.037</span><span style="color: #BB0000; text-decoration: underline;">7</span>     0.052<span style="text-decoration: underline;">0</span>     3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> sexmale nde       0.461    0.334      0.588      4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> sexmale nie       0.011<span style="text-decoration: underline;">1</span>  -<span style="color: #BB0000;">0.035</span><span style="color: #BB0000; text-decoration: underline;">6</span>     0.057<span style="text-decoration: underline;">9</span>     4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> sexmale nde       0.454    0.329      0.580      5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> sexmale nie       0.017<span style="text-decoration: underline;">8</span>  -<span style="color: #BB0000;">0.032</span><span style="color: #BB0000; text-decoration: underline;">4</span>     0.068<span style="text-decoration: underline;">1</span>     5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> sexmale nde       0.409    0.281      0.537      6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> sexmale nie       0.063<span style="text-decoration: underline;">3</span>  -<span style="color: #BB0000;">0.001</span><span style="color: #BB0000; text-decoration: underline;">39</span>    0.128      6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> sexmale nde       0.205    0.021<span style="text-decoration: underline;">4</span>     0.388      7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> sexmale nie       0.267    0.118      0.417      7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> sexmale nde       0.205    0.020<span style="text-decoration: underline;">9</span>     0.389      8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> sexmale nie       0.267    0.117      0.418      8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> sexmale nde       0.204    0.019<span style="text-decoration: underline;">4</span>     0.389      9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> sexmale nie       0.268    0.117      0.419      9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">17</span> sexmale nde       0.199    0.014<span style="text-decoration: underline;">7</span>     0.383     10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">18</span> sexmale nie       0.273    0.122      0.424     10</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">curve_custom</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="sensitivity_curve_custom-1.png" alt="" width="700" height="433"></span>
