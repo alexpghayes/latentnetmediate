@@ -60,8 +60,8 @@ model_mediator_perfect <- function(n, k = 5, ztheta_0 = NULL, ztheta_t = NULL,
   if (is.null(ztheta_t)) {
     ztheta_t <- matrix(0, nrow = 1, ncol = k)
   } else {
-    W <- cbind(trt, W)
-    colnames(W) <- c("trt", colnames(W))
+    W <- cbind(trt)
+    colnames(W) <- c("trt")
 
     # here we perform the intervention in Z space
     zX <- zX + trt %*% ztheta_t
